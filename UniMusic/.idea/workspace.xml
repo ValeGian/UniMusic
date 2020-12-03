@@ -1,5 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="8094dcf4-10fb-4fe1-8bb8-a4e59d140ebc" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/UniMusic.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/aws.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/aws.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniMusic/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniMusic/.idea/aws.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniMusic/.idea/codeStyles/Project.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniMusic/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniMusic/.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniMusic/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniMusic/.idea/jarRepositories.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniMusic/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniMusic/.idea/uiDesigner.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniMusic/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniMusic/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/gui/App.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniMusic/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/gui/welcomeController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniMusic/src/main/java/module-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniMusic/src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/gui/default.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniMusic/src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/gui/img/app_background.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniMusic/src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/gui/welcome.fxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniMusic/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/gui/App.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniMusic/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/gui/default.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniMusic/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/gui/img/app_background.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniMusic/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/gui/welcome.fxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniMusic/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/gui/welcomeController$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniMusic/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/gui/welcomeController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniMusic/target/classes/module-info.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniMusic/target/maven-status/maven-compiler-plugin/compile/null/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UniMusic/target/maven-status/maven-compiler-plugin/compile/null/inputFiles.lst" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
@@ -7,7 +71,96 @@
       </MavenGeneralSettings>
     </option>
   </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="1" />
+  </component>
+  <component name="ProjectId" id="1l8qLfDAuWs54pqUXCW6iZnCiHx" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
     <property name="settings.editor.selected.configurable" value="preferences.applicationServers" />
+  </component>
+  <component name="RunManager">
+    <configuration name="Run" type="MavenRunConfiguration" factoryName="Maven">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list>
+                <option value="javafx:run" />
+              </list>
+            </option>
+            <option name="pomFileName" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method v="2">
+        <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="javafx:compile" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8094dcf4-10fb-4fe1-8bb8-a4e59d140ebc" name="Default Changelist" comment="" />
+      <created>1606989013516</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1606989013516</updated>
+      <workItem from="1606989014804" duration="298000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1606989113908">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1606989113908" />
+    <state width="1493" height="210" key="GridCell.Tab.0.bottom" timestamp="1606989263423">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1606989263423" />
+    <state width="1493" height="210" key="GridCell.Tab.0.center" timestamp="1606989263422">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="210" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1606989263422" />
+    <state width="1493" height="210" key="GridCell.Tab.0.left" timestamp="1606989263422">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="210" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1606989263422" />
+    <state width="1493" height="210" key="GridCell.Tab.0.right" timestamp="1606989263423">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1606989263423" />
   </component>
 </project>
