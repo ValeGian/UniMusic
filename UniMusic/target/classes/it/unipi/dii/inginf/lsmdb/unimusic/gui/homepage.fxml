@@ -3,41 +3,97 @@
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="root" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
         <URL value="@default.css" />
     </stylesheets>
-    <children>
-      <VBox prefWidth="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-             <Button contentDisplay="RIGHT">
-                 <graphic>
-                     <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mouseTransparent="true">
-                         <children>
-                             <ImageView>
-                                 <image>
-                                     <Image url="@img/home.png" />
-                                 </image>
-                             </ImageView>
-                             <Pane prefWidth="10.0" HBox.hgrow="ALWAYS" />
-                             <Label text="Home" />
-                         </children>
-                     </HBox>
-                 </graphic>
-             </Button>
-         </children>
-      </VBox>
-      <ScrollPane layoutX="107.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <content>
-            <Button mnemonicParsing="false" text="Button" />
-         </content></ScrollPane>
-   </children>
+    <VBox prefWidth="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <Pane prefHeight="50.0" />
+        <Button contentDisplay="RIGHT" styleClass="menu_button">
+            <graphic>
+                <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mouseTransparent="true">
+                    <ImageView>
+                        <Image url="@img/house.png" />
+                    </ImageView>
+                    <Pane prefWidth="10.0" HBox.hgrow="ALWAYS" />
+                    <Label text="Home" />
+                    <Pane prefWidth="60.0" />
+                </HBox>
+            </graphic>
+        </Button>
+        <Button contentDisplay="RIGHT" styleClass="menu_button">
+            <graphic>
+                <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mouseTransparent="true">
+                    <ImageView>
+                        <Image url="@img/house.png" />
+                    </ImageView>
+                    <Pane prefWidth="10.0" HBox.hgrow="ALWAYS" />
+                    <Label text="Home" />
+                    <Pane prefWidth="60.0" />
+                </HBox>
+            </graphic>
+        </Button>
+        <Button contentDisplay="RIGHT" styleClass="menu_button">
+            <graphic>
+                <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mouseTransparent="true">
+                    <ImageView>
+                        <Image url="@img/house.png" />
+                    </ImageView>
+                    <Pane prefWidth="10.0" HBox.hgrow="ALWAYS" />
+                    <Label text="Home" />
+                    <Pane prefWidth="60.0" />
+                </HBox>
+            </graphic>
+        </Button>
+        <Button contentDisplay="RIGHT" styleClass="menu_button">
+            <graphic>
+                <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mouseTransparent="true">
+                    <ImageView>
+                        <Image url="@img/house.png" />
+                    </ImageView>
+                    <Pane prefWidth="10.0" HBox.hgrow="ALWAYS" />
+                    <Label text="Home" />
+                    <Pane prefWidth="60.0" />
+                </HBox>
+            </graphic>
+        </Button>
+        <Button contentDisplay="RIGHT" styleClass="menu_button">
+            <graphic>
+                <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mouseTransparent="true">
+                    <ImageView>
+                        <Image url="@img/house.png" />
+                    </ImageView>
+                    <Pane prefWidth="10.0" HBox.hgrow="ALWAYS" />
+                    <Label text="Home" />
+                    <Pane prefWidth="60.0" />
+                </HBox>
+            </graphic>
+        </Button>
+    </VBox>
+    <VBox layoutX="120.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <HBox prefHeight="50.0">
+            <Button prefHeight="32.0" style="-fx-background-color: white; -fx-background-radius: 0; -fx-border-width: 0;">
+                <graphic>
+                    <HBox alignment="CENTER" mouseTransparent="true">
+                        <ImageView>
+                            <Image url="@img/search.png" />
+                        </ImageView>
+                    </HBox>
+                </graphic>
+            </Button>
+            <TextField prefHeight="36.0" prefWidth="200.0" style="-fx-background-radius: 0; -fx-border-width: 0;">
+            <font>
+               <Font size="16.0" />
+            </font></TextField>
+        </HBox>
+    </VBox>
 </AnchorPane>

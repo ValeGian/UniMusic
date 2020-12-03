@@ -17,7 +17,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("welcome"), 1300, 750);
+        scene = new Scene(loadFXML("homepage"), 1300, 750);
         scene.getRoot().requestFocus();
         stage.setScene(scene);
         stage.setTitle("UniMusic Application");
