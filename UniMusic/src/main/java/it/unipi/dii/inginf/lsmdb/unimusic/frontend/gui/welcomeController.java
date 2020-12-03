@@ -1,6 +1,5 @@
-package it.unipi.dii.inginf.lsmdb.unimusic.gui;
+package it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui;
 
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

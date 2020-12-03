@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<GridPane alignment="CENTER" hgap="10.0" prefHeight="637.0" prefWidth="913.0" styleClass="root" vgap="20.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.inginf.lsmdb.unimusic.gui.welcomeController">
+<GridPane alignment="CENTER" hgap="10.0" prefHeight="637.0" prefWidth="913.0" styleClass="root" vgap="20.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui.welcomeController">
     <stylesheets>
         <URL value="@default.css" />
     </stylesheets>

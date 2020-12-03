@@ -1,4 +1,4 @@
-package it.unipi.dii.inginf.lsmdb.unimusic.gui;
+package it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
