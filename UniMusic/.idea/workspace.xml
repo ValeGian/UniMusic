@@ -23,42 +23,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c6dccbe1-0415-4611-95fc-f19c418b4dcd" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/App.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/homepageController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/welcomeController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/default.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/homepage.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/app_background.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/house.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/search.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/welcome.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/contacts.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/heart.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/logout.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/plus.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UniMusic.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/gui/App.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/gui/homepageController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/gui/welcomeController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/gui/default.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/gui/homepage.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/gui/img/app_background.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/gui/img/house.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/gui/img/search.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/gui/welcome.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/gui/App.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/gui/default.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/gui/homepage.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/gui/homepageController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/gui/img/app_background.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/gui/img/house.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/gui/img/search.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/gui/welcome.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/gui/welcomeController$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/gui/welcomeController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/module-info.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/module-info.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/null/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/null/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/null/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/null/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/homepage.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/homepage.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/homepage.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/homepage.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,23 +62,26 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img" />
     <property name="settings.editor.selected.configurable" value="preferences.applicationServers" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\LSMDB_git_project\LSMDB_UniMusic\UniMusic\src\main\resources\it\unipi\dii\inginf\lsmdb\unimusic\frontend\gui\img" />
       <recent name="C:\LSMDB_git_project\LSMDB_UniMusic\UniMusic\src\main\resources\it\unipi\dii\inginf\lsmdb\unimusic\frontend\gui" />
       <recent name="C:\LSMDB_git_project\LSMDB_UniMusic\UniMusic\src\main\java\it\unipi\dii\inginf\lsmdb\unimusic\frontend\gui" />
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -149,6 +123,7 @@
       <option name="presentableId" value="Default" />
       <updated>1607020562891</updated>
       <workItem from="1607020564437" duration="243000" />
+      <workItem from="1607074002642" duration="1324000" />
     </task>
     <servers />
   </component>
@@ -165,27 +140,28 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="447" y="70" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1607020639068">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="447" y="70" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1607020639068" />
-    <state width="1493" height="210" key="GridCell.Tab.0.bottom" timestamp="1607020811283">
+    <state width="1493" height="210" key="GridCell.Tab.0.bottom" timestamp="1607075335384">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1607020811283" />
-    <state width="1493" height="210" key="GridCell.Tab.0.center" timestamp="1607020811282">
+    <state width="1493" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1607075335384" />
+    <state width="1493" height="210" key="GridCell.Tab.0.center" timestamp="1607075335384">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1607020811282" />
-    <state width="1493" height="210" key="GridCell.Tab.0.left" timestamp="1607020811282">
+    <state width="1493" height="210" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1607075335384" />
+    <state width="1493" height="210" key="GridCell.Tab.0.left" timestamp="1607075335383">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1607020811282" />
-    <state width="1493" height="210" key="GridCell.Tab.0.right" timestamp="1607020811283">
+    <state width="1493" height="210" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1607075335383" />
+    <state width="1493" height="210" key="GridCell.Tab.0.right" timestamp="1607075335384">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1607020811283" />
+    <state width="1493" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1607075335384" />
   </component>
 </project>
