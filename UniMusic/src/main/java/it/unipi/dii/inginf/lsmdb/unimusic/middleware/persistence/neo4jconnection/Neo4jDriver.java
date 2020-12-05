@@ -1,8 +1,11 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.neo4jconnection;
 
-import org.neo4j.driver.AuthTokens;
-import org.neo4j.driver.Driver;
-import org.neo4j.driver.GraphDatabase;
+import org.neo4j.driver.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.neo4j.driver.Values.parameters;
 
 public class Neo4jDriver {
     private static Neo4jDriver instance = new Neo4jDriver();
@@ -22,4 +25,27 @@ public class Neo4jDriver {
     public Driver getDriver() { return driver; }
 
     public void closeConnection() { driver.close(); }
+
+    public static void main(String[] args) {
+        final String actorName = "Tom Hanks";
+        Driver driver = Neo4jDriver.getInstance().getDriver();
+        try ( Session session = driver.session() )
+        {
+            session.writeTransaction((TransactionWork<Void>) tx -> {
+                tx.run( "MERGE (p:Person {name: $name, from: $from, age: $age})",
+                        parameters( "name", "Valerio", "from", "Italy", "age", 22 ) );
+                return null;
+            });
+        }
+
+        try ( Session session = driver.session() )
+        {
+            Integer age = session.readTransaction((TransactionWork<Integer>) tx -> {
+                Result result = tx.run( "MATCH (p:Person) WHERE p.name = $name RETURN p.age",
+                        parameters( "name", "Valerio") );
+                return result.single().get(0).asInt();
+            });
+            System.out.println(age);
+        }
+    }
 }
