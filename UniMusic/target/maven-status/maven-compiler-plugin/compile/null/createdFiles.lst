@@ -1,2 +1,4 @@
 module-info.class
 it\unipi\dii\inginf\lsmdb\unimusic\middleware\entities\Song.class
+it\unipi\dii\inginf\lsmdb\unimusic\middleware\persistence\mongoconnection\MongoDriver.class
+it\unipi\dii\inginf\lsmdb\unimusic\middleware\persistence\neo4jconnection\Neo4jDriver.class
