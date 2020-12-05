@@ -9,10 +9,11 @@ public class Neo4jDriver {
     private final Driver driver;
 
     private final String uri = "neo4j://localhost:7687";
-    private final String user = "";
-    private final String password = "";
+    private final String user = "neo4j";
+    private final String password = "root";
 
     private Neo4jDriver() {
+
         driver = GraphDatabase.driver(uri, AuthTokens.basic(user, password));
     }
 
