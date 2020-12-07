@@ -12,10 +12,6 @@ import org.neo4j.driver.exceptions.Neo4jException;
 import org.bson.Document;
 import org.apache.log4j.*;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Properties;
-
 import static org.neo4j.driver.Values.parameters;
 
 public class UserDAOImpl implements UserDAO{
