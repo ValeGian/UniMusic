@@ -77,9 +77,6 @@ public class ScraperUtil {
                 like = Double.parseDouble(likeStr);
                 dislike = Double.parseDouble(dislikeStr);
 
-                System.out.println("like: " + like);
-                System.out.println("dislike: " + dislike);
-
                 if (like == 0)
                     return 0;
                 if (dislike == 0)

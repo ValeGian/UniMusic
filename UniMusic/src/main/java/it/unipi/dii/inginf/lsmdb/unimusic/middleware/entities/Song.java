@@ -1,11 +1,13 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities;
 
+import java.util.ArrayList;
+
 public class Song {
-    private long ID;
+    private String ID;
     private Album album;
     private String title;
     private String artist;
-    private String[] featuredArtists;
+    private ArrayList<String> featuredArtists;
     private int releaseYear;
     private String genre;
     private double rating;
@@ -18,13 +20,14 @@ public class Song {
 
     }
 
-    public Song(long ID,
+    public Song(String ID,
                 String albumName,
                 String albumImageURL,
                 String artist,
-                String[] featuredArtists,
+                ArrayList<String> featuredArtists,
                 int releaseYear,
-                String genre, double rating,
+                String genre,
+                double rating,
                 int likeCount,
                 String youtubeMediaURL,
                 String spotifyMediaURL,
@@ -42,13 +45,9 @@ public class Song {
         this.geniusMediaURL = geniusMediaURL;
     }
 
-    public long getID() {
-        return ID;
-    }
+    public String getID() { return ID; }
 
-    public void setID(long ID) {
-        this.ID = ID;
-    }
+    public void setID(String ID) { this.ID = ID; }
 
     public String getTitle() {
         return title;
@@ -66,11 +65,11 @@ public class Song {
         this.artist = artist;
     }
 
-    public String[] getFeaturedArtists() {
+    public ArrayList<String> getFeaturedArtists() {
         return featuredArtists;
     }
 
-    public void setFeaturedArtists(String[] featuredArtists) {
+    public void setFeaturedArtists(ArrayList<String> featuredArtists) {
         this.featuredArtists = featuredArtists;
     }
 
@@ -122,9 +121,10 @@ public class Song {
 
     public Album getAlbum() { return album; }
 
-    public void setAlbum(String albumName, String albumImageURL) { this.album = album; }
+    public void setAlbum(Album album) { this.album = album; }
 
     public String getGenre() { return genre; }
 
     public void setGenre(String genre) { this.genre = genre; }
+
 }
