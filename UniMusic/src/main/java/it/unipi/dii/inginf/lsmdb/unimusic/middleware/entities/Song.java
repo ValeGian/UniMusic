@@ -2,12 +2,12 @@ package it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities;
 
 public class Song {
     private long ID;
+    private Album album;
     private String title;
-    private String album;
-    private String albumImageURL;
     private String artist;
     private String[] featuredArtists;
     private int releaseYear;
+    private String genre;
     private double rating;
     private int likeCount;
     private String youtubeMediaURL;
@@ -19,19 +19,19 @@ public class Song {
     }
 
     public Song(long ID,
-                String album,
+                String albumName,
                 String albumImageURL,
                 String artist,
                 String[] featuredArtists,
                 int releaseYear,
-                double rating,
+                String genre, double rating,
                 int likeCount,
                 String youtubeMediaURL,
                 String spotifyMediaURL,
                 String geniusMediaURL) {
         this.ID = ID;
-        this.album = album;
-        this.albumImageURL = albumImageURL;
+        this.genre = genre;
+        this.album = new Album(albumName, albumImageURL);
         this.artist = artist;
         this.featuredArtists = featuredArtists;
         this.releaseYear = releaseYear;
@@ -58,22 +58,6 @@ public class Song {
         this.title = title;
     }
 
-    public String getAlbum() {
-        return album;
-    }
-
-    public void setAlbum(String album) {
-        this.album = album;
-    }
-
-    public String getAlbumImageURL() {
-        return albumImageURL;
-    }
-
-    public void setAlbumImageURL(String albumImageURL) {
-        this.albumImageURL = albumImageURL;
-    }
-
     public String getArtist() {
         return artist;
     }
@@ -94,9 +78,7 @@ public class Song {
         return releaseYear;
     }
 
-    public void setReleaseYear(int releaseYear) {
-        this.releaseYear = releaseYear;
-    }
+    public void setReleaseYear(int releaseYear) { this.releaseYear = releaseYear; }
 
     public double getRating() {
         return rating;
@@ -137,4 +119,12 @@ public class Song {
     public void setGeniusMediaURL(String geniusMediaURL) {
         this.geniusMediaURL = geniusMediaURL;
     }
+
+    public Album getAlbum() { return album; }
+
+    public void setAlbum(String albumName, String albumImageURL) { this.album = album; }
+
+    public String getGenre() { return genre; }
+
+    public void setGenre(String genre) { this.genre = genre; }
 }

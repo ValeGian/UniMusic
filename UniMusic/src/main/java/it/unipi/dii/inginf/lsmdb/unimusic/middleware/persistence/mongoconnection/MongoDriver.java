@@ -2,7 +2,6 @@ package it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnectio
 
 import com.mongodb.ConnectionString;
 import com.mongodb.client.*;
-import org.bson.Document;
 
 public class MongoDriver {
     private static MongoDriver instance = new MongoDriver();
@@ -28,9 +27,4 @@ public class MongoDriver {
     }
 
     public void closeConnection() { client.close(); }
-
-    public static void main(String[] args){
-        MongoCollection<Document> myColl = MongoDriver.getInstance().getCollection("songs");
-        System.out.println("Collection opened. Num of Docs: " + myColl.countDocuments());
-    }
 }

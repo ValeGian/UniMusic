@@ -65,11 +65,7 @@ public class User {
         this.age = age;
     }
 
-    public PrivilegeLevel getPrivilegeLevel() {
-        return privilegeLevel;
-    }
+    public PrivilegeLevel getPrivilegeLevel() { return privilegeLevel; }
 
-    public void setPrivilegeLevel(PrivilegeLevel privilegeLevel) {
-        this.privilegeLevel = privilegeLevel;
-    }
+    public void setPrivilegeLevel(PrivilegeLevel privilegeLevel) { this.privilegeLevel = privilegeLevel; }
 }

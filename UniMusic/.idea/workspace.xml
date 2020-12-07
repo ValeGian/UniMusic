@@ -23,34 +23,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c6dccbe1-0415-4611-95fc-f19c418b4dcd" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/entities/PrivilegeLevel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/exception/ActionNotCompletedException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/entities/Album.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/PlaylistDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/PlaylistDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/PlaylistDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/PlaylistDAOImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/SongDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/SongDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/SongDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/SongDAOImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/UserDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/UserDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/UserDAOImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/entities/Playlist.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/entities/Playlist.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/entities/Song.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/entities/Song.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/entities/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/exception/ActionNotCompletedException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/exception/ActionNotCompletedException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/persistence/mongoconnection/MongoDriver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/persistence/mongoconnection/MongoDriver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/PlaylistDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/PlaylistDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/PlaylistDAOImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/PlaylistDAOImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/SongDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/SongDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/SongDAOImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/SongDAOImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/UserDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/UserDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/UserDAOImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/UserDAOImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/entities/Playlist.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/entities/Playlist.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/entities/Song.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/entities/Song.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/entities/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/entities/User.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/module-info.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/null/createdFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/null/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/persistence/neo4jconnection/Neo4jDriver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/persistence/neo4jconnection/Neo4jDriver.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,7 +92,7 @@
       <recent name="C:\LSMDB_git_project\LSMDB_UniMusic\UniMusic\src\main\java\it\unipi\dii\inginf\lsmdb\unimusic\frontend\gui" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.MongoDriver">
+  <component name="RunManager" selected="Application.App">
     <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui.App" />
       <module name="UniMusic" />
@@ -124,30 +107,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MongoDriver" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.MongoDriver" />
-      <module name="UniMusic" />
-      <option name="VM_PARAMETERS" value="--module-path &quot;C:\javafx-sdk-15.0.1\lib&quot; --add-modules javafx.controls,javafx.fxml" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Neo4jDriver" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.neo4jconnection.Neo4jDriver" />
-      <module name="UniMusic" />
-      <option name="VM_PARAMETERS" value="--module-path &quot;C:\javafx-sdk-15.0.1\lib&quot; --add-modules javafx.controls,javafx.fxml" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.neo4jconnection.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -181,15 +147,11 @@
     </configuration>
     <list>
       <item itemvalue="Application.App" />
-      <item itemvalue="Application.MongoDriver" />
-      <item itemvalue="Application.Neo4jDriver" />
       <item itemvalue="Maven.Run" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.MongoDriver" />
         <item itemvalue="Application.App" />
-        <item itemvalue="Application.Neo4jDriver" />
       </list>
     </recent_temporary>
   </component>
@@ -219,6 +181,7 @@
       <workItem from="1607286573846" duration="1875000" />
       <workItem from="1607292395525" duration="984000" />
       <workItem from="1607294031658" duration="933000" />
+      <workItem from="1607332834628" duration="4852000" />
     </task>
     <servers />
   </component>
@@ -242,14 +205,14 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="249" y="0" key="#Project_Structure/0.0.1536.824@0.0.1536.824" timestamp="1607290551219" />
-    <state x="447" y="70" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1607294074971">
+    <state x="447" y="70" width="1089" height="737" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1607335978281">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="447" y="70" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1607294074971" />
-    <state x="574" y="128" key="#com.intellij.ide.util.MemberChooser" timestamp="1607277298937">
+    <state x="447" y="70" width="1089" height="737" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1607335978281" />
+    <state x="574" y="128" key="#com.intellij.ide.util.MemberChooser" timestamp="1607337597240">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="574" y="128" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1607277298937" />
+    <state x="574" y="128" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1607337597240" />
     <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1607292460495">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -278,5 +241,9 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="360" y="73" key="new project wizard/0.0.1536.824@0.0.1536.824" timestamp="1607292547718" />
+    <state x="425" y="187" key="run.anything.popup" timestamp="1607334635829">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="425" y="187" key="run.anything.popup/0.0.1536.824@0.0.1536.824" timestamp="1607334635829" />
   </component>
 </project>
