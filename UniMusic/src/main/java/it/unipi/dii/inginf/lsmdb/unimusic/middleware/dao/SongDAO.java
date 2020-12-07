@@ -10,6 +10,6 @@ public interface SongDAO {
 
     public void createSong(Song song) throws ActionNotCompletedException;
 
-    public Song getSong(long songID) throws ActionNotCompletedException;
+    public Song getSong(String songID) throws ActionNotCompletedException;
 
 }
