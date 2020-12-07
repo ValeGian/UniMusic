@@ -22,8 +22,8 @@ public class MongoDriver {
 
     public static MongoDriver getInstance() { return instance; }
 
-    public MongoCollection getCollection(String collectionName) {
-        return mongoDB.getCollection(collectionName);
+    public MongoCollection getCollection(Collections collectionName) {
+        return mongoDB.getCollection(collectionName.toString());
     }
 
     public void closeConnection() { client.close(); }

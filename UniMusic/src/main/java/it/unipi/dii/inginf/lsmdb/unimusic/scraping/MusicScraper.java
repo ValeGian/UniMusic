@@ -67,7 +67,7 @@ public class MusicScraper {
                 continue;
             }
 
-            StringBuffer responseSpotify = getResponse("https://api.spotify.com/v1/tracks/" + uriSpotify, " BQC2Eg4JOJkOxa2yFAeI-mJ9NjRN2V-RTgIExEqxIEYgmcmwIKWzZp_71BVSB1jWIaf-R_WDUgM5fMg0N4D6QzzLAgMvd-o_pbVI873cYERYYeP5ikJjqahNaorFPfrDNwIRIdydKBjZNQIuOPitp1mntphbf_lRhK40f45POA");
+            StringBuffer responseSpotify = getResponse("https://api.spotify.com/v1/tracks/" + uriSpotify, " BQAH2D02CiVHLqjyUbbsgEwd87zD2Cr1M--zyacHee3YHqdqeyEqwt8VJc1Lg_0fdzYgRuhw9HDD7iCl87aTeNtNjWkFKYoxqTQyD8IDiDXl7IWiCIvN6On5FiM4JzapmBoj1zSv9pjt1sxiCWIBX42GutqfkCtpEDlGo-chfw");
             if(responseSpotify == null) {
                 System.out.println("Spotify response missed, check the spotify bearer if the problem persists!");
                 miss++;
@@ -76,7 +76,11 @@ public class MusicScraper {
 
             songToInsert.setID(new ObjectId().toString());
 
-            songToInsert.setRating(new JSONObject(responseSpotify.toString()).getInt("popularity"));
+            double spotifyRating = new JSONObject(responseSpotify.toString()).getInt("popularity");
+            double youtubeRating = ScraperUtil.getPopularity(songToInsert.getYoutubeMediaURL());
+            double rating = spotifyRating * 0.7 + youtubeRating * 0.3;
+
+            songToInsert.setRating(rating);
 
             try{
                 songAlbum.setImageURL(song.getJSONObject("album").getString("cover_art_url"));
@@ -92,7 +96,7 @@ public class MusicScraper {
             System.out.format("Response:-\tAlbum: %s\tTitle: %s\tindex: %s\n\n", songAlbum.getImageURL(), songToInsert.getTitle(), i);
 
             songToInsert.setAlbum(songAlbum);
-            songToInsert.setGenre("Unknown"); //            songToInsert.setGenre(getGenre);
+            songToInsert.setGenre(ScraperUtil.getGenre(songToInsert.getGeniusMediaURL()));
             JSONArray featuredArtists;
             try{
                 featuredArtists = song.getJSONArray("featured_artists");

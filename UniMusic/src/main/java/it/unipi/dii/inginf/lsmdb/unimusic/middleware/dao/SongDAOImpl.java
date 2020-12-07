@@ -4,6 +4,7 @@ import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Song;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.Collections;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.MongoDriver;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.neo4jconnection.Neo4jDriver;
 import org.bson.Document;
@@ -53,7 +54,7 @@ public class SongDAOImpl implements SongDAO{
 
     private void createSongDocument(Song song) throws MongoException{
 
-        MongoCollection<Document> songCollection = MongoDriver.getInstance().getCollection("songs");
+        MongoCollection<Document> songCollection = MongoDriver.getInstance().getCollection(Collections.SONGS);
 
         Document songDocument = new Document("_id", song.getID())
                 .append("title", song.getTitle());

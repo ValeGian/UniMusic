@@ -22,18 +22,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6dccbe1-0415-4611-95fc-f19c418b4dcd" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/entities/Album.java" afterDir="false" />
+    <list default="true" id="c6dccbe1-0415-4611-95fc-f19c418b4dcd" name="Default Changelist" comment="Modificati campi Playlist">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/PlaylistDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/PlaylistDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/PlaylistDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/PlaylistDAOImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/UserDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/UserDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/UserDAOImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/entities/Song.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/entities/Song.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/entities/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/exception/ActionNotCompletedException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/exception/ActionNotCompletedException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/persistence/mongoconnection/MongoDriver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/persistence/mongoconnection/MongoDriver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/persistence/neo4jconnection/Neo4jDriver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/persistence/neo4jconnection/Neo4jDriver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/UserDAOImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/UserDAOImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/entities/Playlist.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/entities/Playlist.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/persistence/mongoconnection/MongoDriver.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/persistence/mongoconnection/MongoDriver.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,7 +53,7 @@
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
-        <option name="mavenHome" value="C:\Program Files\JetBrains\IntelliJ IDEA 2020.2.3\plugins\maven\lib\maven3" />
+        <option name="mavenHome" value="C:\Users\mrlor\AppData\Local\JetBrains\IntelliJ IDEA Community Edition 2020.2.3\plugins\maven\lib\maven3" />
       </MavenGeneralSettings>
     </option>
   </component>
@@ -76,7 +70,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../UniMusic" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -92,7 +86,18 @@
       <recent name="C:\LSMDB_git_project\LSMDB_UniMusic\UniMusic\src\main\java\it\unipi\dii\inginf\lsmdb\unimusic\frontend\gui" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.App">
+  <component name="RunManager" selected="Application.ScraperUtil">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui.App" />
       <module name="UniMusic" />
@@ -107,13 +112,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
+    <configuration name="ScraperUtil" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="it.unipi.dii.inginf.lsmdb.unimusic.scraping.ScraperUtil" />
+      <module name="UniMusic" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="it.unipi.dii.inginf.lsmdb.unimusic.scraping.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -148,9 +155,11 @@
     <list>
       <item itemvalue="Application.App" />
       <item itemvalue="Maven.Run" />
+      <item itemvalue="Application.ScraperUtil" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.ScraperUtil" />
         <item itemvalue="Application.App" />
       </list>
     </recent_temporary>
@@ -181,8 +190,25 @@
       <workItem from="1607286573846" duration="1875000" />
       <workItem from="1607292395525" duration="984000" />
       <workItem from="1607294031658" duration="933000" />
-      <workItem from="1607332834628" duration="4852000" />
+      <workItem from="1607332834628" duration="7285000" />
+      <workItem from="1607342265987" duration="135000" />
+      <workItem from="1607350312701" duration="448000" />
     </task>
+    <task id="LOCAL-00001" summary="Aggiunto campo &quot;isFavourite&quot; a Playlist">
+      <created>1607340500761</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1607340500761</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Modificati campi Playlist">
+      <created>1607342348751</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1607342348751</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -200,19 +226,24 @@
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Aggiunto campo &quot;isFavourite&quot; a Playlist" />
+    <MESSAGE value="Modificati campi Playlist" />
+    <option name="LAST_COMMIT_MESSAGE" value="Modificati campi Playlist" />
+  </component>
   <component name="WindowStateProjectService">
     <state x="249" y="0" key="#Project_Structure" timestamp="1607290551219">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="249" y="0" key="#Project_Structure/0.0.1536.824@0.0.1536.824" timestamp="1607290551219" />
-    <state x="447" y="70" width="1089" height="737" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1607335978281">
+    <state x="447" y="70" width="1089" height="737" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1607339024537">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="447" y="70" width="1089" height="737" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1607335978281" />
-    <state x="574" y="128" key="#com.intellij.ide.util.MemberChooser" timestamp="1607337597240">
+    <state x="447" y="70" width="1089" height="737" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1607339024537" />
+    <state x="574" y="128" key="#com.intellij.ide.util.MemberChooser" timestamp="1607340366305">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="574" y="128" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1607337597240" />
+    <state x="574" y="128" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1607340366305" />
     <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1607292460495">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -237,10 +268,22 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="299" y="67" key="Maven.ArtifactSearchDialog/0.0.1536.824@0.0.1536.824" timestamp="1607190472459" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1607342364023">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1607342364023" />
+    <state x="586" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1607350480733">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="586" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1607350480733" />
     <state x="360" y="73" key="new project wizard" timestamp="1607292547718">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="360" y="73" key="new project wizard/0.0.1536.824@0.0.1536.824" timestamp="1607292547718" />
+    <state x="611" y="170" key="refactoring.ChangeSignatureDialog" timestamp="1607342301972">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="611" y="170" key="refactoring.ChangeSignatureDialog/0.0.1536.824@0.0.1536.824" timestamp="1607342301972" />
     <state x="425" y="187" key="run.anything.popup" timestamp="1607334635829">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
