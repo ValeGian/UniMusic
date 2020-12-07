@@ -55,7 +55,7 @@ public class MusicScraper {
                     else if (provider.equals("spotify")) {
                         urls[1] = media.getJSONObject(iter).getString("url");
                         urls[3] = media.getJSONObject(iter).getString("native_uri").split(":")[2];
-
+///PROVIAMO
                     }
                 }
                 if (urls[0] == null || urls[1] == null){
