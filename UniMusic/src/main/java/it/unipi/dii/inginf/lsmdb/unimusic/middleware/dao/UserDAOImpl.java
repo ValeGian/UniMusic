@@ -1,36 +1,40 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.middleware.dao;
 
 import com.mongodb.MongoException;
-import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoCollection;
-import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Playlist;
-import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.User;
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.*;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
-import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.Collections;
-import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.MongoDriver;
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.log.UMLogger;
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.*;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.neo4jconnection.Neo4jDriver;
 import org.neo4j.driver.Session;
 import org.neo4j.driver.exceptions.Neo4jException;
 import org.bson.Document;
+import org.apache.log4j.*;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Properties;
 
 import static org.neo4j.driver.Values.parameters;
 
 public class UserDAOImpl implements UserDAO{
 
     public static void main(String[] args) {
-        User user = new User("valegiann", "root", "Valerio", "Giannini", 22);
+        Logger logger = UMLogger.getUserLogger();
 
+        User user = new User("valegiann", "root", "Valerio", "Giannini", 22);
         UserDAO userDAO = new UserDAOImpl();
 
         try {
             userDAO.createUser(user);
-            System.out.println("> Inserito " + user.getUsername());
+            logger.info("Inserito " + user.getUsername());
         } catch (ActionNotCompletedException e) {
             if (e.getCode() == 11000) {
-                System.out.println("You are trying to insert a document with *duplicate*  _id: " + user.getUsername());
+                logger.error("You are trying to insert a document with *duplicate*  _id: " + user.getUsername());
             }
             else {
-                System.out.println("Some error while inserting document with  _id: ");
+                logger.error("Some error while inserting document with  _id: ");
             }
         }
     }
