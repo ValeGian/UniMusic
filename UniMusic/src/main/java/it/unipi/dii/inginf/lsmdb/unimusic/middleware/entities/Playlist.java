@@ -2,7 +2,7 @@ package it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities;
 
 public class Playlist {
     private String author;
-    private long ID;
+    private String ID;
     private String name;
     private boolean isFavourite;
 
@@ -17,18 +17,18 @@ public class Playlist {
     }
 
     public Playlist(String author,
-                    long ID,
+                    String ID,
                     String name) {
         this.author = author;
         this.ID = ID;
         this.name = name;
     }
 
-    public long getID() {
+    public String getID() {
         return ID;
     }
 
-    public void setID(long ID) {
+    public void setID(String ID) {
         this.ID = ID;
     }
 
