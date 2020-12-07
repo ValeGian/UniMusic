@@ -22,7 +22,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6dccbe1-0415-4611-95fc-f19c418b4dcd" name="Default Changelist" comment="Aggiunto campo &quot;isFavourite&quot; a Playlist" />
+    <list default="true" id="c6dccbe1-0415-4611-95fc-f19c418b4dcd" name="Default Changelist" comment="Modificati campi Playlist">
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/persistence/mongoconnection/Collections.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/UserDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/UserDAOImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/persistence/mongoconnection/MongoDriver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/persistence/mongoconnection/MongoDriver.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -36,8 +41,8 @@
       <list>
         <option value="FxmlFile" />
         <option value="Interface" />
-        <option value="Enum" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -91,6 +96,17 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -159,6 +175,8 @@
       <workItem from="1607292395525" duration="984000" />
       <workItem from="1607294031658" duration="933000" />
       <workItem from="1607332834628" duration="7285000" />
+      <workItem from="1607342265987" duration="135000" />
+      <workItem from="1607350312701" duration="448000" />
     </task>
     <task id="LOCAL-00001" summary="Aggiunto campo &quot;isFavourite&quot; a Playlist">
       <created>1607340500761</created>
@@ -167,7 +185,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607340500761</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Modificati campi Playlist">
+      <created>1607342348751</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1607342348751</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -187,7 +212,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Aggiunto campo &quot;isFavourite&quot; a Playlist" />
-    <option name="LAST_COMMIT_MESSAGE" value="Aggiunto campo &quot;isFavourite&quot; a Playlist" />
+    <MESSAGE value="Modificati campi Playlist" />
+    <option name="LAST_COMMIT_MESSAGE" value="Modificati campi Playlist" />
   </component>
   <component name="WindowStateProjectService">
     <state x="249" y="0" key="#Project_Structure" timestamp="1607290551219">
@@ -226,18 +252,22 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="299" y="67" key="Maven.ArtifactSearchDialog/0.0.1536.824@0.0.1536.824" timestamp="1607190472459" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1607340538460">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1607342364023">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1607340538460" />
-    <state x="586" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1607339693931">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1607342364023" />
+    <state x="586" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1607350480733">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="586" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1607339693931" />
+    <state x="586" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1607350480733" />
     <state x="360" y="73" key="new project wizard" timestamp="1607292547718">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="360" y="73" key="new project wizard/0.0.1536.824@0.0.1536.824" timestamp="1607292547718" />
+    <state x="611" y="170" key="refactoring.ChangeSignatureDialog" timestamp="1607342301972">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="611" y="170" key="refactoring.ChangeSignatureDialog/0.0.1536.824@0.0.1536.824" timestamp="1607342301972" />
     <state x="425" y="187" key="run.anything.popup" timestamp="1607334635829">
       <screen x="0" y="0" width="1536" height="824" />
     </state>

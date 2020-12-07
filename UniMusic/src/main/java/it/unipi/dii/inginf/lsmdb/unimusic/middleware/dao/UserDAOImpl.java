@@ -1,9 +1,12 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.middleware.dao;
 
 import com.mongodb.MongoException;
+import com.mongodb.client.MongoCollection;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Playlist;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.User;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.Collections;
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.MongoDriver;
 import org.neo4j.driver.exceptions.Neo4jException;
 
 public class UserDAOImpl implements UserDAO{
@@ -52,7 +55,7 @@ public class UserDAOImpl implements UserDAO{
     //---------------------------------------------------------------------------------------------
 
     private void createUserDocument(User user) {
-
+        MongoCollection userColl = MongoDriver.getInstance().getCollection(Collections.USERS);
     }
 
     private void createUserNode(User user) {
