@@ -23,10 +23,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c6dccbe1-0415-4611-95fc-f19c418b4dcd" name="Default Changelist" comment="Modificati campi Playlist">
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/persistence/mongoconnection/Collections.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/UserDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/UserDAOImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/persistence/mongoconnection/MongoDriver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/persistence/mongoconnection/MongoDriver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/UserDAOImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/UserDAOImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/entities/Playlist.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/entities/Playlist.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/persistence/mongoconnection/MongoDriver.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/persistence/mongoconnection/MongoDriver.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,8 +42,8 @@
       <list>
         <option value="FxmlFile" />
         <option value="Interface" />
-        <option value="Class" />
         <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -52,7 +53,7 @@
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
-        <option name="mavenHome" value="C:\Program Files\JetBrains\IntelliJ IDEA 2020.2.3\plugins\maven\lib\maven3" />
+        <option name="mavenHome" value="C:\Users\mrlor\AppData\Local\JetBrains\IntelliJ IDEA Community Edition 2020.2.3\plugins\maven\lib\maven3" />
       </MavenGeneralSettings>
     </option>
   </component>
@@ -69,7 +70,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../UniMusic" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -85,7 +86,18 @@
       <recent name="C:\LSMDB_git_project\LSMDB_UniMusic\UniMusic\src\main\java\it\unipi\dii\inginf\lsmdb\unimusic\frontend\gui" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.App">
+  <component name="RunManager" selected="Application.ScraperUtil">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui.App" />
       <module name="UniMusic" />
@@ -100,13 +112,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
+    <configuration name="ScraperUtil" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="it.unipi.dii.inginf.lsmdb.unimusic.scraping.ScraperUtil" />
+      <module name="UniMusic" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="it.unipi.dii.inginf.lsmdb.unimusic.scraping.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -141,9 +155,11 @@
     <list>
       <item itemvalue="Application.App" />
       <item itemvalue="Maven.Run" />
+      <item itemvalue="Application.ScraperUtil" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.ScraperUtil" />
         <item itemvalue="Application.App" />
       </list>
     </recent_temporary>
