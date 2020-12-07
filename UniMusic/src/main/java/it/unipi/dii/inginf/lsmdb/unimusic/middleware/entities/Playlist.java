@@ -4,6 +4,7 @@ public class Playlist {
     private String author;
     private long ID;
     private String name;
+    private boolean isFavourite;
 
     public Playlist() {
 
@@ -45,5 +46,13 @@ public class Playlist {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public boolean isFavourite() {
+        return isFavourite;
+    }
+
+    public void setFavourite(boolean favourite) {
+        isFavourite = favourite;
     }
 }
