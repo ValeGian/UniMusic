@@ -1,15 +1,39 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.middleware.dao;
 
 import com.mongodb.MongoException;
+import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoCollection;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Playlist;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.User;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.Collections;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.MongoDriver;
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.neo4jconnection.Neo4jDriver;
+import org.neo4j.driver.Session;
 import org.neo4j.driver.exceptions.Neo4jException;
+import org.bson.Document;
+
+import static org.neo4j.driver.Values.parameters;
 
 public class UserDAOImpl implements UserDAO{
+
+    public static void main(String[] args) {
+        User user = new User("valegiann", "root", "Valerio", "Giannini", 22);
+
+        UserDAO userDAO = new UserDAOImpl();
+
+        try {
+            userDAO.createUser(user);
+            System.out.println("> Inserito " + user.getUsername());
+        } catch (ActionNotCompletedException e) {
+            if (e.getCode() == 11000) {
+                System.out.println("You are trying to insert a document with *duplicate*  _id: " + user.getUsername());
+            }
+            else {
+                System.out.println("Some error while inserting document with  _id: ");
+            }
+        }
+    }
 
     @Override
     public void createUser(User user)  throws ActionNotCompletedException{
@@ -19,7 +43,7 @@ public class UserDAOImpl implements UserDAO{
             createUserNode(user);
         } catch (MongoException mongoEx) {
             //loggo
-            throw new ActionNotCompletedException(mongoEx);
+            throw new ActionNotCompletedException(mongoEx, mongoEx.getCode());
         } catch (Neo4jException neoEx) {
             //loggo
             try {
@@ -54,12 +78,22 @@ public class UserDAOImpl implements UserDAO{
 
     //---------------------------------------------------------------------------------------------
 
-    private void createUserDocument(User user) {
+    private void createUserDocument(User user) throws MongoException {
+        Document userDoc = new Document("_id", user.getUsername())
+                .append("password", user.getPassword())
+                .append("firstName", user.getFirstName())
+                .append("lastName", user.getLastName())
+                .append("age", user.getAge())
+                .append("privilegeLevel", user.getPrivilegeLevel().toString());
+
         MongoCollection userColl = MongoDriver.getInstance().getCollection(Collections.USERS);
+        userColl.insertOne(userDoc);
     }
 
-    private void createUserNode(User user) {
-
+    private void createUserNode(User user) throws Neo4jException {
+        try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
+            session.run("MERGE (a:User {username: $username})", parameters("username", user.getUsername()));
+        }
     }
 
     private void deleteUserDocument(User user) {
