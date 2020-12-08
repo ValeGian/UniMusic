@@ -10,8 +10,11 @@ import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.neo4jconnection
 import org.apache.log4j.Logger;
 import org.bson.BsonArray;
 import org.bson.Document;
-import org.neo4j.driver.Session;
+import org.neo4j.driver.*;
 import org.neo4j.driver.exceptions.Neo4jException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Updates.*;
@@ -39,6 +42,19 @@ public class UserDAOImpl implements UserDAO{
                 logger.error("Some error while inserting document with  _id: ");
                 e.printStackTrace();
             }
+        }
+
+        try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
+            List<String> lista = session.readTransaction((TransactionWork<List<String>>) tx -> {
+               Result result = tx.run("MATCH (a:User) RETURN a.username as username");
+                ArrayList<String> users = new ArrayList<>();
+                while ((result.hasNext())){
+                    Record r = result.next();
+                    users.add(r.get("username").asString());
+                }
+                return users;
+            });
+            System.out.println(lista);
         }
 
         Neo4jDriver.getInstance().closeDriver();
@@ -70,7 +86,7 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public User getUser(String username)  throws ActionNotCompletedException{
+    public User getUserByUsername(String username)  throws ActionNotCompletedException{
         return null;
     }
 
@@ -130,13 +146,7 @@ public class UserDAOImpl implements UserDAO{
     //---------------------------------------------------------------------------------------------
 
     private void createUserDocument(User user) throws MongoException, ActionNotCompletedException {
-        Document userDoc = new Document(UserFields.USERNAME.toString(), user.getUsername())
-                .append(UserFields.PASSWORD.toString(), user.getPassword())
-                .append(UserFields.FIRST_NAME.toString(), user.getFirstName())
-                .append(UserFields.LAST_NAME.toString(), user.getLastName())
-                .append(UserFields.AGE.toString(), user.getAge())
-                .append(UserFields.PRIVILEGE_LEVEL.toString(), user.getPrivilegeLevel().toString())
-                .append(UserFields.CREATED_PLAYLISTS.toString(), new BsonArray());
+        Document userDoc = user.toBsonDocument();
 
         MongoCollection<Document> userColl = MongoDriver.getInstance().getCollection(Collections.USERS);
         userColl.insertOne(userDoc);
