@@ -67,7 +67,7 @@ public class MusicScraper {
                 continue;
             }
 
-            StringBuffer responseSpotify = getResponse("https://api.spotify.com/v1/tracks/" + uriSpotify, " BQAH2D02CiVHLqjyUbbsgEwd87zD2Cr1M--zyacHee3YHqdqeyEqwt8VJc1Lg_0fdzYgRuhw9HDD7iCl87aTeNtNjWkFKYoxqTQyD8IDiDXl7IWiCIvN6On5FiM4JzapmBoj1zSv9pjt1sxiCWIBX42GutqfkCtpEDlGo-chfw");
+            StringBuffer responseSpotify = getResponse("https://api.spotify.com/v1/tracks/" + uriSpotify, " BQAAiRVQucV2vRS1PYWYhQDt8Ugixf3Q8ERxf2GoWP5SxZY7dAj_FIipFEQWYW4Q54VJNT9jrNqaPdhjTnyZg-sTaZ6bqh9VXQZfpK8-yYbh9Oh3lkllsVO6OrKNu_68N_m4aPOBRUKoVLO7bCXhq7uwRVDU_mJrnWtgvjKFCQ");
             if(responseSpotify == null) {
                 System.out.println("Spotify response missed, check the spotify bearer if the problem persists!");
                 miss++;
