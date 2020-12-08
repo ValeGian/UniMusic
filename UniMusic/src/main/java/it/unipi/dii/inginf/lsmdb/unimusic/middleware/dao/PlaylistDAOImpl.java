@@ -13,6 +13,11 @@ public class PlaylistDAOImpl implements PlaylistDAO{
     }
 
     @Override
+    public void createFavouritePlaylist(String user)  throws ActionNotCompletedException{
+
+    }
+
+    @Override
     public Playlist getPlaylist(long playlistID)  throws ActionNotCompletedException{
         return null;
     }
