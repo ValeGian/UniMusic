@@ -103,8 +103,8 @@ public class SongDAOImpl implements SongDAO{
         try ( Session session = Neo4jDriver.getInstance().getDriver().session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "MERGE (p:Song {title: $title, artist: $artist, imageUrl: $imageUrl})",
-                        parameters( "title", song.getTitle(), "artist", song.getArtist(), "imageUrl", song.getAlbum().getImageURL() ) );
+                tx.run( "MERGE (p:Song {songId: $songId, title: $title, artist: $artist, imageUrl: $imageUrl})",
+                        parameters("songId", song.getID(), "title", song.getTitle(), "artist", song.getArtist(), "imageUrl", song.getAlbum().getImageURL() ) );
                 return null;
             });
         }
