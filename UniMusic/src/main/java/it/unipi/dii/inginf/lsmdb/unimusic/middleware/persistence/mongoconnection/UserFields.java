@@ -6,7 +6,8 @@ public enum UserFields {
     FIRST_NAME("firstName"),
     LAST_NAME("lastName"),
     AGE("age"),
-    PRIVILEGE_LEVEL("privilegeLevel");
+    PRIVILEGE_LEVEL("privilegeLevel"),
+    CREATED_PLAYLISTS("createdPlaylists");
 
     private String userFieldName;
     private UserFields(String collName) {

@@ -1,8 +1,9 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.neo4jconnection;
 
 public enum RelationshipTypes {
-    ESEMPIO("ESEMPIO");
-    //to be added
+    FOLLOW_USER("FOLLOWS_USER"),
+    FOLLOW_PLAYLIST("FOLLOWS_PLAYLIST"),
+    LIKE("LIKES");
 
     private String relTypeName;
     private RelationshipTypes(String collName) {

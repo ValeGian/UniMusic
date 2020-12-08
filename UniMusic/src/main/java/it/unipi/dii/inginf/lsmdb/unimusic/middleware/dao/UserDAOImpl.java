@@ -6,10 +6,9 @@ import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.*;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.log.UMLogger;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.*;
-import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.neo4jconnection.Labels;
-import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.neo4jconnection.Neo4jDriver;
-import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.neo4jconnection.UserProperties;
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.neo4jconnection.*;
 import org.apache.log4j.Logger;
+import org.bson.BsonArray;
 import org.bson.Document;
 import org.neo4j.driver.Session;
 import org.neo4j.driver.exceptions.Neo4jException;
@@ -23,23 +22,23 @@ public class UserDAOImpl implements UserDAO{
 
     public static void main(String[] args) {
 
-        User user = new User("valegiann", "root", "Valerio", "Giannini", 22);
+        User user1 = new User("valegiann", "root", "Valerio", "Giannini", 22);
+        User user2 = new User("aleserra", "root", "Alessio", "Serra", 22);
         UserDAO userDAO = new UserDAOImpl();
 
         try {
-            userDAO.createUser(user);
+            userDAO.createUser(user1);
+            userDAO.createUser(user2);
+            userDAO.followUser(user1, user2);
+
         } catch (ActionNotCompletedException e) {
             if (e.getCode() == 11000) {
-                logger.error("You are trying to insert a document with *duplicate*  _id: " + user.getUsername());
+                logger.error("You are trying to insert a document with *duplicate*  _id: " + user1.getUsername());
+                e.printStackTrace();
             } else {
                 logger.error("Some error while inserting document with  _id: ");
+                e.printStackTrace();
             }
-        }
-
-        try {
-            userDAO.updateUserPrivilegeLevel(user, PrivilegeLevel.ADMIN);
-        } catch (ActionNotCompletedException ancEx) {
-            ancEx.printStackTrace();
         }
 
         Neo4jDriver.getInstance().closeDriver();
@@ -52,13 +51,9 @@ public class UserDAOImpl implements UserDAO{
             createUserNode(user);
             logger.info("Created user <" +user.getUsername()+ ">");
 
-            PlaylistDAO playlistDAO = new PlaylistDAOImpl();
-            playlistDAO.createFavourite(user);
-            logger.info("Created favourite playlist of user <" +user.getUsername()+ ">");
-
         } catch (ActionNotCompletedException ancEx) {
             logger.error(ancEx.getMessage());
-            throw new ActionNotCompletedException(ancEx);
+            throw new ActionNotCompletedException(ancEx.getMessage());
         } catch (MongoException mEx) {
             logger.error(mEx.getMessage());
             throw new ActionNotCompletedException(mEx, mEx.getCode());
@@ -80,13 +75,44 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public void addPlaylist(User user, Playlist playlist)  throws ActionNotCompletedException{
+    public void addCreatedPlaylist(User user, Playlist playlistCreated)  throws ActionNotCompletedException{
+        try {
+            addPlaylistToUserDocument(user, playlistCreated);
+            logger.info("Playlist <" +playlistCreated.getName()+ "> created by user <" + user.getUsername() + ">");
+        } catch (MongoException mEx) {
+            logger.error(mEx.getMessage());
+            throw new ActionNotCompletedException(mEx);
+        }
+    }
 
+    @Override
+    public void followUser(User userFollowing, User userFollowed) throws ActionNotCompletedException {
+        try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
+            session.run("MATCH (following:" +Labels.USER+ ") WHERE following." +UserProperties.USERNAME+ " = $following "
+                            + "MATCH (followed:" +Labels.USER+ ") WHERE followed." +UserProperties.USERNAME+ " = $followed "
+                            + "CREATE (following)-[:" +RelationshipTypes.FOLLOW_USER+ "]->(followed)",
+                    parameters("following", userFollowing.getUsername(), "followed", userFollowed.getUsername())
+            );
+            logger.info("User <" + userFollowing.getUsername() + "> follows user <" + userFollowed.getUsername() + ">");
+        } catch (Neo4jException n4jEx) {
+            logger.error(n4jEx.getMessage());
+            throw new ActionNotCompletedException(n4jEx);
+        }
     }
 
     @Override
     public void followPlaylist(User user, Playlist playlist) throws ActionNotCompletedException {
-
+        try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
+            session.run("MATCH (following:" +Labels.USER+ ") WHERE following." +UserProperties.USERNAME+ " = $following "
+                            + "MATCH (followed:" +Labels.PLAYLIST+ ") WHERE followed." + PlaylistProperties.ID + " = $followed "
+                            + "CREATE (following)-[:" +RelationshipTypes.FOLLOW_PLAYLIST+ "]->(followed)",
+                    parameters("following", user.getUsername(), "followed", playlist.getID())
+            );
+            logger.info("User <" + user.getUsername() + "> follows playlist <" + playlist.getID() + ">");
+        } catch (Neo4jException n4jEx) {
+            logger.error(n4jEx.getMessage());
+            throw new ActionNotCompletedException(n4jEx);
+        }
     }
 
     @Override
@@ -103,24 +129,32 @@ public class UserDAOImpl implements UserDAO{
 
     //---------------------------------------------------------------------------------------------
 
-    private void createUserDocument(User user) throws MongoException {
+    private void createUserDocument(User user) throws MongoException, ActionNotCompletedException {
         Document userDoc = new Document(UserFields.USERNAME.toString(), user.getUsername())
                 .append(UserFields.PASSWORD.toString(), user.getPassword())
                 .append(UserFields.FIRST_NAME.toString(), user.getFirstName())
                 .append(UserFields.LAST_NAME.toString(), user.getLastName())
                 .append(UserFields.AGE.toString(), user.getAge())
-                .append(UserFields.PRIVILEGE_LEVEL.toString(), user.getPrivilegeLevel().toString());
+                .append(UserFields.PRIVILEGE_LEVEL.toString(), user.getPrivilegeLevel().toString())
+                .append(UserFields.CREATED_PLAYLISTS.toString(), new BsonArray());
 
         MongoCollection<Document> userColl = MongoDriver.getInstance().getCollection(Collections.USERS);
         userColl.insertOne(userDoc);
+
+        Playlist favouritePlaylist = new Playlist(user.getUsername(), "Favourites");
+        addPlaylistToUserDocument(user, favouritePlaylist);
     }
 
     private void createUserNode(User user) throws Neo4jException {
         try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
             session.run(
                     "MERGE (a:" +Labels.USER+ " {" +UserProperties.USERNAME+ ": $username})",
-                    parameters(UserProperties.USERNAME, user.getUsername()));
+                    parameters("username", user.getUsername()));
         }
+    }
+
+    private void addPlaylistToUserDocument(User user, Playlist playlist) throws MongoException {
+
     }
 
     private void updateUserDocument(User user) throws MongoException {
