@@ -53,12 +53,9 @@ public class UserDAOImpl implements UserDAO{
             logger.info("Created user <" +user.getUsername()+ ">");
 
             PlaylistDAO playlistDAO = new PlaylistDAOImpl();
-            playlistDAO.createFavourite(user);
+            //playlistDAO.createFavourite(user);
             logger.info("Created favourite playlist of user <" +user.getUsername()+ ">");
 
-        } catch (ActionNotCompletedException ancEx) {
-            logger.error(ancEx.getMessage());
-            throw new ActionNotCompletedException(ancEx);
         } catch (MongoException mEx) {
             logger.error(mEx.getMessage());
             throw new ActionNotCompletedException(mEx, mEx.getCode());

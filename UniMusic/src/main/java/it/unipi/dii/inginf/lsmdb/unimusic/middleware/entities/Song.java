@@ -3,7 +3,7 @@ package it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities;
 import java.util.ArrayList;
 
 public class Song {
-    private String ID;
+    private String _id;
     private Album album;
     private String title;
     private String artist;
@@ -20,7 +20,7 @@ public class Song {
 
     }
 
-    public Song(String ID,
+    public Song(String _id,
                 String albumName,
                 String albumImageURL,
                 String artist,
@@ -32,7 +32,7 @@ public class Song {
                 String youtubeMediaURL,
                 String spotifyMediaURL,
                 String geniusMediaURL) {
-        this.ID = ID;
+        this._id = _id;
         this.genre = genre;
         this.album = new Album(albumName, albumImageURL);
         this.artist = artist;
@@ -45,9 +45,9 @@ public class Song {
         this.geniusMediaURL = geniusMediaURL;
     }
 
-    public String getID() { return ID; }
+    public String getID() { return _id; }
 
-    public void setID(String ID) { this.ID = ID; }
+    public void setID(String ID) { this._id = ID; }
 
     public String getTitle() {
         return title;

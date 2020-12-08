@@ -2,26 +2,27 @@ package it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities;
 
 public class Album {
     private String title;
-    private String imageURL;
+    private String image;
 
     public Album() {
 
     }
 
     public Album(String title,
-                 String imageURL) {
+                 String image) {
         this.title = title;
-        this.imageURL = imageURL;
+        this.image = image;
     }
 
-
-    public String getTitle() {
-        return title;
+    public Album(String image){
+        this(null, image);
     }
+
+    public String getTitle() { return title; }
 
     public void setTitle(String title) { this.title = title; }
 
-    public String getImageURL() { return imageURL; }
+    public String getImage() { return image; }
 
-    public void setImageURL(String imageURL) { this.imageURL = imageURL; }
+    public void setImage(String image) { this.image = image; }
 }
