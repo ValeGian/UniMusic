@@ -67,7 +67,7 @@ public class MusicScraper {
                 continue;
             }
 
-            StringBuffer responseSpotify = getResponse("https://api.spotify.com/v1/tracks/" + uriSpotify, " BQAAiRVQucV2vRS1PYWYhQDt8Ugixf3Q8ERxf2GoWP5SxZY7dAj_FIipFEQWYW4Q54VJNT9jrNqaPdhjTnyZg-sTaZ6bqh9VXQZfpK8-yYbh9Oh3lkllsVO6OrKNu_68N_m4aPOBRUKoVLO7bCXhq7uwRVDU_mJrnWtgvjKFCQ");
+            StringBuffer responseSpotify = getResponse("https://api.spotify.com/v1/tracks/" + uriSpotify, " BQCj0Zwb1LtAudkjY20-WmWN3mujgaYUNZZuPhN2zuQFatoYkBZX3wWI7eYuJkMB2bx_8icqi9tgAlxDSwlFDlEFf6pSHXbAksxC-hZXS-3mFZVozlTWOKQkwcwOBZaildxTWb8yx7bep-voj3MDCHzCHUaRHgp6MwGhGhOduQ");
             if(responseSpotify == null) {
                 System.out.println("Spotify response missed, check the spotify bearer if the problem persists!");
                 miss++;
@@ -83,9 +83,9 @@ public class MusicScraper {
             songToInsert.setRating(rating);
 
             try{
-                songAlbum.setImageURL(song.getJSONObject("album").getString("cover_art_url"));
+                songAlbum.setImage(song.getJSONObject("album").getString("cover_art_url"));
             } catch (JSONException e) {
-                songAlbum.setImageURL("");
+                songAlbum.setImage("");
             }
 
             try{
@@ -93,7 +93,7 @@ public class MusicScraper {
             } catch (JSONException e) {
             }
 
-            System.out.format("Response:-\tAlbum: %s\tTitle: %s\tindex: %s\n\n", songAlbum.getImageURL(), songToInsert.getTitle(), i);
+            System.out.format("Response:-\tAlbum: %s\tTitle: %s\tindex: %s\n\n", songAlbum.getImage(), songToInsert.getTitle(), i);
 
             songToInsert.setAlbum(songAlbum);
             songToInsert.setGenre(ScraperUtil.getGenre(songToInsert.getGeniusMediaURL()));
