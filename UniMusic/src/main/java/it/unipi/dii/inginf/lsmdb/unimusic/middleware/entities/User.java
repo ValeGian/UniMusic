@@ -1,15 +1,22 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities;
 
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.UserFields;
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.neo4jconnection.UserProperties;
+import org.bson.BsonArray;
+import org.bson.Document;
+import org.neo4j.driver.Record;
+
 public class User {
     private String username;
-    private String password;
-    private String firstName;
-    private String lastName;
-    private int age;
+    private String password = null;
+    private String firstName = null;
+    private String lastName = null;
+    private int age = -1;
     private PrivilegeLevel privilegeLevel;
 
     public User(String username) {
         this.username = username;
+        this.privilegeLevel = PrivilegeLevel.STANDARD_USER;
     }
 
     public User(String username,
@@ -23,6 +30,35 @@ public class User {
         this.lastName = lastName;
         this.age = age;
         this.privilegeLevel = PrivilegeLevel.STANDARD_USER;
+    }
+
+    public User(Record userNeo4jRecord) {
+        /* solo per esempio
+        String tmp;
+        if((tmp = userNeo4jRecord.get(UserProperties.USERNAME.toString()).asString()) != null)
+            username = tmp;
+        if((tmp = userNeo4jRecord.get(UserProperties.ALTRA_PROPERTY.toString()).asString()) != null)
+            altraProperty = tmp;
+         */
+        username = userNeo4jRecord.get(UserProperties.USERNAME.toString()).asString();
+    }
+
+    public Document toBsonDocument() {
+        Document document = new Document(UserFields.USERNAME.toString(), username);
+
+        if(password != null)
+            document.append(UserFields.PASSWORD.toString(), password);
+        if(firstName != null)
+            document.append(UserFields.FIRST_NAME.toString(), firstName);
+        if(lastName != null)
+            document.append(UserFields.LAST_NAME.toString(), lastName);
+        if(age < 0)
+            document.append(UserFields.AGE.toString(), age);
+
+        document.append(UserFields.PRIVILEGE_LEVEL.toString(), privilegeLevel.toString());
+        document.append(UserFields.CREATED_PLAYLISTS.toString(), new BsonArray());
+
+        return document;
     }
 
     public String getUsername() {

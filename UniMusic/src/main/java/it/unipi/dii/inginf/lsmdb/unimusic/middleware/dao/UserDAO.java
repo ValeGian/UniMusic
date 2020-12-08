@@ -12,7 +12,7 @@ public interface UserDAO {
 
     public void createUser(User user) throws ActionNotCompletedException;
 
-    public User getUser(String username) throws ActionNotCompletedException;
+    public User getUserByUsername(String username) throws ActionNotCompletedException;
 
     public void addCreatedPlaylist(User user, Playlist playlistCreated) throws ActionNotCompletedException;
 
