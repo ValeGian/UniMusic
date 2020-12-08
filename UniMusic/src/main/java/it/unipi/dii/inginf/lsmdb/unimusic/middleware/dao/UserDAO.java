@@ -1,6 +1,7 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.middleware.dao;
 
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Playlist;
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.PrivilegeLevel;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.User;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
 
@@ -17,6 +18,6 @@ public interface UserDAO {
 
     public void followPlaylist(User user, Playlist playlist) throws ActionNotCompletedException;
 
-    public void updateUser(User user) throws ActionNotCompletedException;
+    public void updateUserPrivilegeLevel(User user, PrivilegeLevel newPrivLevel) throws ActionNotCompletedException;
 
 }
