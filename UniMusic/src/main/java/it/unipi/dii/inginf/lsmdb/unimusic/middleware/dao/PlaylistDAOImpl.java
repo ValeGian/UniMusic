@@ -1,12 +1,17 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.middleware.dao;
 
 import com.mongodb.MongoException;
+import com.mongodb.client.MongoCollection;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Playlist;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Song;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.User;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.Collections;
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.MongoDriver;
 import org.neo4j.driver.exceptions.Neo4jException;
 import org.bson.Document;
+import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Updates.*;
 
 public class PlaylistDAOImpl implements PlaylistDAO{
 
@@ -61,7 +66,13 @@ public class PlaylistDAOImpl implements PlaylistDAO{
     //---------------------------------------------------------------------------------------------
 
     private void createPlaylistDocument(Playlist playlist) {
-        Document doc =
+        MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
+
+        Document doc = new Document("playlistId", playlist.getID())
+                .append("playlistName", playlist.getAuthor());
+
+        usersCollection.updateOne(eq("username", playlist.getAuthor()), set("playlists", doc));
+
     }
 
     private void createPlaylistNode(Playlist playlist) {
