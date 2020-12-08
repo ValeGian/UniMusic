@@ -14,7 +14,9 @@ public interface UserDAO {
 
     public User getUser(String username) throws ActionNotCompletedException;
 
-    public void addPlaylist(User user, Playlist playlist) throws ActionNotCompletedException;
+    public void addCreatedPlaylist(User user, Playlist playlistCreated) throws ActionNotCompletedException;
+
+    public void followUser(User userFollowing, User userFollowed) throws ActionNotCompletedException;
 
     public void followPlaylist(User user, Playlist playlist) throws ActionNotCompletedException;
 
