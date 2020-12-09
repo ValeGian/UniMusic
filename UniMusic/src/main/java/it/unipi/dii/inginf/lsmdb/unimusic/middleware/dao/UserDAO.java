@@ -14,9 +14,15 @@ public interface UserDAO {
 
     public void followUser(User userFollowing, User userFollowed) throws ActionNotCompletedException;
 
+    public void unfollowUser(User userFollowing, User userFollowed) throws ActionNotCompletedException;
+
     public void followPlaylist(User user, Playlist playlist) throws ActionNotCompletedException;
 
+    public void unfollowPlaylist(User user, Playlist playlist) throws ActionNotCompletedException;
+
     public void likeSong(User user, Song song) throws ActionNotCompletedException;
+
+    public void deleteLike(User user, Song song) throws ActionNotCompletedException;
 
     public void updateUserPrivilegeLevel(User user, PrivilegeLevel newPrivLevel) throws ActionNotCompletedException;
 
