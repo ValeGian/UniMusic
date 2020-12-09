@@ -28,6 +28,13 @@ public class UserDAOImpl implements UserDAO{
         User user3 = new User("loreBianchi", "root", "Lorenzo", "Bianchi", 22);
         UserDAO userDAO = new UserDAOImpl();
 
+        try {
+
+            userDAO.unfollowUser(user1, user2);
+
+        } catch (ActionNotCompletedException e) {
+            e.printStackTrace();
+        }
         /*try {
             userDAO.createUser(user1);
             userDAO.createUser(user2);
@@ -56,11 +63,12 @@ public class UserDAOImpl implements UserDAO{
             logger.info(lista);
         }*/
 
-        try (MongoCursor<Document> cursor = MongoDriver.getInstance().getCollection(Collections.USERS).find().iterator()) {
+        /*try (MongoCursor<Document> cursor = MongoDriver.getInstance().getCollection(Collections.USERS).find().iterator()) {
             while (cursor.hasNext()) {
                 logger.info("/" + cursor.next().get("boh") + "/");
             }
         }
+         */
 
         Neo4jDriver.getInstance().closeDriver();
     }
@@ -77,9 +85,6 @@ public class UserDAOImpl implements UserDAO{
 
             logger.info("Created user <" +user.getUsername()+ ">");
 
-        } catch (ActionNotCompletedException ancEx) {
-            logger.error(ancEx.getMessage());
-            throw new ActionNotCompletedException(ancEx.getMessage());
         } catch (MongoException mEx) {
             logger.error(mEx.getMessage());
             throw new ActionNotCompletedException(mEx, mEx.getCode());
@@ -97,15 +102,38 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public User getUserByUsername(String username)  throws ActionNotCompletedException{
-        return null;
+        try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
+            User user = session.readTransaction((TransactionWork<User>) tx -> {
+                Result result = tx.run(
+                        "MATCH (a:User { username: $username }) RETURN a",
+                        parameters("username", username)
+                );
+
+                if ((result.hasNext())) {
+                    Record r = result.next();
+                    return new User(r);
+                }
+                return null;
+            });
+
+            if (user == null)
+                logger.info("User <" + username + "> not found");
+            else
+                logger.info("User <" + username + "> found");
+
+            return user;
+        } catch (Neo4jException n4jEx) {
+            logger.warn(n4jEx.getMessage());
+            throw new ActionNotCompletedException(n4jEx);
+        }
     }
 
     @Override
     public void followUser(User userFollowing, User userFollowed) throws ActionNotCompletedException {
         try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
-            session.run("MATCH (following:User) WHERE following.username = $following "
-                            + "MATCH (followed:User) WHERE followed.username = $followed "
-                            + "CREATE (following)-[:FOLLOWS_USER]->(followed)",
+            session.run("MATCH (following:User { username: $following }) "
+                            + "MATCH (followed:User { username: $followed }) "
+                            + "MERGE (following)-[:FOLLOWS_USER]->(followed)",
                     parameters("following", userFollowing.getUsername(), "followed", userFollowed.getUsername())
             );
             logger.info("User <" + userFollowing.getUsername() + "> follows user <" + userFollowed.getUsername() + ">");
@@ -116,14 +144,45 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
+    public void unfollowUser(User userFollowing, User userFollowed) throws ActionNotCompletedException {
+        try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
+            session.run(
+                    "MATCH (:User { username: $username1 })-[f:FOLLOWS_USER]->(:User { username: $username2 }) "
+                            + "DELETE f",
+                    parameters("username1", userFollowing.getUsername(), "username2", userFollowed.getUsername())
+            );
+            logger.info("Deleted user <" +userFollowing.getUsername()+ "> follows user <" +userFollowed.getUsername()+ ">");
+        } catch (Neo4jException n4jEx) {
+            logger.error(n4jEx.getMessage());
+            throw new ActionNotCompletedException(n4jEx);
+        }
+    }
+
+    @Override
     public void followPlaylist(User user, Playlist playlist) throws ActionNotCompletedException {
         try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
-            session.run("MATCH (following:User) WHERE following.username = $following "
-                            + "MATCH (followed:Playlist) WHERE followed.playlistId = $followed "
-                            + "CREATE (following)-[:FOLLOWS_PLAYLIST]->(followed)",
+            session.run(
+                    "MATCH (following:User { username: $following }) "
+                            + "MATCH (followed:Playlist { playlistId: $followed }) "
+                            + "MERGE (following)-[:FOLLOWS_PLAYLIST]->(followed)",
                     parameters("following", user.getUsername(), "followed", playlist.getID())
             );
-            logger.info("User <" + user.getUsername() + "> follows playlist <" + playlist.getID() + ">");
+            logger.info("User <" +user.getUsername()+ "> follows playlist <" +playlist.getID()+ ">");
+        } catch (Neo4jException n4jEx) {
+            logger.error(n4jEx.getMessage());
+            throw new ActionNotCompletedException(n4jEx);
+        }
+    }
+
+    @Override
+    public void unfollowPlaylist(User user, Playlist playlist) throws ActionNotCompletedException {
+        try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
+            session.run(
+                    "MATCH (:User { username: $username })-[f:FOLLOWS_PLAYLIST]->(:Playlist { playlistId: $playlistId }) "
+                            + "DELETE f",
+                    parameters("username", user.getUsername(), "playlistId", playlist.getID())
+            );
+            logger.info("Deleted user <" +user.getUsername()+ "> follows playlist <" +playlist.getID()+ ">");
         } catch (Neo4jException n4jEx) {
             logger.error(n4jEx.getMessage());
             throw new ActionNotCompletedException(n4jEx);
@@ -132,7 +191,33 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public void likeSong(User user, Song song) throws ActionNotCompletedException {
+        try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
+            session.run(
+                    "MATCH (u:User { username: $username }) "
+                    + "MATCH (s:Song { songId: $songId }) "
+                    + "MERGE (u)-[:LIKES {day: date()}]->(s)",
+                    parameters("username", user.getUsername(), "songId", song.getID())
+            );
+            logger.info("User <" +user.getUsername()+ "> likes song <" +song.getTitle()+ ">");
+        } catch (Neo4jException n4jEx) {
+            logger.error(n4jEx.getMessage());
+            throw new ActionNotCompletedException(n4jEx);
+        }
+    }
 
+    @Override
+    public void deleteLike(User user, Song song) throws ActionNotCompletedException {
+        try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
+            session.run(
+                    "MATCH (:User { username: $username })-[l:LIKES]->(:Song { songId: $songId }) "
+                            + "DELETE l",
+                    parameters("username", user.getUsername(), "songId", song.getID())
+            );
+            logger.info("Deleted user <" +user.getUsername()+ "> likes song <" +song.getTitle()+ ">");
+        } catch (Neo4jException n4jEx) {
+            logger.error(n4jEx.getMessage());
+            throw new ActionNotCompletedException(n4jEx);
+        }
     }
 
     @Override
@@ -161,7 +246,7 @@ public class UserDAOImpl implements UserDAO{
 
     //--------------------------PRIVATE------------------------------------------------------------
 
-    private void createUserDocument(User user) throws MongoException, ActionNotCompletedException {
+    private void createUserDocument(User user) throws MongoException {
         Document userDoc = user.toBsonDocument();
 
         MongoCollection<Document> userColl = MongoDriver.getInstance().getCollection(Collections.USERS);
