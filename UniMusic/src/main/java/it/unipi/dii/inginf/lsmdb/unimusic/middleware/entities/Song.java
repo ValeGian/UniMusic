@@ -45,12 +45,9 @@ public class Song {
         ID = song.getString("_id");
         title = song.getString("title");
         artist = song.getString("artist");
-        try {
-            rating = song.getDouble("rating");
-            likeCount = song.getInt("likeCount");
-        }catch(Exception ed){
+        rating = song.getDouble("rating");
+        likeCount = song.getInt("likeCount");
 
-        }
         JSONArray media = song.getJSONArray("media");
         youtubeMediaURL = media.getJSONObject(0).getString("url");
         spotifyMediaURL = media.getJSONObject(1).getString("url");
