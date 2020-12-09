@@ -27,12 +27,16 @@ public class UserDAOImpl implements UserDAO{
 
         User user1 = new User("valegiann", "root", "Valerio", "Giannini", 22);
         User user2 = new User("aleserra", "root", "Alessio", "Serra", 22);
+        User user3 = new User("loreBianchi", "root", "Lorenzo", "Bianchi", 22);
         UserDAO userDAO = new UserDAOImpl();
 
         try {
             userDAO.createUser(user1);
             userDAO.createUser(user2);
+            userDAO.createUser(user3);
+
             userDAO.followUser(user1, user2);
+            userDAO.followUser(user3, user2);
 
         } catch (ActionNotCompletedException e) {
             if (e.getCode() == 11000) {
@@ -65,6 +69,11 @@ public class UserDAOImpl implements UserDAO{
         try {
             createUserDocument(user);
             createUserNode(user);
+
+            Playlist playlist = new Playlist(user.getUsername(), "Favourites");
+            PlaylistDAO playlistDAO = new PlaylistDAOImpl();
+            playlistDAO.createPlaylist(playlist);
+
             logger.info("Created user <" +user.getUsername()+ ">");
 
         } catch (ActionNotCompletedException ancEx) {
@@ -150,9 +159,6 @@ public class UserDAOImpl implements UserDAO{
 
         MongoCollection<Document> userColl = MongoDriver.getInstance().getCollection(Collections.USERS);
         userColl.insertOne(userDoc);
-
-        Playlist favouritePlaylist = new Playlist(user.getUsername(), "Favourites");
-        addPlaylistToUserDocument(user, favouritePlaylist);
     }
 
     private void createUserNode(User user) throws Neo4jException {

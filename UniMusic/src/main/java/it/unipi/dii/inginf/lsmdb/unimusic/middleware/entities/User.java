@@ -6,6 +6,8 @@ import org.bson.BsonArray;
 import org.bson.Document;
 import org.neo4j.driver.Record;
 
+import javax.print.Doc;
+
 public class User {
     private String username;
     private String password = null;
@@ -41,6 +43,10 @@ public class User {
             altraProperty = tmp;
          */
         username = userNeo4jRecord.get(UserProperties.USERNAME.toString()).asString();
+    }
+
+    public User(Document userDocument) {
+
     }
 
     public Document toBsonDocument() {
