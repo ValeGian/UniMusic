@@ -6,10 +6,10 @@ import org.neo4j.driver.Record;
 
 public class User {
     private String username;
-    private String password = null;
-    private String firstName = null;
-    private String lastName = null;
-    private int age = -1;
+    private String password;
+    private String firstName;
+    private String lastName;
+    private int age;
     private PrivilegeLevel privilegeLevel;
 
     public User(String username) {
@@ -31,32 +31,25 @@ public class User {
     }
 
     public User(Record userNeo4jRecord) {
-        /* solo per esempio
-        String tmp;
-        if((tmp = userNeo4jRecord.get(UserProperties.USERNAME.toString()).asString()) != null)
-            username = tmp;
-        if((tmp = userNeo4jRecord.get(UserProperties.ALTRA_PROPERTY.toString()).asString()) != null)
-            altraProperty = tmp;
-         */
         username = userNeo4jRecord.get("username").asString();
     }
 
     public User(Document userDocument) {
-
+        username = userDocument.get("_id").toString();
+        password = userDocument.get("password").toString();
+        firstName = userDocument.get("firstName").toString();
+        lastName = userDocument.get("lastName").toString();
+        age = (Integer) userDocument.get("age");
+        privilegeLevel = (PrivilegeLevel) userDocument.get("privilegeLevel");
     }
 
     public Document toBsonDocument() {
         Document document = new Document("_id", username);
 
-        if(password != null)
-            document.append("password", password);
-        if(firstName != null)
-            document.append("firstName", firstName);
-        if(lastName != null)
-            document.append("lastName", lastName);
-        if(age < 0)
-            document.append("age", age);
-
+        document.append("password", password);
+        document.append("firstName", firstName);
+        document.append("lastName", lastName);
+        document.append("age", age);
         document.append("privilegeLevel", privilegeLevel.toString());
         document.append("createdPlaylists", new BsonArray());
 
