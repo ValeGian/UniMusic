@@ -1,10 +1,15 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities;
 
+import org.bson.BsonArray;
+import org.bson.Document;
+import org.json.JSONObject;
+
 public class Playlist {
     private String author;
-    private String ID;
+    private String ID = null;
     private String name;
-    private boolean isFavourite;
+    private String urlImage = null;
+    private boolean isFavourite = false;
 
     public Playlist() {
 
@@ -22,6 +27,38 @@ public class Playlist {
         this.author = author;
         this.ID = ID;
         this.name = name;
+    }
+
+    public Playlist(String author,
+                    String ID,
+                    String name,
+                    String urlImage) {
+        this.author = author;
+        this.ID = ID;
+        this.name = name;
+        this.urlImage = urlImage;
+    }
+
+    public Playlist(Document mongoDocument, String author){
+        String json = mongoDocument.toJson();
+        JSONObject jsonObject = new JSONObject(json);
+        this.author = author;
+        ID = jsonObject.getString("playlistId");
+        name = jsonObject.getString("name");
+        if (jsonObject.has("isFavourite"))
+            isFavourite = true;
+    }
+
+    public Document toBsonDocument() {
+        Document document = new Document("playlistId", ID);
+
+        document.append("name", name);
+        if (isFavourite)
+            document.append("isFavourite", true);
+        if (urlImage != null)
+            document.append("urlImage", urlImage);
+
+        return document;
     }
 
     public String getID() {
@@ -46,6 +83,14 @@ public class Playlist {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public String getUrlImage() {
+        return urlImage;
+    }
+
+    public void setUrlImage(String urlImage) {
+        this.urlImage = urlImage;
     }
 
     public boolean isFavourite() {
