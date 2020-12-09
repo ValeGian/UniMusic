@@ -15,6 +15,11 @@ public class Playlist {
 
     }
 
+    public Playlist(String author) {
+        this.author = author;
+        this.name = "My playlist";
+    }
+
     public Playlist(String author,
                     String name) {
         this.author = author;

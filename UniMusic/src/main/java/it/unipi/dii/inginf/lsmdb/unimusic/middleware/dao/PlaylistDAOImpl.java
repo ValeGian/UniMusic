@@ -21,6 +21,7 @@ import org.neo4j.driver.TransactionWork;
 import org.neo4j.driver.exceptions.Neo4jException;
 import org.bson.Document;
 
+import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,12 +41,13 @@ public class PlaylistDAOImpl implements PlaylistDAO{
         Playlist playlist;
         try {
             //playlist = p.getPlaylist("2");
-            playlist = new Playlist("lorenzo", "diahane");
+            playlist = new Playlist("lorenzo", "5fd0e66206871c0d404a2ebd", "terza");
             playlist.setFavourite(false);
             //p.createPlaylist(playlist);
-            playlist = p.getPlaylist("5fd0e138c5452d6017ff69a3");
-            playlist = p.getFavourite(new User("lorenzo"));
-            System.out.println(playlist.getAuthor() + "   " + playlist.getID() + "   " + playlist.getName());
+            //playlist = p.getPlaylist("5fd0e138c5452d6017ff69a3");
+            //playlist = p.getFavourite(new User("lorenzo"));
+            //System.out.println(playlist.getAuthor() + "   " + playlist.getID() + "   " + playlist.getName());
+            p.deletePlaylist(playlist);
         } catch (ActionNotCompletedException e) {
             e.printStackTrace();
         }
@@ -133,16 +135,8 @@ public class PlaylistDAOImpl implements PlaylistDAO{
     //---------------------------------------------------------------------------------------------
 
     private void createPlaylistDocument(Playlist playlist) {
-        MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
-
-        Document doc = new Document("playlistId", playlist.getID())
-                .append("name", playlist.getName());
-        if (playlist.isFavourite())
-            doc.append("isFavourite", true);
-        if (playlist.getUrlImage() != null)
-            doc.append("urlImage", playlist.getUrlImage());
-
-        usersCollection.updateOne(eq("_id", playlist.getAuthor()), push("createdPlaylists", doc));
+        UserDAOImpl userDAO = new UserDAOImpl();
+        userDAO.addPlaylistToUserDocument(new User(playlist.getAuthor()), playlist);
     }
 
     private void createPlaylistNode(Playlist playlist) {
@@ -156,23 +150,10 @@ public class PlaylistDAOImpl implements PlaylistDAO{
         }
     }
 
-    private Playlist getPlaylistFromJson(String json, String author){
-        JSONObject jsonObject = new JSONObject(json);
-
-        if (author == null)
-            author = jsonObject.getString("username");
-
-        String idPlaylist = jsonObject.getJSONObject("playlists").getString("playlistId");
-        String playlistName = jsonObject.getJSONObject("playlists").getString("playlistName");
-        Playlist playlist = new Playlist(author, idPlaylist, playlistName);
-        if (jsonObject.getJSONObject("playlists").has("isFavourite"))
-            playlist.isFavourite();
-
-        return playlist;
-    }
-
     private void deletePlaylistDocument(Playlist playlist){
-        //da fare
+        MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
+        usersCollection.updateOne(new Document(), pull("createdPlaylists", eq("playlistId", playlist.getID())));
+
     }
 
     private void deletePlaylistNode(Playlist playlist){
