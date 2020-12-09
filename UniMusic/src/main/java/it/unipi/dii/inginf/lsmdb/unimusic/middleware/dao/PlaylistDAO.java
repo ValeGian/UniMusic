@@ -12,8 +12,6 @@ public interface PlaylistDAO {
 
     public void createPlaylist(Playlist playlist) throws ActionNotCompletedException;
 
-    public void createFavouritePlaylist(String user, String playlistId) throws ActionNotCompletedException;
-
     public Playlist getPlaylist(String playlistID) throws ActionNotCompletedException;
 
     public Playlist getFavourite(User user) throws ActionNotCompletedException;

@@ -14,6 +14,7 @@ import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.neo4jconnection
 import org.apache.log4j.Logger;
 import org.bson.conversions.Bson;
 import org.bson.json.JsonWriterSettings;
+import org.bson.types.ObjectId;
 import org.json.JSONObject;
 import org.neo4j.driver.Session;
 import org.neo4j.driver.TransactionWork;
@@ -36,33 +37,40 @@ public class PlaylistDAOImpl implements PlaylistDAO{
 
     public static void main(String[] args){
         PlaylistDAOImpl p = new PlaylistDAOImpl();
+        Playlist playlist;
         try {
-            Playlist playlist;
-
-            //p.createFavouritePlaylist("manolo", "13");
-            //p.createPlaylist(new Playlist("manolo", "14", "abracadabra"));
-            //p.createPlaylist(new Playlist("manolo", "15", "sadsadsa"));
-
-            User user = new User("manolo", "1", "1", "1", 22);
-            playlist = p.getPlaylist("13");
-            System.out.println(playlist.getID() + " " + playlist.getAuthor() + " " + playlist.getName());
-            playlist = p.getFavourite(user);
-            System.out.println(playlist.getID() + " " + playlist.getAuthor() + " " + playlist.getName());
-            p.deletePlaylistNode(new Playlist("manolo", "14", "abracadabra"));
+            //playlist = p.getPlaylist("2");
+            playlist = new Playlist("lorenzo", "diahane");
+            playlist.setFavourite(false);
+            //p.createPlaylist(playlist);
+            playlist = p.getPlaylist("5fd0e138c5452d6017ff69a3");
+            playlist = p.getFavourite(new User("lorenzo"));
+            System.out.println(playlist.getAuthor() + "   " + playlist.getID() + "   " + playlist.getName());
         } catch (ActionNotCompletedException e) {
             e.printStackTrace();
         }
     }
-    @Override
-    public void createPlaylist(Playlist playlist)  throws ActionNotCompletedException{
-        createPlaylistConcrete(playlist);
-    }
 
     @Override
-    public void createFavouritePlaylist(String user, String playlistId)  throws ActionNotCompletedException{
-        Playlist playlist = new Playlist(user, playlistId, "Favourites");
-        playlist.setFavourite(true);
-        createPlaylistConcrete(playlist);
+    public void createPlaylist(Playlist playlist)  throws ActionNotCompletedException{
+        playlist.setID(ObjectId.get().toString());
+        try {
+            createPlaylistDocument(playlist);
+            createPlaylistNode(playlist);
+            logger.info("Created playlist " + playlist.getID());
+        } catch (MongoException mongoEx) {
+            logger.error(mongoEx.getMessage());
+            throw new ActionNotCompletedException(mongoEx);
+        } catch (Neo4jException neoEx) {
+            logger.error(neoEx.getMessage());
+            try {
+                deletePlaylistDocument(playlist);
+                throw new ActionNotCompletedException(neoEx);
+            } catch (MongoException mongoEx) {
+                logger.error(mongoEx.getMessage());
+                throw new ActionNotCompletedException(mongoEx);
+            }
+        }
     }
 
     @Override
@@ -70,13 +78,12 @@ public class PlaylistDAOImpl implements PlaylistDAO{
         MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
         Playlist playlist = null;
 
-        Bson unwind = unwind("$playlists");
-        Bson match = match(eq("playlists.playlistId", playlistID));
-        Bson project = project(fields(include("username", "playlists")));
+        Bson unwind = unwind("$createdPlaylists");
+        Bson match = match(eq("createdPlaylists.playlistId", playlistID));
+        Bson project = project(fields(include("_id", "createdPlaylists")));
 
-        String result = usersCollection.aggregate(Arrays.asList(unwind, match, project)).first().toJson();
-
-        playlist = getPlaylistFromJson(result, null);
+        Document result = usersCollection.aggregate(Arrays.asList(unwind, match, project)).first();
+        playlist = new Playlist(result.get("createdPlaylists", Document.class), result.getString("_id"));
         return playlist;
     }
 
@@ -85,14 +92,14 @@ public class PlaylistDAOImpl implements PlaylistDAO{
         MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
         Playlist playlist = null;
 
-        Bson match1 = match(eq("username", user.getUsername()));
-        Bson unwind = unwind("$playlists");
-        Bson match2 = match(eq("playlists.isFavourite", true));
-        Bson project = project(fields(include("playlists")));
+        Bson match1 = match(eq("_id", user.getUsername()));
+        Bson unwind = unwind("$createdPlaylists");
+        Bson match2 = match(eq("createdPlaylists.isFavourite", true));
+        Bson project = project(fields(include("createdPlaylists")));
 
-        String result = usersCollection.aggregate(Arrays.asList(match1, unwind, match2, project)).first().toJson();
+        Document result = usersCollection.aggregate(Arrays.asList(match1, unwind, match2, project)).first();
 
-        playlist = getPlaylistFromJson(result, user.getUsername());
+        playlist = new Playlist(result.get("createdPlaylists", Document.class), user.getUsername());
         return playlist;
     }
 
@@ -125,35 +132,17 @@ public class PlaylistDAOImpl implements PlaylistDAO{
 
     //---------------------------------------------------------------------------------------------
 
-    private void createPlaylistConcrete(Playlist playlist) throws ActionNotCompletedException{
-        try {
-            createPlaylistDocument(playlist);
-            createPlaylistNode(playlist);
-            logger.info("Created playlist " + playlist.getID());
-        } catch (MongoException mongoEx) {
-            logger.error(mongoEx.getMessage());
-            throw new ActionNotCompletedException(mongoEx);
-        } catch (Neo4jException neoEx) {
-            logger.error(neoEx.getMessage());
-            try {
-                deletePlaylistDocument(playlist);
-                throw new ActionNotCompletedException(neoEx);
-            } catch (MongoException mongoEx) {
-                logger.error(mongoEx.getMessage());
-                throw new ActionNotCompletedException(mongoEx);
-            }
-        }
-    }
-
     private void createPlaylistDocument(Playlist playlist) {
         MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
 
         Document doc = new Document("playlistId", playlist.getID())
-                .append("playlistName", playlist.getName());
+                .append("name", playlist.getName());
         if (playlist.isFavourite())
             doc.append("isFavourite", true);
+        if (playlist.getUrlImage() != null)
+            doc.append("urlImage", playlist.getUrlImage());
 
-        usersCollection.updateOne(eq("username", playlist.getAuthor()), push("playlists", doc));
+        usersCollection.updateOne(eq("_id", playlist.getAuthor()), push("createdPlaylists", doc));
     }
 
     private void createPlaylistNode(Playlist playlist) {
