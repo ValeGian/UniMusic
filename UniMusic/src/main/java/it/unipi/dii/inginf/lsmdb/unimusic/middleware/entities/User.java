@@ -39,8 +39,8 @@ public class User {
         password = userDocument.get("password").toString();
         firstName = userDocument.get("firstName").toString();
         lastName = userDocument.get("lastName").toString();
-        age = (Integer) userDocument.get("age");
-        privilegeLevel = (PrivilegeLevel) userDocument.get("privilegeLevel");
+        age = Integer.parseInt(userDocument.get("age").toString());
+        privilegeLevel = PrivilegeLevel.getPrivilegeLevel(userDocument.getString("privilegeLevel"));
     }
 
     public Document toBsonDocument() {

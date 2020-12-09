@@ -29,9 +29,7 @@ public class UserDAOImpl implements UserDAO{
         UserDAO userDAO = new UserDAOImpl();
 
         try {
-
-            userDAO.unfollowUser(user1, user2);
-
+            userDAO.createUser(user1);
         } catch (ActionNotCompletedException e) {
             e.printStackTrace();
         }
@@ -81,7 +79,7 @@ public class UserDAOImpl implements UserDAO{
 
             Playlist playlist = new Playlist(user.getUsername(), "Favourites");
             PlaylistDAO playlistDAO = new PlaylistDAOImpl();
-            //playlistDAO.createPlaylist(playlist);
+            playlistDAO.createPlaylist(playlist);
 
             logger.info("Created user <" +user.getUsername()+ ">");
 
@@ -102,30 +100,44 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public User getUserByUsername(String username)  throws ActionNotCompletedException{
-        try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
-            User user = session.readTransaction((TransactionWork<User>) tx -> {
-                Result result = tx.run(
-                        "MATCH (a:User { username: $username }) RETURN a",
-                        parameters("username", username)
-                );
+        User user = null;
 
-                if ((result.hasNext())) {
-                    Record r = result.next();
-                    return new User(r);
-                }
-                return null;
-            });
-
-            if (user == null)
-                logger.info("User <" + username + "> not found");
-            else
-                logger.info("User <" + username + "> found");
-
-            return user;
-        } catch (Neo4jException n4jEx) {
-            logger.warn(n4jEx.getMessage());
-            throw new ActionNotCompletedException(n4jEx);
+        try (MongoCursor<Document> cursor =
+                     MongoDriver.getInstance().getCollection(Collections.USERS).find(eq("_id", username)).iterator()) {
+            if (cursor.hasNext()) {
+                user = new User(cursor.next());
+            }
+        } catch (MongoException mEx) {
+            logger.warn(mEx.getMessage());
+            throw new ActionNotCompletedException(mEx);
         }
+        return user;
+    }
+
+    @Override
+    public boolean checkUserExists(String username) {
+        try (MongoCursor<Document> cursor = MongoDriver.getInstance().getCollection(Collections.USERS)
+                .find(eq("_id", username)).iterator()) {
+            if (cursor.hasNext()) {
+                return true;
+            }
+        } catch (MongoException mEx) {
+            return false;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean checkUserPassword(String username, String password) {
+        try (MongoCursor<Document> cursor = MongoDriver.getInstance().getCollection(Collections.USERS)
+                .find(eq("_id", username)).iterator()) {
+            if (cursor.hasNext())
+               if(password.equals(cursor.next().get("password").toString()))
+                   return true;
+        } catch (MongoException mEx) {
+            return false;
+        }
+        return false;
     }
 
     @Override
