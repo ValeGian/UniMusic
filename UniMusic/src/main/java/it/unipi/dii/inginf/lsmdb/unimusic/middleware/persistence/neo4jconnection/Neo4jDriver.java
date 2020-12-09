@@ -3,7 +3,7 @@ package it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.neo4jconnectio
 import org.neo4j.driver.*;
 
 public class Neo4jDriver {
-    private static Neo4jDriver instance = new Neo4jDriver();
+    private static final Neo4jDriver instance = new Neo4jDriver();
     private final Driver driver;
 
     private final String uri = "neo4j://localhost:7687";
