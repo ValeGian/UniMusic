@@ -1,9 +1,17 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities;
 
+import org.bson.BsonArray;
+import org.bson.Document;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.neo4j.driver.Record;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Song {
-    private String _id;
+    private String ID;
     private Album album;
     private String title;
     private String artist;
@@ -20,7 +28,110 @@ public class Song {
 
     }
 
-    public Song(String _id,
+    public Song(Record songNeo4jRecord) {
+
+        String tmp;
+        ID = songNeo4jRecord.get("songId").asString();
+        title = songNeo4jRecord.get("title").asString();
+        artist = songNeo4jRecord.get("artist").asString();
+        if ((tmp = songNeo4jRecord.get("imageUrl").asString()) != null)
+            album = new Album(tmp);
+    }
+
+    public Song(String jsonSong){
+
+        JSONObject song = new JSONObject(jsonSong);
+
+        ID = song.getString("_id");
+        title = song.getString("title");
+        artist = song.getString("artist");
+        try {
+            rating = song.getDouble("rating");
+            likeCount = song.getInt("likeCount");
+        }catch(Exception ed){
+
+        }
+        JSONArray media = song.getJSONArray("media");
+        youtubeMediaURL = media.getJSONObject(0).getString("url");
+        spotifyMediaURL = media.getJSONObject(1).getString("url");
+        geniusMediaURL = media.getJSONObject(2).getString("url");
+
+        Album songAlbum = new Album();
+        try{
+            songAlbum.setTitle(song.getJSONObject("album").getString("title"));
+        }catch (JSONException jex){}
+
+        try{
+            songAlbum.setImage(song.getJSONObject("album").getString("image"));
+        }catch (JSONException jex){}
+
+        album = songAlbum;
+        featuredArtists = new ArrayList<>();
+        try {
+            JSONArray jsonFeaturedArtists = song.getJSONArray("featuredArtists");
+            if (jsonFeaturedArtists.length() != 0) {
+                for (int i = 0; i < jsonFeaturedArtists.length(); i++)
+                    featuredArtists.add(jsonFeaturedArtists.getString(i));
+            }
+        }catch (JSONException jex){}
+
+        try {
+            releaseYear = song.getInt("releaseYear");
+        }catch (JSONException jex){}
+
+        try{
+            genre = song.getString("genre");
+        }catch (JSONException jex){}
+
+    }
+
+    public Document toBsonDocument() {
+
+        Document songDocument = new Document("_id", ID)
+                .append("title", title);
+
+        Document albumDocument = null;
+        if(album.getTitle() != null)
+            albumDocument = new Document("title", album.getTitle());
+
+        if(!album.getImage().equals("")){
+            if(albumDocument == null)
+                albumDocument = new Document("image", album.getImage());
+            else
+                albumDocument.append("image", album.getImage());
+        }
+
+        if(albumDocument != null)
+            songDocument.append("album", albumDocument);
+
+        songDocument.append("artist", artist);
+
+        if(genre != null)
+            songDocument.append("genre", genre);
+
+        if(featuredArtists != null)
+            songDocument.append("featuredArtists", featuredArtists);
+
+        if(releaseYear != 0)
+            songDocument.append("releaseYear", releaseYear);
+
+        songDocument.append("rating", rating);
+
+        songDocument.append("likeCount", likeCount);
+
+        songDocument.append("media", Arrays.asList(
+                new Document("provider", "youtube")
+                        .append("url", youtubeMediaURL),
+                new Document("provider", "spotify")
+                        .append("url", spotifyMediaURL),
+                new Document("provider", "genius")
+                        .append("url", geniusMediaURL)
+        ));
+
+        return songDocument;
+    }
+
+    public Song(String ID,
                 String albumName,
                 String albumImageURL,
                 String artist,
@@ -32,7 +143,7 @@ public class Song {
                 String youtubeMediaURL,
                 String spotifyMediaURL,
                 String geniusMediaURL) {
-        this._id = _id;
+        this.ID = ID;
         this.genre = genre;
         this.album = new Album(albumName, albumImageURL);
         this.artist = artist;
@@ -45,9 +156,9 @@ public class Song {
         this.geniusMediaURL = geniusMediaURL;
     }
 
-    public String getID() { return _id; }
+    public String getID() { return ID; }
 
-    public void setID(String ID) { this._id = ID; }
+    public void setID(String ID) { this.ID = ID; }
 
     public String getTitle() {
         return title;
