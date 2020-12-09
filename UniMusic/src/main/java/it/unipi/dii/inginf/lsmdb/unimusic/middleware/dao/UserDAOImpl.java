@@ -14,9 +14,6 @@ import org.bson.Document;
 import org.neo4j.driver.*;
 import org.neo4j.driver.exceptions.Neo4jException;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Updates.*;
 import static org.neo4j.driver.Values.parameters;
@@ -152,14 +149,14 @@ public class UserDAOImpl implements UserDAO{
 
     //--------------------------PACKAGE-----------------------------------------------------------
 
-    void addCreatedPlaylist(User user, Playlist playlistCreated)  throws ActionNotCompletedException{
-        try {
-            addPlaylistToUserDocument(user, playlistCreated);
-            logger.info("Playlist <" +playlistCreated.getName()+ "> created by user <" + user.getUsername() + ">");
-        } catch (MongoException mEx) {
-            logger.error(mEx.getMessage());
-            throw new ActionNotCompletedException(mEx);
-        }
+    void addPlaylistToUserDocument(User user, Playlist playlist)  throws MongoException{
+        Document playlistDoc = playlist.toBsonDocument();
+
+        MongoCollection<Document> userColl = MongoDriver.getInstance().getCollection(Collections.USERS);
+        userColl.updateOne(
+                eq("_id", user.getUsername()),
+                addToSet("createdPlaylists", playlistDoc)
+        );
     }
 
     //--------------------------PRIVATE------------------------------------------------------------
@@ -177,10 +174,6 @@ public class UserDAOImpl implements UserDAO{
                     "MERGE (a:User {username: $username})",
                     parameters("username", user.getUsername()));
         }
-    }
-
-    private void addPlaylistToUserDocument(User user, Playlist playlist) throws MongoException {
-
     }
 
     private void updateUserDocument(User user) throws MongoException {
