@@ -2,13 +2,14 @@ package it.unipi.dii.inginf.lsmdb.unimusic.middleware.dao;
 
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.*;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.log.UMLogger;
-import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.*;
-import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.neo4jconnection.*;
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.MongoDriver;
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.Collections;
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.neo4jconnection.Neo4jDriver;
 import org.apache.log4j.Logger;
-import org.bson.BsonArray;
 import org.bson.Document;
 import org.neo4j.driver.*;
 import org.neo4j.driver.exceptions.Neo4jException;
@@ -30,13 +31,10 @@ public class UserDAOImpl implements UserDAO{
         User user3 = new User("loreBianchi", "root", "Lorenzo", "Bianchi", 22);
         UserDAO userDAO = new UserDAOImpl();
 
-        try {
+        /*try {
             userDAO.createUser(user1);
             userDAO.createUser(user2);
             userDAO.createUser(user3);
-
-            userDAO.followUser(user1, user2);
-            userDAO.followUser(user3, user2);
 
         } catch (ActionNotCompletedException e) {
             if (e.getCode() == 11000) {
@@ -46,9 +44,9 @@ public class UserDAOImpl implements UserDAO{
                 logger.error("Some error while inserting document with  _id: ");
                 e.printStackTrace();
             }
-        }
+        }*/
 
-        try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
+        /*try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
             List<String> lista = session.readTransaction((TransactionWork<List<String>>) tx -> {
                Result result = tx.run("MATCH (a:User) RETURN a.username as username");
                 ArrayList<String> users = new ArrayList<>();
@@ -58,7 +56,13 @@ public class UserDAOImpl implements UserDAO{
                 }
                 return users;
             });
-            System.out.println(lista);
+            logger.info(lista);
+        }*/
+
+        try (MongoCursor<Document> cursor = MongoDriver.getInstance().getCollection(Collections.USERS).find().iterator()) {
+            while (cursor.hasNext()) {
+                logger.info("/" + cursor.next().get("boh") + "/");
+            }
         }
 
         Neo4jDriver.getInstance().closeDriver();
@@ -72,7 +76,7 @@ public class UserDAOImpl implements UserDAO{
 
             Playlist playlist = new Playlist(user.getUsername(), "Favourites");
             PlaylistDAO playlistDAO = new PlaylistDAOImpl();
-            playlistDAO.createPlaylist(playlist);
+            //playlistDAO.createPlaylist(playlist);
 
             logger.info("Created user <" +user.getUsername()+ ">");
 
@@ -100,22 +104,11 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public void addCreatedPlaylist(User user, Playlist playlistCreated)  throws ActionNotCompletedException{
-        try {
-            addPlaylistToUserDocument(user, playlistCreated);
-            logger.info("Playlist <" +playlistCreated.getName()+ "> created by user <" + user.getUsername() + ">");
-        } catch (MongoException mEx) {
-            logger.error(mEx.getMessage());
-            throw new ActionNotCompletedException(mEx);
-        }
-    }
-
-    @Override
     public void followUser(User userFollowing, User userFollowed) throws ActionNotCompletedException {
         try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
-            session.run("MATCH (following:" +Labels.USER+ ") WHERE following." +UserProperties.USERNAME+ " = $following "
-                            + "MATCH (followed:" +Labels.USER+ ") WHERE followed." +UserProperties.USERNAME+ " = $followed "
-                            + "CREATE (following)-[:" +RelationshipTypes.FOLLOW_USER+ "]->(followed)",
+            session.run("MATCH (following:User) WHERE following.username = $following "
+                            + "MATCH (followed:User) WHERE followed.username = $followed "
+                            + "CREATE (following)-[:FOLLOWS_USER]->(followed)",
                     parameters("following", userFollowing.getUsername(), "followed", userFollowed.getUsername())
             );
             logger.info("User <" + userFollowing.getUsername() + "> follows user <" + userFollowed.getUsername() + ">");
@@ -128,9 +121,9 @@ public class UserDAOImpl implements UserDAO{
     @Override
     public void followPlaylist(User user, Playlist playlist) throws ActionNotCompletedException {
         try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
-            session.run("MATCH (following:" +Labels.USER+ ") WHERE following." +UserProperties.USERNAME+ " = $following "
-                            + "MATCH (followed:" +Labels.PLAYLIST+ ") WHERE followed." + PlaylistProperties.ID + " = $followed "
-                            + "CREATE (following)-[:" +RelationshipTypes.FOLLOW_PLAYLIST+ "]->(followed)",
+            session.run("MATCH (following:User) WHERE following.username = $following "
+                            + "MATCH (followed:Playlist) WHERE followed.playlistId = $followed "
+                            + "CREATE (following)-[:FOLLOWS_PLAYLIST]->(followed)",
                     parameters("following", user.getUsername(), "followed", playlist.getID())
             );
             logger.info("User <" + user.getUsername() + "> follows playlist <" + playlist.getID() + ">");
@@ -138,6 +131,11 @@ public class UserDAOImpl implements UserDAO{
             logger.error(n4jEx.getMessage());
             throw new ActionNotCompletedException(n4jEx);
         }
+    }
+
+    @Override
+    public void likeSong(User user, Song song) throws ActionNotCompletedException {
+
     }
 
     @Override
@@ -152,7 +150,19 @@ public class UserDAOImpl implements UserDAO{
         }
     }
 
-    //---------------------------------------------------------------------------------------------
+    //--------------------------PACKAGE-----------------------------------------------------------
+
+    void addCreatedPlaylist(User user, Playlist playlistCreated)  throws ActionNotCompletedException{
+        try {
+            addPlaylistToUserDocument(user, playlistCreated);
+            logger.info("Playlist <" +playlistCreated.getName()+ "> created by user <" + user.getUsername() + ">");
+        } catch (MongoException mEx) {
+            logger.error(mEx.getMessage());
+            throw new ActionNotCompletedException(mEx);
+        }
+    }
+
+    //--------------------------PRIVATE------------------------------------------------------------
 
     private void createUserDocument(User user) throws MongoException, ActionNotCompletedException {
         Document userDoc = user.toBsonDocument();
@@ -164,7 +174,7 @@ public class UserDAOImpl implements UserDAO{
     private void createUserNode(User user) throws Neo4jException {
         try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
             session.run(
-                    "MERGE (a:" +Labels.USER+ " {" +UserProperties.USERNAME+ ": $username})",
+                    "MERGE (a:User {username: $username})",
                     parameters("username", user.getUsername()));
         }
     }
@@ -176,17 +186,17 @@ public class UserDAOImpl implements UserDAO{
     private void updateUserDocument(User user) throws MongoException {
         MongoCollection<Document> userColl = MongoDriver.getInstance().getCollection(Collections.USERS);
         userColl.updateOne(
-                eq(UserFields.USERNAME.toString(), user.getUsername()),
+                eq("_id", user.getUsername()),
                 combine(
-                        set(UserFields.FIRST_NAME.toString(), user.getFirstName()),
-                        set(UserFields.LAST_NAME.toString(), user.getLastName()),
-                        set(UserFields.AGE.toString(), user.getAge()),
-                        set(UserFields.PRIVILEGE_LEVEL.toString(), user.getPrivilegeLevel().toString())
+                        set("firstName", user.getFirstName()),
+                        set("lastName", user.getLastName()),
+                        set("age", user.getAge()),
+                        set("privilegeLevel", user.getPrivilegeLevel().toString())
                 ));
     }
 
     private void deleteUserDocument(User user) throws MongoException {
         MongoCollection<Document> userColl = MongoDriver.getInstance().getCollection(Collections.USERS);
-        userColl.deleteOne(eq(UserFields.USERNAME.toString(), user.getUsername()));
+        userColl.deleteOne(eq("_id", user.getUsername()));
     }
 }

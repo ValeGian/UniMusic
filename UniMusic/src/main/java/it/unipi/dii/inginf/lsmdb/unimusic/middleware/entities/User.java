@@ -1,12 +1,8 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities;
 
-import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.UserFields;
-import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.neo4jconnection.UserProperties;
 import org.bson.BsonArray;
 import org.bson.Document;
 import org.neo4j.driver.Record;
-
-import javax.print.Doc;
 
 public class User {
     private String username;
@@ -42,7 +38,7 @@ public class User {
         if((tmp = userNeo4jRecord.get(UserProperties.ALTRA_PROPERTY.toString()).asString()) != null)
             altraProperty = tmp;
          */
-        username = userNeo4jRecord.get(UserProperties.USERNAME.toString()).asString();
+        username = userNeo4jRecord.get("username").asString();
     }
 
     public User(Document userDocument) {
@@ -50,19 +46,19 @@ public class User {
     }
 
     public Document toBsonDocument() {
-        Document document = new Document(UserFields.USERNAME.toString(), username);
+        Document document = new Document("_id", username);
 
         if(password != null)
-            document.append(UserFields.PASSWORD.toString(), password);
+            document.append("password", password);
         if(firstName != null)
-            document.append(UserFields.FIRST_NAME.toString(), firstName);
+            document.append("firstName", firstName);
         if(lastName != null)
-            document.append(UserFields.LAST_NAME.toString(), lastName);
+            document.append("lastName", lastName);
         if(age < 0)
-            document.append(UserFields.AGE.toString(), age);
+            document.append("age", age);
 
-        document.append(UserFields.PRIVILEGE_LEVEL.toString(), privilegeLevel.toString());
-        document.append(UserFields.CREATED_PLAYLISTS.toString(), new BsonArray());
+        document.append("privilegeLevel", privilegeLevel.toString());
+        document.append("createdPlaylists", new BsonArray());
 
         return document;
     }
