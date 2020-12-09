@@ -12,4 +12,14 @@ public enum PrivilegeLevel {
     public String toString() {
         return privilegeLevelName;
     }
+
+    public static PrivilegeLevel getPrivilegeLevel(String privilegeLevelName) {
+        switch (privilegeLevelName) {
+            case "admin":
+                return PrivilegeLevel.ADMIN;
+            case "standard_user":
+            default:
+                return PrivilegeLevel.STANDARD_USER;
+        }
+    }
 }

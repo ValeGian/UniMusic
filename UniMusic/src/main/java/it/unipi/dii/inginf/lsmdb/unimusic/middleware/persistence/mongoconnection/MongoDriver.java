@@ -4,7 +4,7 @@ import com.mongodb.ConnectionString;
 import com.mongodb.client.*;
 
 public class MongoDriver {
-    private static MongoDriver instance = new MongoDriver();
+    private static final MongoDriver instance = new MongoDriver();
     private final MongoClient client;
     private final MongoDatabase mongoDB;
 

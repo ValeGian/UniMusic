@@ -48,18 +48,18 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <Label text="Userame:">
+                        <Label text="Username:">
                             <padding>
                                 <Insets right="10.0" />
                             </padding>
                         </Label>
-                        <TextField GridPane.columnIndex="1" />
+                        <TextField fx:id="logUsername" GridPane.columnIndex="1" />
                         <Label text="Password:" GridPane.rowIndex="1">
                             <padding>
                                 <Insets right="10.0" />
                             </padding>
                         </Label>
-                        <PasswordField GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <PasswordField fx:id="logPassword" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                     </children>
                     <VBox.margin>
                         <Insets />
@@ -68,7 +68,7 @@
                         <Insets bottom="20.0" />
                     </padding>
                 </GridPane>
-                <Button mnemonicParsing="false" style="-fx-padding: 5px 7px; -fx-background-color: #43b754;" text="Login" textFill="WHITE">
+                <Button fx:id="loginButton" mnemonicParsing="false" style="-fx-padding: 5px 7px; -fx-background-color: #43b754;" text="Login" textFill="WHITE">
                     <font>
                         <Font name="Arial Black" size="14.0" />
                     </font>
@@ -105,21 +105,21 @@
                                 <Insets right="10.0" />
                             </padding>
                         </Label>
-                        <Label text="Userame:" GridPane.rowIndex="3">
+                        <Label text="Username:" GridPane.rowIndex="3">
                             <padding>
                                 <Insets right="10.0" />
                             </padding>
                         </Label>
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <TextField fx:id="regUsername" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                         <Label text="Password:" GridPane.rowIndex="4">
                             <padding>
                                 <Insets right="10.0" />
                             </padding>
                         </Label>
-                        <TextField fx:id="ageActionTarget" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextField GridPane.columnIndex="1" />
-                        <PasswordField GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <TextField fx:id="regAge" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="regLastName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="regFirstName" GridPane.columnIndex="1" />
+                        <PasswordField fx:id="regPassword" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                     </children>
                     <VBox.margin>
                         <Insets />
@@ -128,7 +128,7 @@
                         <Insets bottom="20.0" />
                     </padding>
                 </GridPane>
-                <Button mnemonicParsing="false" style="-fx-background-color: #fe9702; -fx-padding: 5px 7px;" text="Register" textFill="WHITE">
+                <Button fx:id="registerButton" mnemonicParsing="false" style="-fx-background-color: #fe9702; -fx-padding: 5px 7px;" text="Register" textFill="WHITE">
                     <font>
                         <Font name="Arial Black" size="14.0" />
                     </font>
