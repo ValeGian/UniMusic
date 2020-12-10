@@ -2,6 +2,7 @@ package it.unipi.dii.inginf.lsmdb.unimusic.middleware.dao;
 
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Updates;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Playlist;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Song;
@@ -41,13 +42,18 @@ public class PlaylistDAOImpl implements PlaylistDAO{
         Playlist playlist;
         try {
             //playlist = p.getPlaylist("2");
-            playlist = new Playlist("lorenzo", "5fd0e66206871c0d404a2ebd", "terza");
-            playlist.setFavourite(false);
+            playlist = new Playlist("manolo", "5fd0e138c5452d6017ff69a3", "diaha");
+            //playlist.setFavourite(true);
             //p.createPlaylist(playlist);
-            //playlist = p.getPlaylist("5fd0e138c5452d6017ff69a3");
-            //playlist = p.getFavourite(new User("lorenzo"));
-            //System.out.println(playlist.getAuthor() + "   " + playlist.getID() + "   " + playlist.getName());
-            p.deletePlaylist(playlist);
+            playlist = p.getPlaylist("5fd1ffc8c3952245fe3be6d9");
+            playlist = p.getFavourite(new User("lorenzo"));
+            System.out.println(playlist.getAuthor() + "   " + playlist.getID() + "   " + playlist.getName());
+            /*
+            Song song = new Song("dfsfsd","aaaaa", "aaaaa", "aaaaa", null, 1999, "aaaaa", 11, 11, "aaaaa", "aaaaa", "aaaaa");
+            song.setTitle("bbbbbb");
+            p.deleteSong(playlist, song);
+
+             */
         } catch (ActionNotCompletedException e) {
             e.printStackTrace();
         }
@@ -80,12 +86,17 @@ public class PlaylistDAOImpl implements PlaylistDAO{
         MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
         Playlist playlist = null;
 
-        Bson unwind = unwind("$createdPlaylists");
+
         Bson match = match(eq("createdPlaylists.playlistId", playlistID));
+        Bson unwind = unwind("$createdPlaylists");
         Bson project = project(fields(include("_id", "createdPlaylists")));
 
-        Document result = usersCollection.aggregate(Arrays.asList(unwind, match, project)).first();
-        playlist = new Playlist(result.get("createdPlaylists", Document.class), result.getString("_id"));
+        try (MongoCursor<Document> cursor = usersCollection.aggregate(Arrays.asList(match, unwind, match, project)).iterator()) {
+            if(cursor.hasNext()) {
+                Document result = cursor.next();
+                playlist = new Playlist(result.get("createdPlaylists", Document.class), result.getString("_id"));
+            }
+        }
         return playlist;
     }
 
@@ -99,22 +110,49 @@ public class PlaylistDAOImpl implements PlaylistDAO{
         Bson match2 = match(eq("createdPlaylists.isFavourite", true));
         Bson project = project(fields(include("createdPlaylists")));
 
-        Document result = usersCollection.aggregate(Arrays.asList(match1, unwind, match2, project)).first();
-
-        playlist = new Playlist(result.get("createdPlaylists", Document.class), user.getUsername());
+        try (MongoCursor<Document> cursor = usersCollection.aggregate(Arrays.asList(match1, unwind, match2, project)).iterator()) {
+            if(cursor.hasNext()) {
+                Document result = cursor.next();
+                playlist = new Playlist(result.get("createdPlaylists", Document.class), user.getUsername());
+            }
+        }
         return playlist;
     }
 
     @Override
     public void addSong(Playlist playlist, Song song)  throws ActionNotCompletedException{
-        MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
+        try {
+            MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
 
-        Document doc = new Document("songId", song.getID())
-                            .append("title", song.getTitle())
-                            .append("artist", song.getArtist())
-                            .append("link", song.getYoutubeMediaURL());
+            Document songDocument = new Document("songId", song.getID())
+                    .append("title", song.getTitle())
+                    .append("artist", song.getArtist())
+                    .append("link", song.getYoutubeMediaURL());
 
-        //da fare
+            Bson find = eq("createdPlaylists.playlistId", playlist.getID());
+            Bson query = push("createdPlaylists.$.songs", songDocument);
+            usersCollection.updateOne(find, query);
+            logger.info("Added song " + song.getID() + " to playlist " + playlist.getID());
+        } catch (MongoException mongoEx) {
+            logger.error(mongoEx.getMessage());
+            throw new ActionNotCompletedException(mongoEx);
+        }
+
+    }
+
+    @Override
+    public void deleteSong(Playlist playlist, Song song) throws ActionNotCompletedException{
+        try {
+            MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
+            Bson find = eq("createdPlaylists.playlistId", playlist.getID());
+            Bson query = pull("createdPlaylists.$.songs", eq("songId", song.getID()));
+
+            usersCollection.updateOne(find, query);
+            logger.info("Deleted song " + song.getID() + " from playlist " + playlist.getID());
+        } catch (MongoException mongoEx) {
+            logger.error(mongoEx.getMessage());
+            throw new ActionNotCompletedException(mongoEx);
+        }
     }
 
     @Override
@@ -153,7 +191,6 @@ public class PlaylistDAOImpl implements PlaylistDAO{
     private void deletePlaylistDocument(Playlist playlist){
         MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
         usersCollection.updateOne(new Document(), pull("createdPlaylists", eq("playlistId", playlist.getID())));
-
     }
 
     private void deletePlaylistNode(Playlist playlist){
