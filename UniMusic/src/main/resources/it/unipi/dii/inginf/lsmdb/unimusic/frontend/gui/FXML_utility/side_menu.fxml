@@ -8,8 +8,9 @@
 
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-<AnchorPane prefWidth="151.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-    <Button contentDisplay="RIGHT" prefHeight="37.0" styleClass="menu_button" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="50.0">
+<AnchorPane fx:controller="it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui.sideBarController" prefWidth="151.0"
+            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <Button fx:id="home" contentDisplay="RIGHT" prefHeight="37.0" styleClass="menu_button" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="50.0">
         <graphic>
             <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mouseTransparent="true">
                 <ImageView>
@@ -21,7 +22,7 @@
             </HBox>
         </graphic>
     </Button>
-    <Button contentDisplay="RIGHT" prefHeight="37.0" styleClass="menu_button" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="87.0">
+    <Button fx:id="favourites" contentDisplay="RIGHT" prefHeight="37.0" styleClass="menu_button" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="87.0">
         <graphic>
             <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mouseTransparent="true">
                 <ImageView>
@@ -33,7 +34,7 @@
             </HBox>
         </graphic>
     </Button>
-    <Button contentDisplay="RIGHT" prefHeight="37.0" styleClass="menu_button" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="124.0">
+    <Button fx:id="addPlaylist" contentDisplay="RIGHT" prefHeight="37.0" styleClass="menu_button" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="124.0">
         <graphic>
             <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mouseTransparent="true">
                 <ImageView>
@@ -45,7 +46,7 @@
             </HBox>
         </graphic>
     </Button>
-    <Button contentDisplay="RIGHT" styleClass="menu_button" AnchorPane.bottomAnchor="37.0" AnchorPane.leftAnchor="0.0">
+    <Button fx:id="personalProfile" contentDisplay="RIGHT" styleClass="menu_button" AnchorPane.bottomAnchor="37.0" AnchorPane.leftAnchor="0.0">
         <graphic>
             <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mouseTransparent="true">
                 <ImageView>
@@ -57,7 +58,7 @@
             </HBox>
         </graphic>
     </Button>
-    <Button contentDisplay="RIGHT" styleClass="menu_button" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+    <Button fx:id="logout" contentDisplay="RIGHT" styleClass="menu_button" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
         <graphic>
             <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mouseTransparent="true">
                 <ImageView>

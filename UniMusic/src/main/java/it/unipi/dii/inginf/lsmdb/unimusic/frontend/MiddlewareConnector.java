@@ -26,6 +26,10 @@ public class MiddlewareConnector {
         Neo4jDriver.getInstance().closeDriver();
     }
 
+    public void logout() {
+        loggedUser = null;
+    }
+
     public boolean registerUser(String username,
                              String password,
                              String firstName,
