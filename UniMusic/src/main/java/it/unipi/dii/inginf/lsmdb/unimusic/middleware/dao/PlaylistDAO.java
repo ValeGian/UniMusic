@@ -18,5 +18,7 @@ public interface PlaylistDAO {
 
     public void addSong(Playlist playlist, Song song) throws ActionNotCompletedException;
 
+    public void deleteSong(Playlist playlist, Song song) throws ActionNotCompletedException;
+
     public void deletePlaylist(Playlist playlist) throws ActionNotCompletedException;
 }
