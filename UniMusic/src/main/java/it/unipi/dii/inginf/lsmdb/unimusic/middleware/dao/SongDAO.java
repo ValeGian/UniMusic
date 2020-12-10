@@ -14,9 +14,17 @@ public interface SongDAO {
 
     Song getSongById(String songID) throws ActionNotCompletedException;
 
+    List<Song> getSongsByPartialAlbum(String partialAlbum, int limit) throws ActionNotCompletedException;
+
+    List<Song> getSongsByPartialAlbum(String partialAlbum) throws ActionNotCompletedException;
+
     List<Song> getSongsByPartialTitle(String partialTitle, int limit) throws ActionNotCompletedException;
 
     List<Song> getSongsByPartialTitle(String partialTitle) throws ActionNotCompletedException;
+
+    List<Song> getSongsByPartialArtist(String partialArtist, int limit) throws ActionNotCompletedException;
+
+    List<Song> getSongsByPartialArtist(String partialArtist) throws ActionNotCompletedException;
 
     List<Song> getHotSongs() throws  ActionNotCompletedException;
 }

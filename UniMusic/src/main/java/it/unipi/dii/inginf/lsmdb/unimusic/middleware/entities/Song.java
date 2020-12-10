@@ -28,6 +28,10 @@ public class Song {
 
     }
 
+    /**
+     * Constructs a song given a Neo4j Record initializing only fields that correspond to song Node properties.
+     * @param songNeo4jRecord
+     */
     public Song(Record songNeo4jRecord) {
 
         String tmp;
@@ -38,6 +42,10 @@ public class Song {
             album = new Album(tmp);
     }
 
+    /**
+     * Constructs a song given a json string.
+     * @param jsonSong
+     */
     public Song(String jsonSong){
 
         JSONObject song = new JSONObject(jsonSong);
@@ -45,12 +53,9 @@ public class Song {
         ID = song.getString("_id");
         title = song.getString("title");
         artist = song.getString("artist");
-        try {
-            rating = song.getDouble("rating");
-            likeCount = song.getInt("likeCount");
-        }catch(Exception ed){
+        rating = song.getDouble("rating");
+        likeCount = song.getInt("likeCount");
 
-        }
         JSONArray media = song.getJSONArray("media");
         youtubeMediaURL = media.getJSONObject(0).getString("url");
         spotifyMediaURL = media.getJSONObject(1).getString("url");
@@ -85,6 +90,9 @@ public class Song {
 
     }
 
+    /**
+     * @return
+     */
     public Document toBsonDocument() {
 
         Document songDocument = new Document("_id", ID)

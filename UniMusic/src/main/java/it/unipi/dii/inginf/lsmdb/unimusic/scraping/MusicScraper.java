@@ -15,6 +15,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Class that takes care of performing all actions related to scarping.
+ * It is used to fill databases with all the information needed about songs.
+ */
 public class MusicScraper {
 
     public static void main(String[] args) throws ActionNotCompletedException {
@@ -67,7 +71,7 @@ public class MusicScraper {
                 continue;
             }
 
-            StringBuffer responseSpotify = getResponse("https://api.spotify.com/v1/tracks/" + uriSpotify, " BQAr_M7cGFew4oAVWb-u52cWK_Ui7xE73R8WPvMBT_s_dwKtdK5PyF_8Scd_R0hLgYu7JA1P1mrhBtW1_3RE0UQMRBcSdMtGVRYrkNKgNdm4ZKghVeVT9ih41xwQJrW-OvoF-4V__wR_3bkJOcMFepAsyIafb-fV13PNrvrTig");
+            StringBuffer responseSpotify = getResponse("https://api.spotify.com/v1/tracks/" + uriSpotify, " BQCpfpPIujVBtY-Rup5HzXrXSmAo4cuQJJLBgjz4EW7PGZ7bP3WqX9BzFCJRslx0Xl8JbtwjUC6Ueui-8XsKgUbLroYI5Z3OuiBrLg2YzCP0P5LAkLjT2lsRnHD1yc9IWlmS_NWqZvqdX7szorKT7Eh9OJRWXJPPJw-FuPjiNg");
             if(responseSpotify == null) {
                 System.out.println("Spotify response missed, check the spotify bearer if the problem persists!");
                 miss++;
@@ -122,7 +126,11 @@ public class MusicScraper {
     }
 
 
-
+    /**
+     * @param inputUrl
+     * @param bearer
+     * @return The response from the given API, specified by inputUrl, using the bearer to authentication.
+     */
     private static StringBuffer getResponse(String inputUrl, String bearer){
         StringBuffer response = new StringBuffer();
         try {
