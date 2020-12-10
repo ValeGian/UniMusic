@@ -5,6 +5,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Song;
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.User;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.log.UMLogger;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.Collections;
@@ -20,6 +21,7 @@ import org.neo4j.driver.Session;
 import org.neo4j.driver.TransactionWork;
 import org.neo4j.driver.exceptions.Neo4jException;
 
+import java.time.Year;
 import java.util.*;
 
 import static com.mongodb.client.model.Accumulators.sum;
@@ -32,11 +34,15 @@ import static com.mongodb.client.model.Updates.inc;
 
 import static org.neo4j.driver.Values.parameters;
 
+
 public class SongDAOImpl implements SongDAO{
     private static final Logger logger = UMLogger.getSongLogger();
 
     public static void main(String[] args) throws ActionNotCompletedException {
+
+
         SongDAOImpl song = new SongDAOImpl();
+        song.populateWithUser();
         //Song songExample = song.getSongById("5fd0caea9ab23875a76c9819");
         List<Song> songExamples = song.getSongsByPartialArtist("c");
 
@@ -65,8 +71,19 @@ public class SongDAOImpl implements SongDAO{
         for(Document doc: list){
             logger.info(doc.toString());
         }
+        logger.info("FINISH");
     }
 
+    //-----------------------------------------------  CREATE  -----------------------------------------------
+
+    /**
+     * Add a song in both databases and handle possible errors:
+     * 1) if the song isn't added to MongoDb throws ActionNotCompletedException.
+     * 2) if the song isn't added to Neo4j delete also the document in MongoDb to avoid inconsitency and then throws  ActionNotCompletedException.
+     * In any case errors are logged.
+     * @param song
+     * @throws ActionNotCompletedException
+     */
     @Override
     public void createSong(Song song)  throws ActionNotCompletedException{
         try {
@@ -90,34 +107,47 @@ public class SongDAOImpl implements SongDAO{
 
     }
 
-    void incrementLikeCount(Song song) throws ActionNotCompletedException{
+    /**
+     * Add a song document in MongoDb.
+     * @param song
+     * @throws MongoException
+     */
+    private void createSongDocument(Song song) throws MongoException{
+
         MongoCollection<Document> songCollection = MongoDriver.getInstance().getCollection(Collections.SONGS);
-        try{
-            songCollection.updateOne(eq("_id", song.getID()), inc("likeCount", 1));
-            song.setLikeCount(song.getLikeCount()+1);
-        } catch (MongoException mongoEx) {
-            logger.error(mongoEx.getMessage());
-            throw new ActionNotCompletedException(mongoEx);
+
+        Document songDocument = song.toBsonDocument();
+
+        songCollection.insertOne(songDocument);
+
+    }
+
+    /**
+     * Add a song node in Neo4j.
+     * @param song
+     * @throws Neo4jException
+     */
+    private void createSongNode(Song song) throws Neo4jException{
+
+        try ( Session session = Neo4jDriver.getInstance().getDriver().session() )
+        {
+            session.writeTransaction((TransactionWork<Void>) tx -> {
+
+                tx.run( "CREATE (p:Song {songId: $songId, title: $title, artist: $artist, imageUrl: $imageUrl})",
+                        parameters("songId", song.getID(), "title", song.getTitle(),
+                                "artist", song.getArtist(), "imageUrl", song.getAlbum().getImage() ) );
+                return null;
+            });
         }
-
     }
 
-    void decrementLikeCount(Song song) throws ActionNotCompletedException{
-        MongoCollection<Document> songCollection = MongoDriver.getInstance().getCollection(Collections.SONGS);
-        try{
-            songCollection.updateOne(eq("_id", song.getID()), inc("likeCount", -1));
-            song.setLikeCount(song.getLikeCount()-1);
-        } catch (MongoException mongoEx) {
-            logger.error(mongoEx.getMessage());
-            throw new ActionNotCompletedException(mongoEx);
-        }
-    }
+    //----------------------------------------------  RETRIEVE  ----------------------------------------------
 
-    private void deleteSongDocument(Song song) {
-        MongoCollection<Document> songCollection = MongoDriver.getInstance().getCollection(Collections.SONGS);
-        songCollection.deleteOne(eq("_id", song.getID()));
-    }
-
+    /**
+     * @param songID
+     * @return
+     * @throws ActionNotCompletedException
+     */
     @Override
     public Song getSongById(String songID)  throws ActionNotCompletedException{
 
@@ -138,6 +168,67 @@ public class SongDAOImpl implements SongDAO{
         return songToReturn;
     }
 
+    /**
+     * @param partialInput
+     * @param maxNumber
+     * @param attributeField
+     * @return songs where the specified attribute fields contains the partial input of the user (case insensitive).
+     * @throws ActionNotCompletedException
+     */
+    private List<Song> filterSong(String partialInput, int maxNumber, String attributeField) throws ActionNotCompletedException {
+
+        MongoCollection<Document> songCollection = MongoDriver.getInstance().getCollection(Collections.SONGS);
+        List<Song> songsToReturn = new ArrayList<>();
+
+        Bson match = match(regex(attributeField, "(?i)^" + partialInput + ".*"));
+        Bson sortLike = sort(descending("likeCount"));
+        try (MongoCursor<Document> cursor = songCollection.aggregate(Arrays.asList(match, sortLike, limit(maxNumber))).iterator()) {
+            while(cursor.hasNext()) {
+                String jsonSong = cursor.next().toJson();
+                songsToReturn.add(new Song(jsonSong));
+            }
+        } catch (MongoException mongoEx) {
+            logger.error(mongoEx.getMessage());
+            throw new ActionNotCompletedException(mongoEx);
+        }
+        return songsToReturn;
+    }
+
+    @Override
+    public List<Song> getSongsByPartialAlbum(String partialAlbum, int limit) throws ActionNotCompletedException {
+        return filterSong(partialAlbum, limit, "album.title");
+    }
+
+    @Override
+    public List<Song> getSongsByPartialAlbum(String partialAlbum) throws ActionNotCompletedException {
+        return getSongsByPartialAlbum(partialAlbum, 20);
+    }
+
+    @Override
+    public List<Song> getSongsByPartialTitle(String partialTitle, int limit) throws ActionNotCompletedException {
+        return filterSong(partialTitle, limit, "title");
+    }
+
+    @Override
+    public List<Song> getSongsByPartialTitle(String partialTitle) throws ActionNotCompletedException {
+        return getSongsByPartialTitle(partialTitle, 20);
+    }
+
+    @Override
+    public List<Song> getSongsByPartialArtist(String partialArtist, int limit) throws ActionNotCompletedException {
+        return filterSong(partialArtist, limit, "artist");
+    }
+
+    @Override
+    public List<Song> getSongsByPartialArtist(String partialArtist) throws ActionNotCompletedException {
+        return getSongsByPartialArtist(partialArtist, 20);
+    }
+
+    /**
+     * It's an Analytic function.
+     * @return the album with the highest average of rating for every decade.
+     * @throws ActionNotCompletedException
+     */
     public List<Document> findTopRatedAlbumPerDecade() throws ActionNotCompletedException {
 
         MongoCollection<Document> songCollection = MongoDriver.getInstance().getCollection(Collections.SONGS);
@@ -171,6 +262,13 @@ public class SongDAOImpl implements SongDAO{
         return topAlbum;
     }
 
+    /**
+     * It's an Analytic function.
+     * @param hitLimit
+     * @param maxNumber
+     * @return artists which made the highest number of “hit songs”. A song is a “hit” if it received more than hitLimit likes.
+     * @throws ActionNotCompletedException
+     */
     public List<Pair<String, Integer>> findArtistsWithMostNumberOfHit(int hitLimit, int maxNumber) throws ActionNotCompletedException {
 
         MongoCollection<Document> songCollection = MongoDriver.getInstance().getCollection(Collections.SONGS);
@@ -194,63 +292,11 @@ public class SongDAOImpl implements SongDAO{
         return artistRank;
     }
 
-
-
-
-    private List<Song> filterSong(String partialInput, int maxNumber, String filterType) throws ActionNotCompletedException {
-
-        MongoCollection<Document> songCollection = MongoDriver.getInstance().getCollection(Collections.SONGS);
-        List<Song> songsToReturn = new ArrayList<>();
-
-        Bson match = match(regex(filterType, "(?i)^" + partialInput + ".*"));
-        Bson sortLike = sort(descending("likeCount"));
-        try (MongoCursor<Document> cursor = songCollection.aggregate(Arrays.asList(match, sortLike, limit(maxNumber))).iterator()) {
-            while(cursor.hasNext()) {
-                String jsonSong = cursor.next().toJson();
-                songsToReturn.add(new Song(jsonSong));
-            }
-        } catch (MongoException mongoEx) {
-            logger.error(mongoEx.getMessage());
-            throw new ActionNotCompletedException(mongoEx);
-        }
-        return songsToReturn;
-    }
-
-    @Override
-    public List<Song> getSongsByPartialAlbum(String partialAlbum, int limit) throws ActionNotCompletedException {
-        return filterSong(partialAlbum, limit, "album.title");
-    }
-
-
-    @Override
-    public List<Song> getSongsByPartialAlbum(String partialAlbum) throws ActionNotCompletedException {
-        return getSongsByPartialAlbum(partialAlbum, 20);
-    }
-
-
-    @Override
-    public List<Song> getSongsByPartialTitle(String partialTitle, int limit) throws ActionNotCompletedException {
-        return filterSong(partialTitle, limit, "title");
-    }
-
-
-    @Override
-    public List<Song> getSongsByPartialTitle(String partialTitle) throws ActionNotCompletedException {
-        return getSongsByPartialTitle(partialTitle, 20);
-    }
-
-    @Override
-    public List<Song> getSongsByPartialArtist(String partialArtist, int limit) throws ActionNotCompletedException {
-        return filterSong(partialArtist, limit, "artist");
-    }
-
-
-    @Override
-    public List<Song> getSongsByPartialArtist(String partialArtist) throws ActionNotCompletedException {
-        return getSongsByPartialArtist(partialArtist, 20);
-    }
-
-
+    /**
+     * It's an Analytic function.
+     * @return songs that received more likes in the current day.
+     * @throws ActionNotCompletedException
+     */
     @Override
     public List<Song> getHotSongs() throws ActionNotCompletedException {
 
@@ -278,34 +324,87 @@ public class SongDAOImpl implements SongDAO{
         return null;
     }
 
+    //-----------------------------------------------  UPDATE  -----------------------------------------------
 
-    //---------------------------------------------------------------------------------------------
-
-    private void createSongDocument(Song song) throws MongoException{
-
+    /**
+     * Update the song Document in MongoDb incrementing the likeCount field.
+     * @param song
+     * @throws ActionNotCompletedException
+     */
+    void incrementLikeCount(Song song) throws ActionNotCompletedException{
         MongoCollection<Document> songCollection = MongoDriver.getInstance().getCollection(Collections.SONGS);
-
-        Document songDocument = song.toBsonDocument();
-
-        songCollection.insertOne(songDocument);
+        try{
+            songCollection.updateOne(eq("_id", song.getID()), inc("likeCount", 1));
+            song.setLikeCount(song.getLikeCount()+1);
+        } catch (MongoException mongoEx) {
+            logger.error(mongoEx.getMessage());
+            throw new ActionNotCompletedException(mongoEx);
+        }
 
     }
 
-
-    private void createSongNode(Song song) throws Neo4jException{
-
-        try ( Session session = Neo4jDriver.getInstance().getDriver().session() )
-        {
-            session.writeTransaction((TransactionWork<Void>) tx -> {
-
-                tx.run( "CREATE (p:Song {songId: $songId, title: $title, artist: $artist, imageUrl: $imageUrl})",
-                        parameters("songId", song.getID(), "title", song.getTitle(),
-                                "artist", song.getArtist(), "imageUrl", song.getAlbum().getImage() ) );
-                return null;
-            });
+    /**
+     * Update the song Document in MongoDb decrementing the likeCount field.
+     * @param song
+     * @throws ActionNotCompletedException
+     */
+    void decrementLikeCount(Song song) throws ActionNotCompletedException{
+        MongoCollection<Document> songCollection = MongoDriver.getInstance().getCollection(Collections.SONGS);
+        try{
+            songCollection.updateOne(eq("_id", song.getID()), inc("likeCount", -1));
+            song.setLikeCount(song.getLikeCount()-1);
+        } catch (MongoException mongoEx) {
+            logger.error(mongoEx.getMessage());
+            throw new ActionNotCompletedException(mongoEx);
         }
     }
 
+    //-----------------------------------------------  DELETE  -----------------------------------------------
 
+    /**
+     * @param song
+     */
+    private void deleteSongDocument(Song song) {
+        MongoCollection<Document> songCollection = MongoDriver.getInstance().getCollection(Collections.SONGS);
+        songCollection.deleteOne(eq("_id", song.getID()));
+    }
+
+    private void populateWithUser(){
+        Random generator = new Random();
+
+        String[] firstName =  new String[] {"Emily","Hannah","Madison","Ashley","Sarah","Alexis","Samantha","Jessica","Elizabeth","Taylor","Lauren","Alyssa","Kayla","Abigail","Brianna","Olivia","Emma","Megan","Grace","Victoria","Rachel","Anna","Sydney","Destiny","Morgan","Jennifer","Jasmine","Haley","Julia","Kaitlyn","Nicole","Amanda","Katherine","Natalie","Hailey","Alexandra","Adam", "Alex", "Aaron", "Ben", "Carl", "Dan", "David", "Edward", "Fred", "Frank", "George", "Hal", "Hank", "Ike", "John", "Jack", "Joe", "Larry", "Monte", "Matthew", "Mark", "Nathan", "Otto", "Paul", "Peter", "Roger", "Roger", "Steve", "Thomas", "Tim", "Ty", "Victor", "Walter"};
+
+        String[] lastName = new String[] {"Anderson", "Ashwoon", "Aikin", "Bateman", "Bongard", "Bowers", "Boyd", "Cannon", "Cast", "Deitz", "Dewalt", "Ebner", "Frick", "Hancock", "Haworth", "Hesch", "Hoffman", "Kassing", "Knutson", "Lawless", "Lawicki", "Mccord", "McCormack", "Miller", "Myers", "Nugent", "Ortiz", "Orwig", "Ory", "Paiser", "Pak", "Pettigrew", "Quinn", "Quizoz", "Ramachandran", "Resnick", "Sagar", "Schickowski", "Schiebel", "Sellon", "Severson", "Shaffer", "Solberg", "Soloman", "Sonderling", "Soukup", "Soulis", "Stahl", "Sweeney", "Tandy", "Trebil", "Trusela", "Trussel", "Turco", "Uddin", "Uflan", "Ulrich", "Upson", "Vader", "Vail", "Valente", "Van Zandt", "Vanderpoel", "Ventotla", "Vogal", "Wagle", "Wagner", "Wakefield", "Weinstein", "Weiss", "Woo", "Yang", "Yates", "Yocum", "Zeaser", "Zeller", "Ziegler", "Bauer", "Baxster", "Casal", "Cataldi", "Caswell", "Celedon", "Chambers", "Chapman", "Christensen", "Darnell", "Davidson", "Davis", "DeLorenzo", "Dinkins", "Doran", "Dugelman", "Dugan", "Duffman", "Eastman", "Ferro", "Ferry", "Fletcher", "Fietzer", "Hylan", "Hydinger", "Illingsworth", "Ingram", "Irwin", "Jagtap", "Jenson", "Johnson", "Johnsen", "Jones", "Jurgenson", "Kalleg", "Kaskel", "Keller", "Leisinger", "LePage", "Lewis", "Linde", "Lulloff", "Maki", "Martin", "McGinnis", "Mills", "Moody", "Moore", "Napier", "Nelson", "Norquist", "Nuttle", "Olson", "Ostrander", "Reamer", "Reardon", "Reyes", "Rice", "Ripka", "Roberts", "Rogers", "Root", "Sandstrom", "Sawyer", "Schlicht", "Schmitt", "Schwager", "Schutz", "Schuster", "Tapia", "Thompson", "Tiernan", "Tisler"};
+
+        for(int i = 0; i < 100; i++){
+            String fName = firstName[generator.nextInt(firstName.length)];
+            String lName = lastName[generator.nextInt(lastName.length)];
+            int age = generator.nextInt(30) + 20;
+            String username;
+            String password = "";
+            for(int j = 0; j < 6; j++){
+                password += (char) (generator.nextInt(26) + 'a');
+            }
+            password = Integer.toString(generator.nextInt(100));
+
+            try {
+                username = fName.substring(0, 3) + lName.substring(0, 3) + (Year.now().getValue() - age);
+            }catch (IndexOutOfBoundsException index){
+                continue;
+            }
+            User user = new User(username, password,fName, lName, age);
+
+            UserDAOImpl userDAO = new UserDAOImpl();
+
+            try {
+                userDAO.createUser(user);
+            } catch (ActionNotCompletedException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
+    }
 
 }

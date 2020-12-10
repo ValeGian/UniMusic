@@ -15,6 +15,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Class that takes care of performing all actions related to scarping.
+ * It is used to fill databases with all the information needed about songs.
+ */
 public class MusicScraper {
 
     public static void main(String[] args) throws ActionNotCompletedException {
@@ -122,7 +126,11 @@ public class MusicScraper {
     }
 
 
-
+    /**
+     * @param inputUrl
+     * @param bearer
+     * @return The response from the given API, specified by inputUrl, using the bearer to authentication.
+     */
     private static StringBuffer getResponse(String inputUrl, String bearer){
         StringBuffer response = new StringBuffer();
         try {
