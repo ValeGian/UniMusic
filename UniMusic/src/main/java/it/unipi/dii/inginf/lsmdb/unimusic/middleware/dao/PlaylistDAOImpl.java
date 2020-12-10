@@ -1,5 +1,6 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.middleware.dao;
 
+import com.google.gson.Gson;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
@@ -42,7 +43,7 @@ public class PlaylistDAOImpl implements PlaylistDAO{
         Playlist playlist;
         try {
             //playlist = p.getPlaylist("2");
-            playlist = new Playlist("manolo", "5fd0e138c5452d6017ff69a3", "diaha");
+            playlist = new Playlist("manolo", "5fd0e138c5452d6017ff69a3", "diahanellomissile");
             //playlist.setFavourite(true);
             //p.createPlaylist(playlist);
             playlist = p.getPlaylist("5fd1ffc8c3952245fe3be6d9");
