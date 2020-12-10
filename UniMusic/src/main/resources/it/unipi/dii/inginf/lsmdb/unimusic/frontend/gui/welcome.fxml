@@ -53,13 +53,13 @@
                                 <Insets right="10.0" />
                             </padding>
                         </Label>
-                        <TextField fx:id="logUsername" GridPane.columnIndex="1" />
+                        <TextField fx:id="logUsername" styleClass="inputTextField" GridPane.columnIndex="1" />
                         <Label text="Password:" GridPane.rowIndex="1">
                             <padding>
                                 <Insets right="10.0" />
                             </padding>
                         </Label>
-                        <PasswordField fx:id="logPassword" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <PasswordField fx:id="logPassword" styleClass="inputTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                     </children>
                     <VBox.margin>
                         <Insets />
@@ -73,9 +73,14 @@
                         <Font name="Arial Black" size="14.0" />
                     </font>
                 </Button>
+            <TextField fx:id="loginMessage" styleClass="inputTextField" style="-fx-background-color: transparent;">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </TextField>
             </children>
         </VBox>
-        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+        <VBox prefHeight="274.0" prefWidth="387.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
             <children>
                 <GridPane vgap="15.0">
                     <columnConstraints>
@@ -110,16 +115,16 @@
                                 <Insets right="10.0" />
                             </padding>
                         </Label>
-                        <TextField fx:id="regUsername" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <TextField fx:id="regUsername" styleClass="inputTextField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                         <Label text="Password:" GridPane.rowIndex="4">
                             <padding>
                                 <Insets right="10.0" />
                             </padding>
                         </Label>
-                        <TextField fx:id="regAge" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <TextField fx:id="regLastName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextField fx:id="regFirstName" GridPane.columnIndex="1" />
-                        <PasswordField fx:id="regPassword" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <TextField fx:id="regAge" styleClass="inputTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="regLastName" styleClass="inputTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="regFirstName" styleClass="inputTextField" GridPane.columnIndex="1" />
+                        <PasswordField fx:id="regPassword" styleClass="inputTextField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                     </children>
                     <VBox.margin>
                         <Insets />
@@ -133,8 +138,13 @@
                         <Font name="Arial Black" size="14.0" />
                     </font>
                 </Button>
+            <TextField fx:id="registerMessage" styleClass="inputTextField" style="-fx-background-color: transparent;">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </TextField>
             </children>
         </VBox>
-        <Separator opacity="0.4" orientation="VERTICAL" prefHeight="200.0" style="-fx-background-color: black;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <Separator opacity="0.4" orientation="VERTICAL" prefHeight="289.0" prefWidth="0.0" style="-fx-background-color: black;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
     </children>
 </GridPane>

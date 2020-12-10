@@ -12,6 +12,26 @@ root {
     -fx-font-size: 56px;
 }
 
+.scroll-pane, .scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.text-field {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.text-id {
+    -fx-fill: white;
+    -fx-stroke-width: 0;
+}
+
+.inputTextField {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+}
+
 .label {
     -fx-text-fill: white;
 }
@@ -31,4 +51,8 @@ root {
     -fx-border-color: darkgrey;
     -fx-padding: 0 0 10px 10px;
     -fx-pref-width: 150px;
+}
+
+#registerMessage, #loginMessage {
+    -fx-font-weight: bold;
 }
