@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -18,6 +19,7 @@ public class welcomeController implements Initializable {
     @FXML private TextField logUsername;
     @FXML private TextField logPassword;
     @FXML private Button loginButton;
+    @FXML private TextField loginMessage;
 
     @FXML private TextField regFirstName;
     @FXML private TextField regLastName;
@@ -25,6 +27,7 @@ public class welcomeController implements Initializable {
     @FXML private TextField regUsername;
     @FXML private TextField regPassword;
     @FXML private Button registerButton;
+    @FXML private TextField registerMessage;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -47,9 +50,15 @@ public class welcomeController implements Initializable {
                 String password = logPassword.getText();
 
                 if(connector.loginUser(username, password)) {
-                    System.out.println("YEAH!");
+                    try {
+                        App.setRoot("homepage");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 } else {
-                    System.out.println("NOPE!");
+                    clear();
+                    loginMessage.setStyle("-fx-text-fill: #ff0000; -fx-background-color: transparent");
+                    loginMessage.setText("Not been able to login, retry!");
                 }
             }
         });
@@ -68,17 +77,30 @@ public class welcomeController implements Initializable {
                 || firstName.equals("")
                 || lastName.equals("")
                 ||age.equals("")) {
-                    System.out.println("Vuoti!");
+                    clear();
+                    registerMessage.setStyle("-fx-text-fill: red; -fx-background-color: transparent");
+                    registerMessage.setText("You have to fill all the fields!");
                 } else if(connector.registerUser(username, password, firstName, lastName, Integer.parseInt(age))) {
-                    regUsername.setText("");
-                    regPassword.setText("");
-                    regFirstName.setText("");
-                    regLastName.setText("");
-                    regAge.setText("");
+                    clear();
+                    registerMessage.setStyle("-fx-text-fill: green; -fx-background-color: transparent");
+                    registerMessage.setText("You have succesfully registered!");
                 } else {
                     System.out.println("Not Connected");
                 }
             }
         });
+    }
+
+    private void clear() {
+        regUsername.setText("");
+        regPassword.setText("");
+        regFirstName.setText("");
+        regLastName.setText("");
+        regAge.setText("");registerMessage.setText(""); registerMessage.setStyle("-fx-background-color: transparent");
+
+        logUsername.setText("");
+        logPassword.setText("");
+        loginMessage.setText(""); loginMessage.setStyle("-fx-background-color: transparent");
+
     }
 }
