@@ -6,6 +6,7 @@ import it.unipi.dii.inginf.lsmdb.unimusic.middleware.dao.UserDAOImpl;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;

@@ -1,5 +1,6 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.middleware.dao;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
@@ -39,7 +40,6 @@ public class SongDAOImpl implements SongDAO{
     private static final Logger logger = UMLogger.getSongLogger();
 
     public static void main(String[] args) throws ActionNotCompletedException {
-
 
         SongDAOImpl song = new SongDAOImpl();
         song.populateWithUser();
@@ -81,11 +81,15 @@ public class SongDAOImpl implements SongDAO{
      * 1) if the song isn't added to MongoDb throws ActionNotCompletedException.
      * 2) if the song isn't added to Neo4j delete also the document in MongoDb to avoid inconsitency and then throws  ActionNotCompletedException.
      * In any case errors are logged.
-     * @param song
+     * @param song the song you want to add to databases.
      * @throws ActionNotCompletedException
      */
     @Override
-    public void createSong(Song song)  throws ActionNotCompletedException{
+    public void createSong(Song song) throws ActionNotCompletedException{
+
+        if(song == null || song.getID() == null)
+            throw new IllegalArgumentException();
+
         try {
             createSongDocument(song);
             createSongNode(song);
@@ -109,7 +113,7 @@ public class SongDAOImpl implements SongDAO{
 
     /**
      * Add a song document in MongoDb.
-     * @param song
+     * @param song the song you want to add to mongoDb.
      * @throws MongoException
      */
     private void createSongDocument(Song song) throws MongoException{
@@ -124,7 +128,7 @@ public class SongDAOImpl implements SongDAO{
 
     /**
      * Add a song node in Neo4j.
-     * @param song
+     * @param song the song you want to add to Neo4j.
      * @throws Neo4jException
      */
     private void createSongNode(Song song) throws Neo4jException{
@@ -144,8 +148,8 @@ public class SongDAOImpl implements SongDAO{
     //----------------------------------------------  RETRIEVE  ----------------------------------------------
 
     /**
-     * @param songID
-     * @return
+     * @param songID the id of the song you wanto to return.
+     * @return the song with the specified id.
      * @throws ActionNotCompletedException
      */
     @Override
@@ -168,14 +172,19 @@ public class SongDAOImpl implements SongDAO{
         return songToReturn;
     }
 
+
     /**
-     * @param partialInput
-     * @param maxNumber
-     * @param attributeField
+     * @param partialInput the partial input of the user.
+     * @param maxNumber the max number of song you want to return.
+     * @param attributeField the document's attribute you want to match.
      * @return songs where the specified attribute fields contains the partial input of the user (case insensitive).
      * @throws ActionNotCompletedException
      */
-    private List<Song> filterSong(String partialInput, int maxNumber, String attributeField) throws ActionNotCompletedException {
+    @VisibleForTesting
+    List<Song> filterSong(String partialInput, int maxNumber, String attributeField) throws ActionNotCompletedException {
+
+        if(attributeField == null || maxNumber < 0)
+            throw new IllegalArgumentException();
 
         MongoCollection<Document> songCollection = MongoDriver.getInstance().getCollection(Collections.SONGS);
         List<Song> songsToReturn = new ArrayList<>();
@@ -264,12 +273,15 @@ public class SongDAOImpl implements SongDAO{
 
     /**
      * It's an Analytic function.
-     * @param hitLimit
-     * @param maxNumber
+     * @param hitLimit the threshold to consider a song as a hit.
+     * @param maxNumber the max number of artists you want to return.
      * @return artists which made the highest number of “hit songs”. A song is a “hit” if it received more than hitLimit likes.
      * @throws ActionNotCompletedException
      */
     public List<Pair<String, Integer>> findArtistsWithMostNumberOfHit(int hitLimit, int maxNumber) throws ActionNotCompletedException {
+
+        if(maxNumber < 0)
+            throw new IllegalArgumentException();
 
         MongoCollection<Document> songCollection = MongoDriver.getInstance().getCollection(Collections.SONGS);
 
@@ -328,10 +340,14 @@ public class SongDAOImpl implements SongDAO{
 
     /**
      * Update the song Document in MongoDb incrementing the likeCount field.
-     * @param song
+     * @param song the song you want to update.
      * @throws ActionNotCompletedException
      */
     void incrementLikeCount(Song song) throws ActionNotCompletedException{
+
+        if(song == null || song.getID() == null)
+            throw new IllegalArgumentException();
+
         MongoCollection<Document> songCollection = MongoDriver.getInstance().getCollection(Collections.SONGS);
         try{
             songCollection.updateOne(eq("_id", song.getID()), inc("likeCount", 1));
@@ -345,10 +361,14 @@ public class SongDAOImpl implements SongDAO{
 
     /**
      * Update the song Document in MongoDb decrementing the likeCount field.
-     * @param song
+     * @param song the song you want to update.
      * @throws ActionNotCompletedException
      */
     void decrementLikeCount(Song song) throws ActionNotCompletedException{
+
+        if(song == null || song.getID() == null)
+            throw new IllegalArgumentException();
+
         MongoCollection<Document> songCollection = MongoDriver.getInstance().getCollection(Collections.SONGS);
         try{
             songCollection.updateOne(eq("_id", song.getID()), inc("likeCount", -1));
@@ -362,9 +382,13 @@ public class SongDAOImpl implements SongDAO{
     //-----------------------------------------------  DELETE  -----------------------------------------------
 
     /**
-     * @param song
+     * @param song the song you want to delete.
      */
     private void deleteSongDocument(Song song) {
+
+        if(song == null || song.getID() == null)
+            throw new IllegalArgumentException();
+
         MongoCollection<Document> songCollection = MongoDriver.getInstance().getCollection(Collections.SONGS);
         songCollection.deleteOne(eq("_id", song.getID()));
     }
@@ -401,9 +425,7 @@ public class SongDAOImpl implements SongDAO{
             } catch (ActionNotCompletedException e) {
                 e.printStackTrace();
             }
-
         }
-
 
     }
 
