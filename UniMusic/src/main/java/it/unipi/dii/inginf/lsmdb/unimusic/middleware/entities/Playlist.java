@@ -3,6 +3,7 @@ package it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities;
 import org.bson.BsonArray;
 import org.bson.Document;
 import org.json.JSONObject;
+import org.neo4j.driver.Record;
 
 public class Playlist {
     private String author;
@@ -13,6 +14,11 @@ public class Playlist {
 
     public Playlist() {
 
+    }
+
+    public Playlist(String author) {
+        this.author = author;
+        this.name = "My playlist";
     }
 
     public Playlist(String author,
@@ -39,14 +45,23 @@ public class Playlist {
         this.urlImage = urlImage;
     }
 
-    public Playlist(Document mongoDocument, String author){
+    public Playlist(Document mongoDocument){
         String json = mongoDocument.toJson();
         JSONObject jsonObject = new JSONObject(json);
-        this.author = author;
         ID = jsonObject.getString("playlistId");
         name = jsonObject.getString("name");
         if (jsonObject.has("isFavourite"))
             isFavourite = true;
+    }
+
+    public Playlist(Document mongoDocument,
+                    String author){
+        this(mongoDocument);
+        this.author = author;
+    }
+
+    public Playlist(Record playlistNeo4jRecord) {
+        ID = playlistNeo4jRecord.get("playlistId").asString();
     }
 
     public Document toBsonDocument() {
