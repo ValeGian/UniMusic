@@ -1,6 +1,7 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui;
 
 import it.unipi.dii.inginf.lsmdb.unimusic.frontend.MiddlewareConnector;
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -72,20 +73,29 @@ public class welcomeController implements Initializable {
                 String lastName = regLastName.getText();
                 String age = regAge.getText();
 
+                clear();
+
                 if(username.equals("")
                 || password.equals("")
                 || firstName.equals("")
                 || lastName.equals("")
                 ||age.equals("")) {
-                    clear();
                     registerMessage.setStyle("-fx-text-fill: red; -fx-background-color: transparent");
                     registerMessage.setText("You have to fill all the fields!");
-                } else if(connector.registerUser(username, password, firstName, lastName, Integer.parseInt(age))) {
-                    clear();
-                    registerMessage.setStyle("-fx-text-fill: green; -fx-background-color: transparent");
-                    registerMessage.setText("You have succesfully registered!");
                 } else {
-                    System.out.println("Not Connected");
+                    try {
+                        connector.registerUser(username, password, firstName, lastName, Integer.parseInt(age));
+                        registerMessage.setStyle("-fx-text-fill: green; -fx-background-color: transparent");
+                        registerMessage.setText("You have succesfully registered!");
+
+                    } catch (ActionNotCompletedException e) {
+                        registerMessage.setStyle("-fx-text-fill: red; -fx-background-color: transparent");
+                        if (e.getCode() == 11000) {
+                            registerMessage.setText("The username already exists!");
+                        } else {
+                            registerMessage.setText("It's been impossible to register, retry!");
+                        }
+                    }
                 }
             }
         });

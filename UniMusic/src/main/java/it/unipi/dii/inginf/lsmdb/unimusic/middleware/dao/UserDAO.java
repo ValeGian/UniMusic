@@ -12,8 +12,6 @@ public interface UserDAO {
 
     public User getUserByUsername(String username) throws ActionNotCompletedException;
 
-    public boolean checkUserExists(String username);
-
     public boolean checkUserPassword(String username, String password);
 
     public void followUser(User userFollowing, User userFollowed) throws ActionNotCompletedException;
