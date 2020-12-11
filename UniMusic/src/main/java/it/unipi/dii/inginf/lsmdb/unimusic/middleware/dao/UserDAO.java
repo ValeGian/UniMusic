@@ -24,6 +24,8 @@ public interface UserDAO {
 
     public void likeSong(User user, Song song) throws ActionNotCompletedException;
 
+    public boolean userLikesSong(User user, Song song);
+
     public void deleteLike(User user, Song song) throws ActionNotCompletedException;
 
     public void updateUserPrivilegeLevel(User user, PrivilegeLevel newPrivLevel) throws ActionNotCompletedException;
