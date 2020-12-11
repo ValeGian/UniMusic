@@ -6,6 +6,9 @@ import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotComplete
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.MongoDriver;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.neo4jconnection.Neo4jDriver;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MiddlewareConnector {
     private static final MiddlewareConnector instance = new MiddlewareConnector();
 
@@ -26,26 +29,15 @@ public class MiddlewareConnector {
         Neo4jDriver.getInstance().closeDriver();
     }
 
-    public void logout() {
-        loggedUser = null;
-    }
+    //-----------------USER-------------------------------------------------------------------
 
-    public boolean registerUser(String username,
+    public void registerUser(String username,
                              String password,
                              String firstName,
                              String lastName,
-                             int age) {
-        if(userDAO.checkUserExists(username))
-            return false;
-
+                             int age) throws ActionNotCompletedException {
         User user = new User(username, password, firstName, lastName, age);
-        try {
-            userDAO.createUser(user);
-        } catch (ActionNotCompletedException e) {
-            return false;
-        }
-
-        return true;
+        userDAO.createUser(user);
     }
 
     public boolean loginUser(String username, String password) {
@@ -58,5 +50,17 @@ public class MiddlewareConnector {
             return true;
         }
         return false;
+    }
+
+
+    public void logout() {
+        loggedUser = null;
+    }
+
+    //--------------------------SONG-------------------------------------------------------------------
+
+    public List<Song> getHotSongs() throws ActionNotCompletedException {
+        return new ArrayList<>();
+        //return songDAO.getHotSongs();
     }
 }

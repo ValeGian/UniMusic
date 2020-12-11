@@ -115,19 +115,6 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public boolean checkUserExists(String username) {
-        try (MongoCursor<Document> cursor = MongoDriver.getInstance().getCollection(Collections.USERS)
-                .find(eq("_id", username)).iterator()) {
-            if (cursor.hasNext()) {
-                return true;
-            }
-        } catch (MongoException mEx) {
-            return false;
-        }
-        return false;
-    }
-
-    @Override
     public boolean checkUserPassword(String username, String password) {
         try (MongoCursor<Document> cursor = MongoDriver.getInstance().getCollection(Collections.USERS)
                 .find(eq("_id", username)).iterator()) {
