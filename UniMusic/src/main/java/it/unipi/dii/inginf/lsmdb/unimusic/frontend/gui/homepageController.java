@@ -42,10 +42,10 @@ public class homepageController implements Initializable {
         scrollPane.setFitToWidth(true);
         verticalScroll.setSpacing(75);
 
-        hotSongsScroll.setFitToHeight(true); hotSongsScroll.setMinViewportHeight(325);
+        hotSongsScroll.setFitToHeight(true); hotSongsScroll.setMinViewportHeight(340);
         hotSongsPane.setSpacing(5);
 
-        suggPlaylistsScroll.setFitToHeight(true); suggPlaylistsScroll.setMinViewportHeight(325);
+        suggPlaylistsScroll.setFitToHeight(true); suggPlaylistsScroll.setMinViewportHeight(340);
         suggPlaylistsPane.setSpacing(5);
 
         suggUsersScroll.setFitToHeight(true); suggUsersScroll.setMinViewportHeight(100);

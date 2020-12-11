@@ -16,7 +16,7 @@ public class MiddlewareConnector {
     private final PlaylistDAO playlistDAO = new PlaylistDAOImpl();
     private final SongDAO songDAO = new SongDAOImpl();
 
-    private User loggedUser;
+    private User loggedUser = new User("");
 
     private MiddlewareConnector() {
 

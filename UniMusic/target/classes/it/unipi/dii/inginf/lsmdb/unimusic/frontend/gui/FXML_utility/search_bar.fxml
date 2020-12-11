@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane AnchorPane.leftAnchor="151.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui.searchBarController">
+<AnchorPane AnchorPane.leftAnchor="161.0" AnchorPane.topAnchor="2.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui.searchBarController">
     <Button maxWidth="47.0" prefHeight="32.0" prefWidth="47.0" style="-fx-background-color: white; -fx-background-radius: 0; -fx-border-width: 0;">
         <graphic>
             <HBox alignment="CENTER" mouseTransparent="true">
