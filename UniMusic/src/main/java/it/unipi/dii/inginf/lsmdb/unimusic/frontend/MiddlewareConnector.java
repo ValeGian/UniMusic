@@ -16,7 +16,7 @@ public class MiddlewareConnector {
     private final PlaylistDAO playlistDAO = new PlaylistDAOImpl();
     private final SongDAO songDAO = new SongDAOImpl();
 
-    private User loggedUser;
+    private User loggedUser = new User("");
 
     private MiddlewareConnector() {
 
@@ -57,10 +57,30 @@ public class MiddlewareConnector {
         loggedUser = null;
     }
 
+    public List<User> getSuggestedUsers() {
+        List<User> suggUsers = new ArrayList<>();
+        try {
+            suggUsers = userDAO.getSuggestedUsers(loggedUser);
+        } catch (ActionNotCompletedException ancEx) {
+            return new ArrayList<User>();
+        }
+        return suggUsers;
+    }
+
     //--------------------------SONG-------------------------------------------------------------------
 
-    public List<Song> getHotSongs() throws ActionNotCompletedException {
-        return new ArrayList<>();
-        //return songDAO.getHotSongs();
+    public List<Song> getHotSongs() {
+        List<Song> hotSongs = new ArrayList<>();
+        try {
+            hotSongs = songDAO.getHotSongs();
+        } catch (ActionNotCompletedException ancEx) {
+            return new ArrayList<Song>();
+        }
+        return hotSongs;
+    }
+
+    public boolean userLikesSong(Song song){
+       return userDAO.userLikesSong(loggedUser, song);
+
     }
 }

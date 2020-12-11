@@ -14,6 +14,10 @@ public interface UserDAO {
 
     public User getUserByUsername(String username) throws ActionNotCompletedException;
 
+    public List<User> getSuggestedUsers(User user) throws ActionNotCompletedException;
+
+    public List<User> getSuggestedUsers(User user, int limit) throws ActionNotCompletedException;
+
     public boolean checkUserPassword(String username, String password);
 
     public void followUser(User userFollowing, User userFollowed) throws ActionNotCompletedException;

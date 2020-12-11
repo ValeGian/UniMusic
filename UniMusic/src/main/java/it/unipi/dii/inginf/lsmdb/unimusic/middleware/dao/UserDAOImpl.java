@@ -17,6 +17,7 @@ import org.neo4j.driver.*;
 import org.neo4j.driver.exceptions.Neo4jException;
 
 import java.util.ArrayList;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,6 +39,23 @@ public class UserDAOImpl implements UserDAO{
         User user1 = new User("JasHof1981");
         User user2 = new User("AlePai1987");
         User user3 = new User("RogRog1992");
+        User user4 = new User("LarHan1998");
+        User user5 = new User("FraRey1989");
+        User user6 = new User("TimWei1994");
+        User user7 = new User("EliTur1990");
+        User user8 = new User("MonFri1978");
+        User user9 = new User("MorTan1999");
+
+        List<User> users = new ArrayList<>();
+        users.add(user1);
+        users.add(user2);
+        users.add(user3);
+        users.add(user4);
+        users.add(user5);
+        users.add(user6);
+        users.add(user7);
+        users.add(user8);
+        users.add(user9);
 
         Song song1 = new Song(); song1.setID("5fd3548a9ab2a47028229e76");
         Song song2 = new Song(); song2.setID("5fd354849ab2a47028229e74");
@@ -49,35 +67,51 @@ public class UserDAOImpl implements UserDAO{
         Song song8 = new Song(); song8.setID("5fd3549b9ab2a47028229e7a");
         Song song9 = new Song(); song9.setID("5fd354a79ab2a47028229e7d");
 
-        List<Song> lista = songDAO.getHotSongs();
-        System.out.println(lista.size());
-        for(Song song: lista) {
-            System.out.println("[" +song.getID()+ "] " +song.getTitle());
+        for(User uno: users) {
+            List<User> suggUsers = userDAO.getSuggestedUsers(uno);
+            System.out.println("USER________________");
+            for (User user : suggUsers) {
+                System.out.println(user.getUsername());
+            }
         }
 
         /*
-        userDAO.likeSong(user1, song2);
+        userDAO.followUser(user1, user2);
+        userDAO.followUser(user1, user3);
+        userDAO.followUser(user1, user4);
+        userDAO.followUser(user1, user5);
+        userDAO.followUser(user2, user6);
+        userDAO.followUser(user2, user7);
+        userDAO.followUser(user2, user8);
+        userDAO.followUser(user2, user9);
+        userDAO.followUser(user2, user5);
+        userDAO.followUser(user3, user1);
+        userDAO.followUser(user3, user2);
+        userDAO.followUser(user3, user4);
+        userDAO.followUser(user4, user5);
+         */
+        /*
         userDAO.likeSong(user1, song1);
+        userDAO.likeSong(user1, song2);
         userDAO.likeSong(user1, song3);
         userDAO.likeSong(user1, song4);
         userDAO.likeSong(user1, song5);
         userDAO.likeSong(user1, song6);
-        userDAO.likeSong(user2, song2);
-        userDAO.likeSong(user2, song7);
-        userDAO.likeSong(user2, song8);
-        userDAO.likeSong(user2, song1);
+        userDAO.likeSong(user1, song7);
+        userDAO.likeSong(user1, song8);
         userDAO.likeSong(user2, song9);
-        userDAO.likeSong(user3, song1);
-        userDAO.likeSong(user3, song2);
-        userDAO.likeSong(user3, song3);
-        userDAO.likeSong(user3, song4);
-        userDAO.likeSong(user3, song5);
-        userDAO.likeSong(user3, song6);
-        userDAO.likeSong(user3, song7);
-        userDAO.likeSong(user3, song8);
+        userDAO.likeSong(user2, song1);
+        userDAO.likeSong(user2, song3);
         userDAO.likeSong(user3, song9);
+        userDAO.likeSong(user4, song2);
+        userDAO.likeSong(user5, song3);
+        userDAO.likeSong(user5, song4);
+        userDAO.likeSong(user6, song5);
+        userDAO.likeSong(user7, song6);
+        userDAO.likeSong(user8, song7);
+        userDAO.likeSong(user9, song8);
+        userDAO.likeSong(user9, song9);
          */
-
         /*
         User user1 = new User("valegiann", "root", "Valerio", "Giannini", 22);
         User user2 = new User("aleserra", "root", "Alessio", "Serra", 22);
@@ -170,6 +204,36 @@ public class UserDAOImpl implements UserDAO{
             throw new ActionNotCompletedException(mEx);
         }
         return user;
+    }
+
+    @Override
+    public List<User> getSuggestedUsers(User user) throws ActionNotCompletedException {
+        return getSuggestedUsers(user, 40);
+    }
+
+    @Override
+    public List<User> getSuggestedUsers(User user, int limit) throws ActionNotCompletedException {
+        List<User> list = new ArrayList<>();
+        try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
+            list = session.readTransaction((TransactionWork<List<User>>) tx -> {
+                Result result = tx.run(
+                        "MATCH (me:User {username: $me})-[:FOLLOWS_USER]->(followed:User)"
+                        + "-[:FOLLOWS_USER]->(suggested:User) WHERE NOT (me)-[:FOLLOWS_USER]->(suggested) "
+                        + "AND me <> suggested RETURN suggested, count(*) AS Strength "
+                        + "ORDER BY Strength DESC LIMIT $limit",
+                        parameters("me", user.getUsername(), "limit", limit)
+                );
+                ArrayList<User> users = new ArrayList<>();
+                while ((result.hasNext())){
+                    Record r = result.next();
+                    users.add(new User(r.get("suggested").get("username").asString()));
+                }
+                return users;
+            });
+        } catch (Neo4jException n4jEx) {
+            throw new ActionNotCompletedException(n4jEx);
+        }
+        return list;
     }
 
     @Override

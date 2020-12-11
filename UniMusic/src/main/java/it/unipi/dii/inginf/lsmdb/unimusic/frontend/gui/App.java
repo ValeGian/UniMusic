@@ -19,6 +19,8 @@ public class App extends Application {
     private static Scene scene;
     private MiddlewareConnector connector;
 
+    public static final double previewImageWidth = 200;
+
     @Override
     public void start(Stage stage) throws IOException {
         connector = MiddlewareConnector.getInstance();
