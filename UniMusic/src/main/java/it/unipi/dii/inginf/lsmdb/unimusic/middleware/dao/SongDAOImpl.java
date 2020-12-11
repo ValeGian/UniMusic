@@ -42,24 +42,39 @@ public class SongDAOImpl implements SongDAO{
     public static void main(String[] args) throws ActionNotCompletedException {
 
         SongDAOImpl song = new SongDAOImpl();
-        song.populateWithUser();
+        //song.populateWithUser();
+
+        User alessio = new User("ale98", "root", "Alessio", "Serra", 22);
+        UserDAOImpl userDAO = new UserDAOImpl();
+        //userDAO.createUser(alessio);
+
         //Song songExample = song.getSongById("5fd0caea9ab23875a76c9819");
         List<Song> songExamples = song.getSongsByPartialArtist("c");
 
         for (Song songExample : songExamples) {
             song.incrementLikeCount(songExample);
+            userDAO.likeSong(alessio, songExample);
             if(new Random().nextInt(2)%2 == 0){
+                userDAO.likeSong(alessio, songExample);
                 song.incrementLikeCount(songExample);
             }
             if(new Random().nextInt(2)%2 == 0){
+                userDAO.likeSong(alessio, songExample);
                 song.incrementLikeCount(songExample);
             }
             if(new Random().nextInt(2)%2 == 0){
+                userDAO.likeSong(alessio, songExample);
                 song.incrementLikeCount(songExample);
             }
             song.incrementLikeCount(songExample);
             song.incrementLikeCount(songExample);
             System.out.format("%s\t%s\t%s\t%d\n", songExample.getID(), songExample.getLikeCount(), songExample.getAlbum().getTitle(), songExample.getReleaseYear());
+        }
+
+        List<Song> songExample2 = song.getHotSongs();
+        for(Song s: songExample2) {
+            if(s != null)
+                logger.info(s.toString());
         }
 
         List<Pair<String, Integer>> ranking = song.findArtistsWithMostNumberOfHit(2, 10);
@@ -318,22 +333,21 @@ public class SongDAOImpl implements SongDAO{
         {
             session.writeTransaction((TransactionWork<List<Song>>) tx -> {
 
-                String query = "MATCH (s:Song)-[l:LIKES{day:date()}]-(u:User)" +
-                        "WITH s, COUNT(*) as num ORDER BY num DESC" +
+                String query = "MATCH (s:Song)<-[l:LIKES {day:date()}]-(u:User) " +
+                        "WITH s, COUNT(*) as num ORDER BY num DESC " +
                         "RETURN s.songId as songId, s.title as title, s.artist as artist, s.imageUrl as imageUrl";
 
                 Result result = tx.run(query);
-                while(result.hasNext()){
-                    Record record = result.next();
-                    hotSongs.add(new Song(record));
-                }
+                while(result.hasNext())
+                    hotSongs.add(new Song(result.next()));
+
                 return hotSongs;
             });
         } catch (Neo4jException neoEx) {
             logger.error(neoEx.getMessage());
             throw new ActionNotCompletedException(neoEx);
         }
-        return null;
+        return hotSongs;
     }
 
     //-----------------------------------------------  UPDATE  -----------------------------------------------
