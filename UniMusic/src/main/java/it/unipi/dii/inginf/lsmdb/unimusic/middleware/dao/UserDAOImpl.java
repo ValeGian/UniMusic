@@ -39,6 +39,17 @@ public class UserDAOImpl implements UserDAO{
         User user8 = new User("MonFri1978");
         User user9 = new User("MorTan1999");
 
+        List<User> users = new ArrayList<>();
+        users.add(user1);
+        users.add(user2);
+        users.add(user3);
+        users.add(user4);
+        users.add(user5);
+        users.add(user6);
+        users.add(user7);
+        users.add(user8);
+        users.add(user9);
+
         Song song1 = new Song(); song1.setID("5fd3548a9ab2a47028229e76");
         Song song2 = new Song(); song2.setID("5fd354849ab2a47028229e74");
         Song song3 = new Song(); song3.setID("5fd3546d9ab2a47028229e70");
@@ -49,9 +60,12 @@ public class UserDAOImpl implements UserDAO{
         Song song8 = new Song(); song8.setID("5fd3549b9ab2a47028229e7a");
         Song song9 = new Song(); song9.setID("5fd354a79ab2a47028229e7d");
 
-        List<User> suggUsers = userDAO.getSuggestedUsers(user3);
-        for(User user: suggUsers) {
-            System.out.println(user.getUsername());
+        for(User uno: users) {
+            List<User> suggUsers = userDAO.getSuggestedUsers(uno);
+            System.out.println("USER________________");
+            for (User user : suggUsers) {
+                System.out.println(user.getUsername());
+            }
         }
 
         /*
@@ -70,28 +84,27 @@ public class UserDAOImpl implements UserDAO{
         userDAO.followUser(user4, user5);
          */
         /*
-        userDAO.likeSong(user1, song2);
         userDAO.likeSong(user1, song1);
+        userDAO.likeSong(user1, song2);
         userDAO.likeSong(user1, song3);
         userDAO.likeSong(user1, song4);
         userDAO.likeSong(user1, song5);
         userDAO.likeSong(user1, song6);
-        userDAO.likeSong(user2, song2);
-        userDAO.likeSong(user2, song7);
-        userDAO.likeSong(user2, song8);
-        userDAO.likeSong(user2, song1);
+        userDAO.likeSong(user1, song7);
+        userDAO.likeSong(user1, song8);
         userDAO.likeSong(user2, song9);
-        userDAO.likeSong(user3, song1);
-        userDAO.likeSong(user3, song2);
-        userDAO.likeSong(user3, song3);
-        userDAO.likeSong(user3, song4);
-        userDAO.likeSong(user3, song5);
-        userDAO.likeSong(user3, song6);
-        userDAO.likeSong(user3, song7);
-        userDAO.likeSong(user3, song8);
+        userDAO.likeSong(user2, song1);
+        userDAO.likeSong(user2, song3);
         userDAO.likeSong(user3, song9);
+        userDAO.likeSong(user4, song2);
+        userDAO.likeSong(user5, song3);
+        userDAO.likeSong(user5, song4);
+        userDAO.likeSong(user6, song5);
+        userDAO.likeSong(user7, song6);
+        userDAO.likeSong(user8, song7);
+        userDAO.likeSong(user9, song8);
+        userDAO.likeSong(user9, song9);
          */
-
         /*
         User user1 = new User("valegiann", "root", "Valerio", "Giannini", 22);
         User user2 = new User("aleserra", "root", "Alessio", "Serra", 22);
