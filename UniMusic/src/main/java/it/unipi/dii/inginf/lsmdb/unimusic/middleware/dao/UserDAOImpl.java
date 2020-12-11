@@ -23,6 +23,9 @@ public class UserDAOImpl implements UserDAO{
 
     public static void main(String[] args) {
 
+        SongDAOImpl songDAO = new SongDAOImpl();
+        songDAO.populateWithUser();
+        /*
         User user1 = new User("valegiann", "root", "Valerio", "Giannini", 22);
         User user2 = new User("aleserra", "root", "Alessio", "Serra", 22);
         User user3 = new User("loreBianchi", "root", "Lorenzo", "Bianchi", 22);
@@ -33,6 +36,7 @@ public class UserDAOImpl implements UserDAO{
         } catch (ActionNotCompletedException e) {
             e.printStackTrace();
         }
+         */
         /*try {
             userDAO.createUser(user1);
             userDAO.createUser(user2);
@@ -198,6 +202,10 @@ public class UserDAOImpl implements UserDAO{
                     parameters("username", user.getUsername(), "songId", song.getID())
             );
             logger.info("User <" +user.getUsername()+ "> likes song <" +song.getTitle()+ ">");
+
+            // Handle the redundancy $likeCount
+            SongDAOImpl songDAO = new SongDAOImpl();
+            songDAO.incrementLikeCount(song);
         } catch (Neo4jException n4jEx) {
             logger.error(n4jEx.getMessage());
             throw new ActionNotCompletedException(n4jEx);
@@ -213,6 +221,9 @@ public class UserDAOImpl implements UserDAO{
                     parameters("username", user.getUsername(), "songId", song.getID())
             );
             logger.info("Deleted user <" +user.getUsername()+ "> likes song <" +song.getTitle()+ ">");
+
+            SongDAOImpl songDAO = new SongDAOImpl();
+            songDAO.decrementLikeCount(song);
         } catch (Neo4jException n4jEx) {
             logger.error(n4jEx.getMessage());
             throw new ActionNotCompletedException(n4jEx);
