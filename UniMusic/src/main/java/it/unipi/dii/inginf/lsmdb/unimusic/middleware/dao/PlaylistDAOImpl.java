@@ -27,6 +27,7 @@ import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Consumer;
 
 import static com.mongodb.client.model.Aggregates.*;
@@ -40,21 +41,45 @@ public class PlaylistDAOImpl implements PlaylistDAO{
 
     public static void main(String[] args){
         PlaylistDAOImpl p = new PlaylistDAOImpl();
+        UserDAOImpl u = new UserDAOImpl();
         Playlist playlist;
+        Song song;
+        User user = new User("lorenzo");
         try {
+
             //playlist = p.getPlaylist("2");
-            playlist = new Playlist("manolo", "5fd0e138c5452d6017ff69a3", "diahanellomissile");
+            playlist = new Playlist("gaetano", "Playlistina pessima");
             //playlist.setFavourite(true);
             //p.createPlaylist(playlist);
-            playlist = p.getPlaylist("5fd1ffc8c3952245fe3be6d9");
-            playlist = p.getFavourite(new User("lorenzo"));
+            //p.addRandomSongs(playlist, 10);
+           /*
+            //playlist = p.getPlaylist("5fd35da737607d47a4c0e9ed");
+
             System.out.println(playlist.getAuthor() + "   " + playlist.getID() + "   " + playlist.getName());
+            for (Integer i = 0; i < 0; i++){
+                Song song = new Song("rap" + i,"aaaaa", "aaaaa", "aaaaa", null, 1999, "rap", 11, 11, "aaaaa", "aaaaa", "aaaaa");
+                song.setTitle("titolo rap " + i);
+                p.addSong(playlist, song);
+            }
+            for (Integer i = 3; i < 7; i++){
+                Song song = new Song("pop" + i,"aaaaa", "aaaaa", "aaaaa", null, 1999, "pop", 11, 11, "aaaaa", "aaaaa", "aaaaa");
+                song.setTitle("titolo pop " + i);
+                p.addSong(playlist, song);
+            }
             /*
             Song song = new Song("dfsfsd","aaaaa", "aaaaa", "aaaaa", null, 1999, "aaaaa", 11, 11, "aaaaa", "aaaaa", "aaaaa");
             song.setTitle("bbbbbb");
             p.deleteSong(playlist, song);
 
-             */
+
+            List<String> list = u.getFavouritesGenres(user, 10);
+            for (int i = 0; i < 4; i++)
+                System.out.println(list.get(i));
+ */
+
+            p.createRandomPlaylist(1, 5, 5);
+            //song = p.getRandomSong();
+            //System.out.println(song.getTitle());
         } catch (ActionNotCompletedException e) {
             e.printStackTrace();
         }
@@ -97,6 +122,9 @@ public class PlaylistDAOImpl implements PlaylistDAO{
                 Document result = cursor.next();
                 playlist = new Playlist(result.get("createdPlaylists", Document.class), result.getString("_id"));
             }
+        }catch (MongoException mongoEx) {
+            logger.error(mongoEx.getMessage());
+            throw new ActionNotCompletedException(mongoEx);
         }
         return playlist;
     }
@@ -116,6 +144,9 @@ public class PlaylistDAOImpl implements PlaylistDAO{
                 Document result = cursor.next();
                 playlist = new Playlist(result.get("createdPlaylists", Document.class), user.getUsername());
             }
+        }catch (MongoException mongoEx) {
+            logger.error(mongoEx.getMessage());
+            throw new ActionNotCompletedException(mongoEx);
         }
         return playlist;
     }
@@ -128,7 +159,8 @@ public class PlaylistDAOImpl implements PlaylistDAO{
             Document songDocument = new Document("songId", song.getID())
                     .append("title", song.getTitle())
                     .append("artist", song.getArtist())
-                    .append("link", song.getYoutubeMediaURL());
+                    .append("urlImage", song.getAlbum().getImage())
+                    .append("genre", song.getGenre());
 
             Bson find = eq("createdPlaylists.playlistId", playlist.getID());
             Bson query = push("createdPlaylists.$.songs", songDocument);
@@ -170,7 +202,83 @@ public class PlaylistDAOImpl implements PlaylistDAO{
             throw new ActionNotCompletedException(neoEx);
         }
     }
+    /* ****************************************************
+    DA METTERE NEL PACKAGE DI POPOLAMENTO
+    ***************************************************** */
+    public Song getRandomSong() throws ActionNotCompletedException{
+        MongoCollection<Document> songsCollection = MongoDriver.getInstance().getCollection(Collections.SONGS);
+        Song song = null;
 
+        Bson sample = sample(1);
+
+        try (MongoCursor<Document> cursor = songsCollection.aggregate(Arrays.asList(sample)).iterator()) {
+            if(cursor.hasNext()) {
+                Document result = cursor.next();
+                song = new Song(result.toJson());
+            }
+        }catch (MongoException mongoEx) {
+            logger.error(mongoEx.getMessage());
+            throw new ActionNotCompletedException(mongoEx);
+        }
+        return song;
+    }
+
+    public User getRandomUser() throws ActionNotCompletedException{
+        MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
+        User user = null;
+
+        Bson sample = sample(1);
+
+        try (MongoCursor<Document> cursor = usersCollection.aggregate(Arrays.asList(sample)).iterator()) {
+            if(cursor.hasNext()) {
+                Document result = cursor.next();
+                user = new User(result);
+            }
+        }catch (MongoException mongoEx) {
+            logger.error(mongoEx.getMessage());
+            throw new ActionNotCompletedException(mongoEx);
+        }
+
+        return user;
+    }
+
+    //select some random users and add random number of playlist to them, with a random number of random songs
+    public void createRandomPlaylist(int numUsers, int maxNumPlaylistsPerUser, int maxNumSongsPerPlaylists) throws ActionNotCompletedException{
+        Random random = new Random();
+        for (int i = 0; i < numUsers; i++){
+            User user = getRandomUser();
+            System.out.println(user.getUsername());
+            int numPlaylists = random.nextInt(maxNumPlaylistsPerUser);
+            for (int j = 0; j < numPlaylists; j++){
+                Playlist playlist = new Playlist(user.getUsername(), "Playlist " + (j + 1) + " by " + user.getFirstName());
+                createPlaylist(playlist);
+                addRandomSongs(playlist, random.nextInt(maxNumSongsPerPlaylists));
+            }
+        }
+    }
+
+    public void addRandomSongs(Playlist playlist, int numSong) throws ActionNotCompletedException{
+        for (int i = 0; i < numSong; i++){
+            Song song = getRandomSong();
+            addSong(playlist, song);
+        }
+    }
+
+    //put some likes to random songs from a user
+    public void likeRandomSongs(User user, int numLikes) throws ActionNotCompletedException{
+        UserDAO userDao = new UserDAOImpl();
+
+        for (int i = 0; i < numLikes; i++)
+            userDao.likeSong(user, getRandomSong());
+    }
+
+    //put some likes to random songs from random users
+    public void completelyRandomLikes(int numLikes) throws ActionNotCompletedException{
+        UserDAO userDao = new UserDAOImpl();
+
+        for (int i = 0; i < numLikes; i++)
+            userDao.likeSong(getRandomUser(), getRandomSong());
+    }
     //---------------------------------------------------------------------------------------------
 
     private void createPlaylistDocument(Playlist playlist) {
@@ -182,8 +290,9 @@ public class PlaylistDAOImpl implements PlaylistDAO{
         try ( Session session = Neo4jDriver.getInstance().getDriver().session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "MERGE (p:Playlist {playlistId: $playlistId})",
-                        parameters("playlistId", playlist.getID()) );
+                tx.run( "CREATE (p:Playlist {playlistId: $playlistId, name: $name, urlImage: $urlImage})",
+                        parameters("playlistId", playlist.getID(), "name", playlist.getName(),
+                                                "urlImage", playlist.getUrlImage()) );
                 return null;
             });
         }
@@ -204,4 +313,6 @@ public class PlaylistDAOImpl implements PlaylistDAO{
             });
         }
     }
+
+
 }

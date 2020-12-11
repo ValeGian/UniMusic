@@ -36,4 +36,7 @@ public interface UserDAO {
 
     public void updateUserPrivilegeLevel(User user, PrivilegeLevel newPrivLevel) throws ActionNotCompletedException;
 
+    public List<Playlist> getAllPlaylist(User user) throws ActionNotCompletedException;
+
+    public List<String> getFavouritesGenres(User user, int numGenres) throws ActionNotCompletedException;
 }

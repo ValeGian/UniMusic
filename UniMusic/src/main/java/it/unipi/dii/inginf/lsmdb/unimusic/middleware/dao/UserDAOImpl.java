@@ -9,17 +9,24 @@ import it.unipi.dii.inginf.lsmdb.unimusic.middleware.log.UMLogger;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.MongoDriver;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.Collections;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.neo4jconnection.Neo4jDriver;
+import javafx.util.Pair;
 import org.apache.log4j.Logger;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.neo4j.driver.*;
 import org.neo4j.driver.exceptions.Neo4jException;
 
 import java.util.ArrayList;
+
+import java.util.Arrays;
 import java.util.List;
 
+import static com.mongodb.client.model.Aggregates.*;
 import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Projections.*;
 import static com.mongodb.client.model.Updates.*;
 import static org.neo4j.driver.Values.parameters;
+import static com.mongodb.client.model.Sorts.*;
 
 public class UserDAOImpl implements UserDAO{
     private static final Logger logger = UMLogger.getUserLogger();
@@ -162,6 +169,7 @@ public class UserDAOImpl implements UserDAO{
             createUserNode(user);
 
             Playlist playlist = new Playlist(user.getUsername(), "Favourites");
+            playlist.setFavourite(true);
             PlaylistDAO playlistDAO = new PlaylistDAOImpl();
             playlistDAO.createPlaylist(playlist);
 
@@ -375,6 +383,34 @@ public class UserDAOImpl implements UserDAO{
             logger.warn(mEx.getMessage());
             throw new ActionNotCompletedException(mEx);
         }
+    }
+
+    @Override
+    public List<Playlist> getAllPlaylist(User user) throws ActionNotCompletedException{
+        return null;
+    }
+
+    @Override
+    public List<String> getFavouritesGenres(User user, int numGenres) throws ActionNotCompletedException{
+        MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
+        List<String> result = new ArrayList<String>();
+        Bson match = match(eq("_id", user.getUsername()));
+        Bson unwind1 = unwind("$createdPlaylists");
+        Bson unwind2 = unwind("$createdPlaylists.songs");
+        Bson group = Document.parse("{$group: {" +
+                                                "_id: \"$createdPlaylists.songs.genre\"," +
+                                                "totalSongs: { $sum: 1}" +
+                                             "}}");
+        Bson sort = sort(descending("totalSongs"));
+        Bson limit = limit(numGenres);
+        Bson project = project(include("_id"));
+        try (MongoCursor<Document> cursor = usersCollection.aggregate(Arrays.asList(match, unwind1, unwind2, group, sort, limit, project)).iterator()) {
+            while(cursor.hasNext()) {
+                Document genre = cursor.next();
+                result.add(genre.getString("_id"));
+            }
+        }
+        return result;
     }
 
     //--------------------------PACKAGE-----------------------------------------------------------
