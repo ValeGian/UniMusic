@@ -4,6 +4,7 @@ root {
 .root {
     -fx-background-image: url("img/app_background.jpg");
     -fx-font-size: 16px;
+    -fx-font-weight: bold;
 }
 
 .title {
@@ -20,6 +21,8 @@ root {
     -fx-background-color: transparent;
     -fx-text-fill: white;
     -fx-font-weight: bold;
+    -fx-max-width: 200px;
+    -fx-font-size: 16px;
 }
 
 .text-id {
@@ -30,6 +33,8 @@ root {
 .inputTextField {
     -fx-background-color: white;
     -fx-text-fill: black;
+    -fx-font-size: 16px;
+    -fx-min-width: 250px;
 }
 
 .label {
@@ -38,11 +43,6 @@ root {
 
 .button {
     -fx-cursor: hand;
-}
-
-.text-field {
-    -fx-max-width: 200px;
-    -fx-font-size: 12px;
 }
 
 .menu_button {
