@@ -3,6 +3,8 @@ package it.unipi.dii.inginf.lsmdb.unimusic.middleware.dao;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.*;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
 
+import java.util.List;
+
 /**
  * Provides CRUD operations for Users
  */
@@ -30,4 +32,7 @@ public interface UserDAO {
 
     public void updateUserPrivilegeLevel(User user, PrivilegeLevel newPrivLevel) throws ActionNotCompletedException;
 
+    public List<Playlist> getAllPlaylist(User user) throws ActionNotCompletedException;
+
+    public List<String> getFavouritesGenres(User user, int numGenres) throws ActionNotCompletedException;
 }
