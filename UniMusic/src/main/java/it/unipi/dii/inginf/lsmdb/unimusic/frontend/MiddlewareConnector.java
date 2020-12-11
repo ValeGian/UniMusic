@@ -16,7 +16,7 @@ public class MiddlewareConnector {
     private final PlaylistDAO playlistDAO = new PlaylistDAOImpl();
     private final SongDAO songDAO = new SongDAOImpl();
 
-    private User loggedUser;
+    private User loggedUser = new User("");
 
     private MiddlewareConnector() {
 
@@ -77,5 +77,10 @@ public class MiddlewareConnector {
             return new ArrayList<Song>();
         }
         return hotSongs;
+    }
+
+    public boolean userLikesSong(Song song){
+       return userDAO.userLikesSong(loggedUser, song);
+
     }
 }

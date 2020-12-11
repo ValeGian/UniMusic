@@ -105,18 +105,23 @@ public class homepageController implements Initializable {
 
     private Button createSongPreview(Song song) {
         Button songPreview = new Button(); songPreview.setStyle("-fx-background-color: transparent");
-
+        Image songImage;
         VBox songGraphic = new VBox(5);
+        try {
+            songImage = new Image(
+                    song.getAlbum().getImage(),
+                    App.previewImageWidth,
+                    0,
+                    true,
+                    true,
+                    true
+            );
 
-        Image songImage = new Image(
-                song.getAlbum().getImage(),
-                App.previewImageWidth,
-                0,
-                true,
-                true,
-                true
-        );
-        if(songImage.isError()) {
+            if(songImage.isError()) {
+                throw new Exception();
+            }
+
+        }catch(Exception ex){
             songImage = new Image(
                     "file:src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/empty.jpg",
                     App.previewImageWidth,
@@ -126,6 +131,7 @@ public class homepageController implements Initializable {
                     true
             );
         }
+
         ImageView songImageView = new ImageView(songImage);
         Text title = new Text(song.getTitle()); title.setWrappingWidth(App.previewImageWidth); title.setFill(Color.WHITE);
         Text artist = new Text(song.getArtist()); artist.setWrappingWidth(App.previewImageWidth); artist.setFill(Color.GRAY);

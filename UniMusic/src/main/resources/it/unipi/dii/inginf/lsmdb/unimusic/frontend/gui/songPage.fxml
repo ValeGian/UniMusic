@@ -12,61 +12,130 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="root" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui.personalProfileController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="672.0" prefWidth="1220.0" styleClass="root" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui.personalProfileController">
     <stylesheets>
         <URL value="@default.css" />
     </stylesheets>
    <children>
        <fx:include source="FXML_utility/side_menu.fxml" />
        <fx:include source="FXML_utility/search_bar.fxml" />
-      <AnchorPane prefHeight="150.0" prefWidth="200.0" AnchorPane.leftAnchor="160.0" AnchorPane.topAnchor="60.0">
+      <AnchorPane layoutX="147.0" layoutY="69.0" prefHeight="800.0" prefWidth="1300.0" AnchorPane.leftAnchor="160.0" AnchorPane.topAnchor="70.0">
          <children>
-            <Pane layoutX="8.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="150.0">
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="20.0">
                <children>
-                  <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true">
-                     <image>
-                        <Image url="@../../../../../../../../../../../../../../Users/Alessio/Pictures/Saved%20Pictures/palma_2017/WhatsApp%20Image%202017-08-06%20at%2020.42.54.jpeg" />
-                     </image>
-                  </ImageView>
-               </children>
-            </Pane>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="200.0">
-               <children>
-                  <VBox prefHeight="200.0" prefWidth="150.0" AnchorPane.leftAnchor="0.0">
+                  <HBox AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="10.0">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="&lt;TITLE&gt;" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                        <ImageView fitHeight="328.0" fitWidth="310.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../../../../../../../../../Users/Alessio/Downloads/test.jpg" />
+                           </image>
+                        </ImageView>
+                        <VBox layoutX="517.0" layoutY="24.0" prefHeight="200.0" prefWidth="150.0" spacing="20.0" AnchorPane.leftAnchor="517.0">
+                           <children>
+                              <TextField alignment="CENTER" editable="false" minWidth="480.0" promptText="C.R.E.A.M. by Wu-Tang Clan" style="-fx-font-size: 2em;">
+                                 <font>
+                                    <Font name="Arial" size="16.0" />
+                                 </font>
+                              </TextField>
+                              <TextField editable="false" minWidth="480.0" promptText="Wu-Tang Clan">
+                                 <font>
+                                    <Font size="7.0" />
+                                 </font>
+                              </TextField>
+                              <TextField editable="false" minWidth="480.0" promptText="Enter the Wu-Tang (36 Chambers) by Wu-Tang Clan">
+                                 <font>
+                                    <Font size="7.0" />
+                                 </font>
+                              </TextField>
+                              <TextField editable="false" promptText="1994">
+                                 <font>
+                                    <Font size="7.0" />
+                                 </font>
+                              </TextField>
+                              <TextField editable="false" minWidth="480.0" promptText="rap">
+                                 <font>
+                                    <Font size="10.0" />
+                                 </font>
+                              </TextField>
+                           </children>
+                           <HBox.margin>
+                              <Insets left="50.0" top="20.0" />
+                           </HBox.margin>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="330.0">
+               <children>
+                  <VBox prefHeight="169.0" prefWidth="200.0">
+                     <children>
+                        <HBox prefHeight="24.0" prefWidth="180.0" spacing="100.0">
+                           <children>
+                              <Label minWidth="-Infinity" prefHeight="29.0" prefWidth="150.0" text="Add to favourite">
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/heart.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <padding>
+                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                 </padding>
+                              </Label>
+                              <Label minWidth="150.0" text="Add to a playlist">
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/plus.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Label>
+                              <Label minWidth="70.0" text="Like">
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/like.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Label>
+                              <Label minWidth="80.0" text="Rating">
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/statistic.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic></Label>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </HBox>
+                        <VBox spacing="20.0">
+                           <children>
+                              <TextField editable="false" minWidth="600.0" promptText="YOUTUBE URL:   http://www.youtube.com/watch?v=PBwAxmrE194">
+                                 <font>
+                                    <Font size="58.0" />
+                                 </font>
+                              </TextField>
+                              <TextField editable="false" minWidth="600.0" promptText="SPOTIFY URL:   https://open.spotify.com/track/119c93MHjrDLJTApCVGpvx" />
+                              <TextField editable="false" minWidth="600.0" promptText="GENIUS URL:   https://genius.com/Wu-tang-clan-cream-lyrics" />
+                           </children>
+                           <VBox.margin>
+                              <Insets left="10.0" top="50.0" />
+                           </VBox.margin>
+                        </VBox>
                      </children>
                   </VBox>
                </children>
             </AnchorPane>
-         </children>
-      </AnchorPane>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="160.0" AnchorPane.topAnchor="230.0">
-         <children>
-            <HBox prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@img/heart.png" />
-                     </image>
-                  </ImageView>
-                  <Pane prefHeight="200.0" prefWidth="200.0" />
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@img/plus.png" />
-                     </image>
-                  </ImageView>
-                  <Pane prefHeight="200.0" prefWidth="200.0" />
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@img/search.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </HBox>
          </children>
       </AnchorPane>
    </children>
