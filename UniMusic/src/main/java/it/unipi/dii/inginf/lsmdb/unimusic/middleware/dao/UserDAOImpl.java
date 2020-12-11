@@ -129,6 +129,7 @@ public class UserDAOImpl implements UserDAO{
             userDAO.createUser(user2);
             userDAO.createUser(user3);
 
+
         } catch (ActionNotCompletedException e) {
             if (e.getCode() == 11000) {
                 logger.error("You are trying to insert a document with *duplicate*  _id: " + user1.getUsername());

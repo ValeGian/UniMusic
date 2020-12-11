@@ -30,6 +30,10 @@ root {
     -fx-stroke-width: 0;
 }
 
+.text {
+
+}
+
 .inputTextField {
     -fx-background-color: white;
     -fx-text-fill: black;

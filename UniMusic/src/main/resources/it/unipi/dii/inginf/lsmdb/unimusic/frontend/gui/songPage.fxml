@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="672.0" prefWidth="1220.0" styleClass="root" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui.personalProfileController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="672.0" prefWidth="1220.0" styleClass="root" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui.songPageController">
     <stylesheets>
         <URL value="@default.css" />
     </stylesheets>
@@ -25,34 +25,34 @@
                <children>
                   <HBox AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="10.0">
                      <children>
-                        <ImageView fitHeight="328.0" fitWidth="310.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="imageAlbum" fitHeight="328.0" fitWidth="310.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../../../../../../../../../../../../../Users/Alessio/Downloads/test.jpg" />
                            </image>
                         </ImageView>
                         <VBox layoutX="517.0" layoutY="24.0" prefHeight="200.0" prefWidth="150.0" spacing="20.0" AnchorPane.leftAnchor="517.0">
                            <children>
-                              <TextField alignment="CENTER" editable="false" minWidth="480.0" promptText="C.R.E.A.M. by Wu-Tang Clan" style="-fx-font-size: 2em;">
+                              <TextField fx:id="titleText" alignment="CENTER" editable="false" minWidth="480.0" promptText="C.R.E.A.M. by Wu-Tang Clan" style="-fx-font-size: 2em;">
                                  <font>
                                     <Font name="Arial" size="16.0" />
                                  </font>
                               </TextField>
-                              <TextField editable="false" minWidth="480.0" promptText="Wu-Tang Clan">
+                              <TextField fx:id="artistText" editable="false" minWidth="480.0" promptText="Wu-Tang Clan">
                                  <font>
                                     <Font size="7.0" />
                                  </font>
                               </TextField>
-                              <TextField editable="false" minWidth="480.0" promptText="Enter the Wu-Tang (36 Chambers) by Wu-Tang Clan">
+                              <TextField fx:id="albumText" editable="false" minWidth="480.0" promptText="Enter the Wu-Tang (36 Chambers) by Wu-Tang Clan">
                                  <font>
                                     <Font size="7.0" />
                                  </font>
                               </TextField>
-                              <TextField editable="false" promptText="1994">
+                              <TextField fx:id="releasedYearText" editable="false" promptText="1994">
                                  <font>
                                     <Font size="7.0" />
                                  </font>
                               </TextField>
-                              <TextField editable="false" minWidth="480.0" promptText="rap">
+                              <TextField fx:id="genreText" editable="false" minWidth="480.0" promptText="rap">
                                  <font>
                                     <Font size="10.0" />
                                  </font>
@@ -72,44 +72,57 @@
                      <children>
                         <HBox prefHeight="24.0" prefWidth="180.0" spacing="100.0">
                            <children>
-                              <Label minWidth="-Infinity" prefHeight="29.0" prefWidth="150.0" text="Add to favourite">
+                              <Button fx:id="favouriteButton" mnemonicParsing="false" text="Button">
                                  <graphic>
-                                    <ImageView fitHeight="24.0" fitWidth="24.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@img/heart.png" />
-                                       </image>
-                                    </ImageView>
+                                    <Label minWidth="-Infinity" prefHeight="29.0" prefWidth="169.0" text="Add to favourite">
+                                       <graphic>
+                                          <ImageView fx:id="favouriteImg" fitHeight="24.0" fitWidth="24.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@img/heart.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                       <padding>
+                                          <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                       </padding>
+                                    </Label>
                                  </graphic>
-                                 <padding>
-                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                                 </padding>
-                              </Label>
-                              <Label minWidth="150.0" text="Add to a playlist">
+                              </Button>
+                              <Button fx:id="playlistButton" mnemonicParsing="false" text="Button">
                                  <graphic>
-                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@img/plus.png" />
-                                       </image>
-                                    </ImageView>
+                                    <Label minWidth="150.0" text="Add to a playlist">
+                                       <graphic>
+                                          <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@img/plus.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Label>
                                  </graphic>
-                              </Label>
-                              <Label minWidth="70.0" text="Like">
+                              </Button>
+                              <Button fx:id="likeButton" mnemonicParsing="false" text="Button">
                                  <graphic>
-                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@img/like.png" />
-                                       </image>
-                                    </ImageView>
+                                    <Label fx:id="likeLabel" minWidth="70.0" text="Like">
+                                       <graphic>
+                                          <ImageView fx:id="likeImg" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@img/like.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Label>
                                  </graphic>
-                              </Label>
-                              <Label minWidth="80.0" text="Rating">
+                              </Button>
+                              <Label fx:id="ratingLabel" minWidth="80.0" text="Rating">
                                  <graphic>
                                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@img/statistic.png" />
                                        </image>
                                     </ImageView>
-                                 </graphic></Label>
+                                 </graphic>
+                              </Label>
                            </children>
                            <VBox.margin>
                               <Insets top="20.0" />
@@ -120,13 +133,13 @@
                         </HBox>
                         <VBox spacing="20.0">
                            <children>
-                              <TextField editable="false" minWidth="600.0" promptText="YOUTUBE URL:   http://www.youtube.com/watch?v=PBwAxmrE194">
+                              <TextField fx:id="youtubeUrlText" editable="false" minWidth="600.0">
                                  <font>
                                     <Font size="58.0" />
                                  </font>
                               </TextField>
-                              <TextField editable="false" minWidth="600.0" promptText="SPOTIFY URL:   https://open.spotify.com/track/119c93MHjrDLJTApCVGpvx" />
-                              <TextField editable="false" minWidth="600.0" promptText="GENIUS URL:   https://genius.com/Wu-tang-clan-cream-lyrics" />
+                              <TextField fx:id="spotifyUrlText" editable="false" minWidth="600.0" />
+                              <TextField fx:id="geniusUrlText" editable="false" minWidth="600.0" />
                            </children>
                            <VBox.margin>
                               <Insets left="10.0" top="50.0" />

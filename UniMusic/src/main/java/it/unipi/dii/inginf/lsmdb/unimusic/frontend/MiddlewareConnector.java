@@ -79,8 +79,13 @@ public class MiddlewareConnector {
         return hotSongs;
     }
 
-    public boolean userLikesSong(Song song){
+    public boolean isLikedSong(Song song){
        return userDAO.userLikesSong(loggedUser, song);
 
+    }
+
+    public boolean isFavouriteSong(Song song){
+        //return userDAO.userFavouriteSong(loggedUser, song);
+        return true;
     }
 }
