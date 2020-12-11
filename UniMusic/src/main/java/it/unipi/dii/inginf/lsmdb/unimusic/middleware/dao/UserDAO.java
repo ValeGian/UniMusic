@@ -3,6 +3,8 @@ package it.unipi.dii.inginf.lsmdb.unimusic.middleware.dao;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.*;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
 
+import java.util.List;
+
 /**
  * Provides CRUD operations for Users
  */
@@ -11,6 +13,10 @@ public interface UserDAO {
     public void createUser(User user) throws ActionNotCompletedException;
 
     public User getUserByUsername(String username) throws ActionNotCompletedException;
+
+    public List<User> getSuggestedUsers(User user) throws ActionNotCompletedException;
+
+    public List<User> getSuggestedUsers(User user, int limit) throws ActionNotCompletedException;
 
     public boolean checkUserPassword(String username, String password);
 

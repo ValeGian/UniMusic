@@ -15,7 +15,7 @@
         <URL value="@default.css" />
     </stylesheets>
     <fx:include source="FXML_utility/side_menu.fxml" />
-      <fx:include source="FXML_utility/search_bar.fxml" />
+    <fx:include source="FXML_utility/search_bar.fxml" />
    <AnchorPane layoutX="238.0" layoutY="83.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
       <children>
          <Text layoutX="76.0" layoutY="48.0" strokeType="OUTSIDE" styleClass="text-id" text="UniMusic" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="5.0">
@@ -34,7 +34,7 @@
                               </font>
                            </Text>
                            <Separator prefWidth="500.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0" />
-                           <ScrollPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="55.0">
+                           <ScrollPane fx:id="hotSongsScroll" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="55.0">
                               <content>
                                  <HBox fx:id="hotSongsPane" prefHeight="100.0" prefWidth="200.0" />
                               </content>
@@ -49,7 +49,7 @@
                                   </font>
                               </Text>
                               <Separator prefWidth="500.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0" />
-                           <ScrollPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="55.0">
+                           <ScrollPane fx:id="suggPlaylistsScroll" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="55.0">
                               <content>
                                  <HBox fx:id="suggPlaylistsPane" prefHeight="100.0" prefWidth="200.0" />
                               </content>
@@ -64,7 +64,7 @@
                                   </font>
                               </Text>
                               <Separator prefWidth="500.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0" />
-                           <ScrollPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="55.0">
+                           <ScrollPane fx:id="suggUsersScroll" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="55.0">
                               <content>
                                  <HBox fx:id="suggUsersPane" prefHeight="100.0" prefWidth="200.0" />
                               </content>
