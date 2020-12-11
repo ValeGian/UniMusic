@@ -1,21 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="root" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui.homepageController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="617.0" prefWidth="859.0" styleClass="root" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui.homepageController">
     <stylesheets>
         <URL value="@default.css" />
     </stylesheets>
     <fx:include source="FXML_utility/side_menu.fxml" />
       <fx:include source="FXML_utility/search_bar.fxml" />
-   <AnchorPane layoutX="238.0" layoutY="83.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
+   <AnchorPane layoutX="238.0" layoutY="83.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
       <children>
          <Text layoutX="76.0" layoutY="48.0" strokeType="OUTSIDE" styleClass="text-id" text="UniMusic" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="5.0">
             <font>
-               <Font name="System Bold" size="48.0" />
+               <Font name="System Bold" size="64.0" />
             </font></Text>
+         <ScrollPane fx:id="scrollPane" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="150.0">
+            <content>
+               <VBox fx:id="verticalScroll" prefHeight="200.0" prefWidth="100.0">
+                  <children>
+                     <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                        <children>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id" text="Hot Songs" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0">
+                              <font>
+                                 <Font size="36.0" />
+                              </font>
+                           </Text>
+                           <Separator prefWidth="500.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0" />
+                           <ScrollPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="55.0">
+                              <content>
+                                 <HBox fx:id="hotSongsPane" prefHeight="100.0" prefWidth="200.0" />
+                              </content>
+                           </ScrollPane>
+                        </children>
+                     </AnchorPane>
+                      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                          <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id" text="Suggested Playlists" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0">
+                                  <font>
+                                      <Font size="36.0" />
+                                  </font>
+                              </Text>
+                              <Separator prefWidth="500.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0" />
+                           <ScrollPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="55.0">
+                              <content>
+                                 <HBox fx:id="suggPlaylistsPane" prefHeight="100.0" prefWidth="200.0" />
+                              </content>
+                           </ScrollPane>
+                          </children>
+                      </AnchorPane>
+                      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                          <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id" text="Suggested Users" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0">
+                                  <font>
+                                      <Font size="36.0" />
+                                  </font>
+                              </Text>
+                              <Separator prefWidth="500.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0" />
+                           <ScrollPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="55.0">
+                              <content>
+                                 <HBox fx:id="suggUsersPane" prefHeight="100.0" prefWidth="200.0" />
+                              </content>
+                           </ScrollPane>
+                          </children>
+                      </AnchorPane>
+                  </children>
+                  <padding>
+                     <Insets bottom="50.0" />
+                  </padding>
+               </VBox>
+            </content>
+         </ScrollPane>
       </children></AnchorPane>
 </AnchorPane>

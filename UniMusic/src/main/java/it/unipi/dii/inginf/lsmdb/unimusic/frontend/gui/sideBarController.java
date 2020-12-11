@@ -50,6 +50,7 @@ public class sideBarController implements Initializable {
             @Override
             public void handle(ActionEvent actionEvent) {
                 connector.logout();
+
                 try {
                     App.setRoot("welcome");
                 } catch (IOException e) {
