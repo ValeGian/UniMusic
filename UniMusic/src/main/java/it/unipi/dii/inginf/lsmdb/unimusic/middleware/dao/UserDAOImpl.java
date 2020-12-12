@@ -344,8 +344,8 @@ public class UserDAOImpl implements UserDAO{
                 );
                 if ((result.hasNext())) {
                     return true;
-                }
-                return false;
+                }else
+                    return false;
             });
             return likes;
         } catch (Exception e) {

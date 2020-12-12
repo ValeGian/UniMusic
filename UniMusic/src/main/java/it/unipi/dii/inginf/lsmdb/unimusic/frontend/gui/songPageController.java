@@ -45,12 +45,6 @@ public class songPageController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        initializeThePage();
-    }
-
-    private void initializeThePage(){
-
         setAlbumImage();
         displaySongInformation();
         initializeButton();

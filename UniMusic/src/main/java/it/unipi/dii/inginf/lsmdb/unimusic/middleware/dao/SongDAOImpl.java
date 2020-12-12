@@ -196,7 +196,7 @@ public class SongDAOImpl implements SongDAO{
      * @throws ActionNotCompletedException
      */
     @VisibleForTesting
-    List<Song> filterSong(String partialInput, int maxNumber, String attributeField) throws ActionNotCompletedException {
+    public List<Song> filterSong(String partialInput, int maxNumber, String attributeField) throws ActionNotCompletedException {
 
         if(attributeField == null || maxNumber < 0)
             throw new IllegalArgumentException();
