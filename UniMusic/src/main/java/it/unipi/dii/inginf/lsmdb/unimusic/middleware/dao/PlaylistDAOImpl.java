@@ -5,6 +5,7 @@ import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Updates;
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Album;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Playlist;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Song;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.User;
@@ -18,6 +19,8 @@ import org.bson.conversions.Bson;
 import org.bson.json.JsonWriterSettings;
 import org.bson.types.ObjectId;
 import org.json.JSONObject;
+import org.neo4j.driver.Record;
+import org.neo4j.driver.Result;
 import org.neo4j.driver.Session;
 import org.neo4j.driver.TransactionWork;
 import org.neo4j.driver.exceptions.Neo4jException;
@@ -42,47 +45,29 @@ public class PlaylistDAOImpl implements PlaylistDAO{
     public static void main(String[] args){
         PlaylistDAOImpl p = new PlaylistDAOImpl();
         UserDAOImpl u = new UserDAOImpl();
-        Playlist playlist;
-        Song song;
-        User user = new User("lorenzo");
+        SongDAOImpl s = new SongDAOImpl();
+        Playlist playlist1 = new Playlist("gaetano", "5fd390f51059072084c0feac", "");
+        Playlist playlist2 = new Playlist("", "5fd3a344f081e1488abf477c", "");
+
+        User user1 = new User("lorenzo");
+        User user2 = new User("gaetano");
+        User user3 = new User("gesu");
+
         try {
-
-            //playlist = p.getPlaylist("2");
-            playlist = new Playlist("gaetano", "Playlistina pessima");
-            //playlist.setFavourite(true);
-            //p.createPlaylist(playlist);
-            //p.addRandomSongs(playlist, 10);
-           /*
-            //playlist = p.getPlaylist("5fd35da737607d47a4c0e9ed");
-
-            System.out.println(playlist.getAuthor() + "   " + playlist.getID() + "   " + playlist.getName());
-            for (Integer i = 0; i < 0; i++){
-                Song song = new Song("rap" + i,"aaaaa", "aaaaa", "aaaaa", null, 1999, "rap", 11, 11, "aaaaa", "aaaaa", "aaaaa");
-                song.setTitle("titolo rap " + i);
-                p.addSong(playlist, song);
+            //u.followUser(user1, user2);
+            //u.followPlaylist(user2, playlist2);
+            //List<Song> list = p.getAllSongs(playlist);
+            Song song = s.getSongById("5fd24df2dec1f62bba09f905");
+            p.deleteSongFromFavourite(user1, song);
+            List<Playlist> list = p.getSuggestedPlaylist(user1);
+            for (int i = 0;i < list.size(); i++){
+                System.out.println(list.get(i).getID() + "   " + list.get(i).getName());
             }
-            for (Integer i = 3; i < 7; i++){
-                Song song = new Song("pop" + i,"aaaaa", "aaaaa", "aaaaa", null, 1999, "pop", 11, 11, "aaaaa", "aaaaa", "aaaaa");
-                song.setTitle("titolo pop " + i);
-                p.addSong(playlist, song);
-            }
-            /*
-            Song song = new Song("dfsfsd","aaaaa", "aaaaa", "aaaaa", null, 1999, "aaaaa", 11, 11, "aaaaa", "aaaaa", "aaaaa");
-            song.setTitle("bbbbbb");
-            p.deleteSong(playlist, song);
 
-
-            List<String> list = u.getFavouritesGenres(user, 10);
-            for (int i = 0; i < 4; i++)
-                System.out.println(list.get(i));
- */
-
-            p.createRandomPlaylist(1, 5, 5);
-            //song = p.getRandomSong();
-            //System.out.println(song.getTitle());
         } catch (ActionNotCompletedException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override
@@ -189,6 +174,15 @@ public class PlaylistDAOImpl implements PlaylistDAO{
     }
 
     @Override
+    public void addSongToFavourite(User user, Song song) throws ActionNotCompletedException{
+        addSong(getFavourite(user), song);
+    }
+
+    @Override
+    public void deleteSongFromFavourite(User user, Song song) throws ActionNotCompletedException{
+        deleteSong(getFavourite(user), song);
+    }
+    @Override
     public void deletePlaylist(Playlist playlist)  throws ActionNotCompletedException{
         try {
             deletePlaylistDocument(playlist);
@@ -201,6 +195,65 @@ public class PlaylistDAOImpl implements PlaylistDAO{
             logger.error(neoEx.getMessage());
             throw new ActionNotCompletedException(neoEx);
         }
+    }
+
+    @Override
+    public List<Song> getAllSongs(Playlist playlist) throws ActionNotCompletedException{
+        MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
+        List<Song> songs = new ArrayList<Song>();
+
+        Bson match = match(eq("createdPlaylists.playlistId", playlist.getID()));
+        Bson unwind1 = unwind("$createdPlaylists");
+        Bson unwind2 = unwind("$createdPlaylists.songs");
+
+        try (MongoCursor<Document> cursor = usersCollection.aggregate(Arrays.asList(match, unwind1, match, unwind2)).iterator()) {
+            while(cursor.hasNext()) {
+                Document result = cursor.next().get("createdPlaylists", Document.class).get("songs", Document.class);
+                Song song = new Song();
+                song.setID(result.getString("songId"));
+                song.setTitle(result.getString("title"));
+                song.setArtist(result.getString("artist"));
+                song.setAlbum(new Album(null, result.getString("urlImage")));
+                song.setGenre(result.getString("genre"));
+                songs.add(song);
+            }
+        }catch (MongoException mongoEx) {
+            logger.error(mongoEx.getMessage());
+            throw new ActionNotCompletedException(mongoEx);
+        }
+        return songs;
+    }
+
+    @Override
+    public List<Playlist> getSuggestedPlaylist(User user) throws ActionNotCompletedException{
+        return getSuggestedPlaylist(user, 40);
+    }
+
+    @Override
+    public List<Playlist> getSuggestedPlaylist(User user, int limit) throws ActionNotCompletedException{
+        List<Playlist> list = new ArrayList<Playlist>();
+        try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
+            list = session.readTransaction((TransactionWork<List<Playlist>>) tx -> {
+                //first level suggestion
+                Result result = tx.run(
+                        "MATCH (me:User {username: $me})-[:FOLLOWS_USER]->(followed:User)"
+                                + "-[:FOLLOWS_PLAYLIST]->(suggested:Playlist) WHERE NOT (me)-[:FOLLOWS_PLAYLISTS]->(suggested) "
+                                + "RETURN suggested, count(*) AS Strength "
+                                + "ORDER BY Strength DESC LIMIT $limit",
+                        parameters("me", user.getUsername(), "limit", limit)
+                );
+                ArrayList<Playlist> playlists = new ArrayList<Playlist>();
+                while ((result.hasNext())){
+                    Record r = result.next();
+                    System.out.println(r.toString());
+                    playlists.add(new Playlist(r.get("suggested")));
+                }
+                return playlists;
+            });
+        } catch (Neo4jException n4jEx) {
+            throw new ActionNotCompletedException(n4jEx);
+        }
+        return list;
     }
     /* ****************************************************
     DA METTERE NEL PACKAGE DI POPOLAMENTO

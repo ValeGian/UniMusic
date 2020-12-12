@@ -4,6 +4,7 @@ import org.bson.BsonArray;
 import org.bson.Document;
 import org.json.JSONObject;
 import org.neo4j.driver.Record;
+import org.neo4j.driver.Value;
 
 public class Playlist {
     private String author;
@@ -60,8 +61,10 @@ public class Playlist {
         this.author = author;
     }
 
-    public Playlist(Record playlistNeo4jRecord) {
-        ID = playlistNeo4jRecord.get("playlistId").asString();
+    public Playlist(Value playlistNeo4jValue) {
+        ID = playlistNeo4jValue.get("playlistId").asString();
+        name = playlistNeo4jValue.get("name").asString();
+        urlImage = playlistNeo4jValue.get("urlImage").asString();
     }
 
     public Document toBsonDocument() {
