@@ -89,17 +89,18 @@ public class MiddlewareConnector {
         return true;
     }
 
-    public void addSongToFavourites(Song song){
-        //userDAO.addSongToFavourites(loggedUser, song);
+    public void addSongToFavourites(Song song) throws ActionNotCompletedException {
+        playlistDAO.addSongToFavourite(loggedUser, song);
     }
 
-    public void removeSongFromFavourites(Song song){
-        //userDAO.removeSongFromFavourites(loggedUser, song);
+    public void removeSongFromFavourites(Song song) throws ActionNotCompletedException {
+        playlistDAO.deleteSongFromFavourite(loggedUser, song);
     }
 
     public Song getSongById(Song song){
         return songDAO.getSongById(song.getID());
     }
+
 
     public void likeSong(Song song) throws ActionNotCompletedException {
         userDAO.likeSong(loggedUser, song);
@@ -107,4 +108,15 @@ public class MiddlewareConnector {
     public void deleteLike(Song song) throws ActionNotCompletedException {
         userDAO.deleteLike(loggedUser, song);
     }
+
+    public List<Song> filterSong(String partialInput, String attributeField) throws ActionNotCompletedException {
+
+        if(attributeField.equals("Song"))
+            return songDAO.getSongsByPartialTitle(partialInput);
+        else if(attributeField.equals("Artist"))
+            return songDAO.getSongsByPartialArtist(partialInput);
+        else
+            return songDAO.getSongsByPartialAlbum(partialInput);
+    }
+
 }
