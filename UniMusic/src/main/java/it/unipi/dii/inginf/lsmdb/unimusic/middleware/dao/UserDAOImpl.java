@@ -57,6 +57,8 @@ public class UserDAOImpl implements UserDAO{
         users.add(user8);
         users.add(user9);
 
+        User userFinto = new User("Boh");
+
         Song song1 = new Song(); song1.setID("5fd3548a9ab2a47028229e76");
         Song song2 = new Song(); song2.setID("5fd354849ab2a47028229e74");
         Song song3 = new Song(); song3.setID("5fd3546d9ab2a47028229e70");
@@ -67,6 +69,17 @@ public class UserDAOImpl implements UserDAO{
         Song song8 = new Song(); song8.setID("5fd3549b9ab2a47028229e7a");
         Song song9 = new Song(); song9.setID("5fd354a79ab2a47028229e7d");
 
+        Song songFinta = new Song(); songFinta.setID("Boh");
+
+        /*
+        Song songFinta = new Song(); songFinta.setID("Boh");
+
+        userDAO.likeSong(user1, song2);
+        System.out.println(userDAO.userLikesSong(user1, song2));
+        userDAO.deleteLike(user1, song2);
+        System.out.println(userDAO.userLikesSong(user1, song2));
+
+        /*
         for(User uno: users) {
             List<User> suggUsers = userDAO.getSuggestedUsers(uno);
             System.out.println("USER________________");
@@ -74,6 +87,7 @@ public class UserDAOImpl implements UserDAO{
                 System.out.println(user.getUsername());
             }
         }
+         */
 
         /*
         userDAO.followUser(user1, user2);
@@ -407,7 +421,7 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public List<String> getFavouritesGenres(User user, int numGenres) throws ActionNotCompletedException{
+    public List<String> getFavouriteGenres(User user, int numGenres) throws ActionNotCompletedException{
         MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
         List<String> result = new ArrayList<String>();
         Bson match = match(eq("_id", user.getUsername()));
