@@ -88,4 +88,23 @@ public class MiddlewareConnector {
         //return userDAO.userFavouriteSong(loggedUser, song);
         return true;
     }
+
+    public void addSongToFavourites(Song song){
+        //userDAO.addSongToFavourites(loggedUser, song);
+    }
+
+    public void removeSongFromFavourites(Song song){
+        //userDAO.removeSongFromFavourites(loggedUser, song);
+    }
+
+    public Song getSongById(Song song){
+        return songDAO.getSongById(song.getID());
+    }
+
+    public void likeSong(Song song) throws ActionNotCompletedException {
+        userDAO.likeSong(loggedUser, song);
+    }
+    public void deleteLike(Song song) throws ActionNotCompletedException {
+        userDAO.deleteLike(loggedUser, song);
+    }
 }

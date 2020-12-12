@@ -30,10 +30,6 @@ root {
     -fx-stroke-width: 0;
 }
 
-.text {
-
-}
-
 .inputTextField {
     -fx-background-color: white;
     -fx-text-fill: black;
@@ -47,6 +43,12 @@ root {
 
 .button {
     -fx-cursor: hand;
+}
+
+.song_button{
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 10px 10px;
+    -fx-pref-width: 150px;
 }
 
 .menu_button {

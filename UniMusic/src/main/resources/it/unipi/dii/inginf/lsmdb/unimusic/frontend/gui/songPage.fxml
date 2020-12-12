@@ -72,7 +72,7 @@
                      <children>
                         <HBox prefHeight="24.0" prefWidth="180.0" spacing="100.0">
                            <children>
-                              <Button fx:id="favouriteButton" mnemonicParsing="false" text="Button">
+                              <Button fx:id="favouriteButton" minWidth="158.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="234.0" styleClass="song_button">
                                  <graphic>
                                     <Label minWidth="-Infinity" prefHeight="29.0" prefWidth="169.0" text="Add to favourite">
                                        <graphic>
@@ -88,9 +88,9 @@
                                     </Label>
                                  </graphic>
                               </Button>
-                              <Button fx:id="playlistButton" mnemonicParsing="false" text="Button">
+                              <Button fx:id="playlistButton" minWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="212.0" styleClass="song_button">
                                  <graphic>
-                                    <Label minWidth="150.0" text="Add to a playlist">
+                                    <Label minWidth="160.0" text="Add to a playlist">
                                        <graphic>
                                           <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
@@ -101,9 +101,9 @@
                                     </Label>
                                  </graphic>
                               </Button>
-                              <Button fx:id="likeButton" mnemonicParsing="false" text="Button">
+                              <Button fx:id="likeButton" mnemonicParsing="false" prefHeight="35.0" prefWidth="87.0" styleClass="song_button">
                                  <graphic>
-                                    <Label fx:id="likeLabel" minWidth="70.0" text="Like">
+                                    <Label fx:id="likeLabel" minWidth="-Infinity" prefHeight="25.0" prefWidth="120.0" text="Like">
                                        <graphic>
                                           <ImageView fx:id="likeImg" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
@@ -114,7 +114,7 @@
                                     </Label>
                                  </graphic>
                               </Button>
-                              <Label fx:id="ratingLabel" minWidth="80.0" text="Rating">
+                              <Label fx:id="ratingLabel" minWidth="-Infinity" prefWidth="200.0" text="Rating">
                                  <graphic>
                                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
