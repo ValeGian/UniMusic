@@ -71,10 +71,6 @@ public class UserDAOImpl implements UserDAO{
 
         Song songFinta = new Song(); songFinta.setID("Boh");
 
-        userDAO.likeSong(user1, song1);
-
-        System.out.println(userDAO.userLikesSong(userFinto, song1) + " : " + userDAO.userLikesSong(user1, songFinta));
-
         /*
         Song songFinta = new Song(); songFinta.setID("Boh");
 
@@ -425,7 +421,7 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public List<String> getFavouritesGenres(User user, int numGenres) throws ActionNotCompletedException{
+    public List<String> getFavouriteGenres(User user, int numGenres) throws ActionNotCompletedException{
         MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
         List<String> result = new ArrayList<String>();
         Bson match = match(eq("_id", user.getUsername()));

@@ -59,7 +59,7 @@ public class PlaylistDAOImpl implements PlaylistDAO{
             //List<Song> list = p.getAllSongs(playlist);
             Song song = s.getSongById("5fd24df2dec1f62bba09f905");
             p.deleteSongFromFavourite(user1, song);
-            List<Playlist> list = p.getSuggestedPlaylist(user1);
+            List<Playlist> list = p.getSuggestedPlaylists(user1);
             for (int i = 0;i < list.size(); i++){
                 System.out.println(list.get(i).getID() + "   " + list.get(i).getName());
             }
@@ -225,12 +225,12 @@ public class PlaylistDAOImpl implements PlaylistDAO{
     }
 
     @Override
-    public List<Playlist> getSuggestedPlaylist(User user) throws ActionNotCompletedException{
-        return getSuggestedPlaylist(user, 40);
+    public List<Playlist> getSuggestedPlaylists(User user) throws ActionNotCompletedException{
+        return getSuggestedPlaylists(user, 40);
     }
 
     @Override
-    public List<Playlist> getSuggestedPlaylist(User user, int limit) throws ActionNotCompletedException{
+    public List<Playlist> getSuggestedPlaylists(User user, int limit) throws ActionNotCompletedException{
         List<Playlist> list = new ArrayList<Playlist>();
         try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
             list = session.readTransaction((TransactionWork<List<Playlist>>) tx -> {

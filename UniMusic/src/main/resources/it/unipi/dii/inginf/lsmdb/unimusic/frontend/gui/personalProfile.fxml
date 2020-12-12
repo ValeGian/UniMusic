@@ -9,7 +9,7 @@
     <stylesheets>
         <URL value="@default.css" />
     </stylesheets>
+    <AnchorPane layoutX="238.0" layoutY="83.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0"></AnchorPane>
     <fx:include source="FXML_utility/side_menu.fxml" />
     <fx:include source="FXML_utility/search_bar.fxml" />
-    <AnchorPane layoutX="238.0" layoutY="83.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0"></AnchorPane>
 </AnchorPane>

@@ -32,7 +32,7 @@
                               </font>
                            </Text>
                            <Separator prefWidth="500.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0" />
-                           <ScrollPane fx:id="hotSongsScroll" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" vbarPolicy="NEVER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="55.0">
+                           <ScrollPane fx:id="hotSongsScroll" prefHeight="200.0" prefWidth="200.0" vbarPolicy="NEVER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="55.0">
                               <content>
                                  <HBox fx:id="hotSongsPane" prefHeight="100.0" prefWidth="200.0" />
                               </content>
@@ -47,7 +47,7 @@
                                   </font>
                               </Text>
                               <Separator prefWidth="500.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0" />
-                           <ScrollPane fx:id="suggPlaylistsScroll" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" vbarPolicy="NEVER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="55.0">
+                           <ScrollPane fx:id="suggPlaylistsScroll" prefHeight="200.0" prefWidth="200.0" vbarPolicy="NEVER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="55.0">
                               <content>
                                  <HBox fx:id="suggPlaylistsPane" prefHeight="100.0" prefWidth="200.0" />
                               </content>
@@ -62,7 +62,7 @@
                                   </font>
                               </Text>
                               <Separator prefWidth="500.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0" />
-                           <ScrollPane fx:id="suggUsersScroll" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" vbarPolicy="NEVER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="55.0">
+                           <ScrollPane fx:id="suggUsersScroll" prefHeight="200.0" prefWidth="200.0" vbarPolicy="NEVER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="55.0">
                               <content>
                                  <HBox fx:id="suggUsersPane" prefHeight="100.0" prefWidth="200.0" />
                               </content>
