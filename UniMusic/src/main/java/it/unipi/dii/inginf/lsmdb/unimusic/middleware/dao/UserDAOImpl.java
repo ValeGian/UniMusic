@@ -71,6 +71,13 @@ public class UserDAOImpl implements UserDAO{
 
         Song songFinta = new Song(); songFinta.setID("Boh");
 
+        userDAO.likeSong(user1, song1);
+
+        System.out.println(userDAO.userLikesSong(userFinto, song1) + " : " + userDAO.userLikesSong(user1, songFinta));
+
+        /*
+        Song songFinta = new Song(); songFinta.setID("Boh");
+
         userDAO.likeSong(user1, song2);
         System.out.println(userDAO.userLikesSong(user1, song2));
         userDAO.deleteLike(user1, song2);
@@ -352,7 +359,7 @@ public class UserDAOImpl implements UserDAO{
                         + "RETURN l",
                         parameters("username", user.getUsername(), "songId", song.getID())
                 );
-                if((result.hasNext())) {
+                if ((result.hasNext())) {
                     return true;
                 }
                 return false;
