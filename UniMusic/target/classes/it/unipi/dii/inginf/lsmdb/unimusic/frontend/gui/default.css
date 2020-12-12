@@ -1,0 +1,13 @@
+root {
+    display: block;
+}
+.root {
+    -fx-background-image: url("img/app_background.jpg");
+    -fx-font-size: 16px;
+}
+
+.title {
+    -fx-fill: #FFFFFF;
+    -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.7) , 6, 0.0 , 0 , 2 );
+    -fx-font-size: 56px;
+}

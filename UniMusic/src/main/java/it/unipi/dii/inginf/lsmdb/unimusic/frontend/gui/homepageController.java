@@ -3,7 +3,8 @@ package it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui;
 import it.unipi.dii.inginf.lsmdb.unimusic.frontend.MiddlewareConnector;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Song;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.User;
-import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -16,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -105,6 +107,18 @@ public class homepageController implements Initializable {
 
     private Button createSongPreview(Song song) {
         Button songPreview = new Button(); songPreview.setStyle("-fx-background-color: transparent");
+        songPreview.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                songPageController songPageController = new songPageController();
+                try {
+                    songPageController.getSongPage(song);
+                } catch (IOException e) {
+
+                }
+            }
+        });
+
         Image songImage;
         VBox songGraphic = new VBox(5);
         try {
