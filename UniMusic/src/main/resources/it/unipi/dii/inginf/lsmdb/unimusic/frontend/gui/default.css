@@ -45,6 +45,12 @@ root {
     -fx-cursor: hand;
 }
 
+.song_button{
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 10px 10px;
+    -fx-pref-width: 150px;
+}
+
 .menu_button {
     -fx-background-color: transparent;
     -fx-border-width: 0 0 1px 0;

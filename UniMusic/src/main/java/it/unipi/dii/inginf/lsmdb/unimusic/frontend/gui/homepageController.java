@@ -110,7 +110,7 @@ public class homepageController implements Initializable {
         songPreview.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                songPageController songPageController = new songPageController();
+
                 try {
                     songPageController.getSongPage(song);
                 } catch (IOException e) {

@@ -12,7 +12,9 @@ public interface SongDAO {
 
     void createSong(Song song) throws ActionNotCompletedException;
 
-    Song getSongById(String songID) throws ActionNotCompletedException;
+    Song getSongById(String songID);
+
+    List<Song> filterSong(String partialInput, int limit, String attributeField) throws ActionNotCompletedException;
 
     List<Song> getSongsByPartialAlbum(String partialAlbum, int limit) throws ActionNotCompletedException;
 

@@ -147,6 +147,7 @@ public class UserDAOImpl implements UserDAO{
             userDAO.createUser(user2);
             userDAO.createUser(user3);
 
+
         } catch (ActionNotCompletedException e) {
             if (e.getCode() == 11000) {
                 logger.error("You are trying to insert a document with *duplicate*  _id: " + user1.getUsername());
@@ -361,8 +362,8 @@ public class UserDAOImpl implements UserDAO{
                 );
                 if ((result.hasNext())) {
                     return true;
-                }
-                return false;
+                }else
+                    return false;
             });
             return likes;
         } catch (Exception e) {
@@ -405,7 +406,22 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public List<Playlist> getAllPlaylist(User user) throws ActionNotCompletedException{
-        return null;
+        MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
+        List<Playlist> playlists = new ArrayList<Playlist>();
+
+        Bson match = match(eq("_id", user.getUsername()));
+        Bson unwind = unwind("$createdPlaylists");
+
+        try (MongoCursor<Document> cursor = usersCollection.aggregate(Arrays.asList(match, unwind)).iterator()) {
+            while(cursor.hasNext()) {
+                Document result = cursor.next();
+                playlists.add(new Playlist(result.get("createdPlaylists", Document.class), user.getUsername()));
+            }
+        }catch (MongoException mongoEx) {
+            logger.error(mongoEx.getMessage());
+            throw new ActionNotCompletedException(mongoEx);
+        }
+        return playlists;
     }
 
     @Override

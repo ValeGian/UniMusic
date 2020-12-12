@@ -71,6 +71,8 @@ public class SongDAOImpl implements SongDAO{
             System.out.format("%s\t%s\t%s\t%d\n", songExample.getID(), songExample.getLikeCount(), songExample.getAlbum().getTitle(), songExample.getReleaseYear());
         }
 
+        PlaylistDAOImpl playlist = new PlaylistDAOImpl();
+        playlist.completelyRandomLikes(23);
         List<Song> songExample2 = song.getHotSongs();
         for(Song s: songExample2) {
             if(s != null)
@@ -165,10 +167,9 @@ public class SongDAOImpl implements SongDAO{
     /**
      * @param songID the id of the song you wanto to return.
      * @return the song with the specified id.
-     * @throws ActionNotCompletedException
      */
     @Override
-    public Song getSongById(String songID)  throws ActionNotCompletedException{
+    public Song getSongById(String songID) {
 
         MongoCollection<Document> songCollection = MongoDriver.getInstance().getCollection(Collections.SONGS);
         Song songToReturn = null;
@@ -182,7 +183,6 @@ public class SongDAOImpl implements SongDAO{
             }
         } catch (MongoException mongoEx) {
             logger.error(mongoEx.getMessage());
-            throw new ActionNotCompletedException(mongoEx);
         }
         return songToReturn;
     }
@@ -196,7 +196,7 @@ public class SongDAOImpl implements SongDAO{
      * @throws ActionNotCompletedException
      */
     @VisibleForTesting
-    List<Song> filterSong(String partialInput, int maxNumber, String attributeField) throws ActionNotCompletedException {
+    public List<Song> filterSong(String partialInput, int maxNumber, String attributeField) throws ActionNotCompletedException {
 
         if(attributeField == null || maxNumber < 0)
             throw new IllegalArgumentException();
