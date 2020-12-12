@@ -57,6 +57,8 @@ public class UserDAOImpl implements UserDAO{
         users.add(user8);
         users.add(user9);
 
+        User userFinto = new User("Boh");
+
         Song song1 = new Song(); song1.setID("5fd3548a9ab2a47028229e76");
         Song song2 = new Song(); song2.setID("5fd354849ab2a47028229e74");
         Song song3 = new Song(); song3.setID("5fd3546d9ab2a47028229e70");
@@ -67,6 +69,13 @@ public class UserDAOImpl implements UserDAO{
         Song song8 = new Song(); song8.setID("5fd3549b9ab2a47028229e7a");
         Song song9 = new Song(); song9.setID("5fd354a79ab2a47028229e7d");
 
+        Song songFinta = new Song(); songFinta.setID("Boh");
+
+        userDAO.likeSong(user1, song1);
+
+        System.out.println(userDAO.userLikesSong(userFinto, song1) + " : " + userDAO.userLikesSong(user1, songFinta));
+
+        /*
         for(User uno: users) {
             List<User> suggUsers = userDAO.getSuggestedUsers(uno);
             System.out.println("USER________________");
@@ -74,6 +83,7 @@ public class UserDAOImpl implements UserDAO{
                 System.out.println(user.getUsername());
             }
         }
+         */
 
         /*
         userDAO.followUser(user1, user2);
@@ -341,7 +351,7 @@ public class UserDAOImpl implements UserDAO{
                         + "RETURN l",
                         parameters("username", user.getUsername(), "songId", song.getID())
                 );
-                if ((result.hasNext())) {
+                if((result.hasNext())) {
                     return true;
                 }
                 return false;
