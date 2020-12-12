@@ -129,4 +129,14 @@ public class MiddlewareConnector {
         playlistDAO.createPlaylist(playlist);
     }
 
+    public List<Playlist> getSuggestedPlaylists() {
+        List<Playlist> suggestedPlaylists = new ArrayList<>();
+        try {
+            suggestedPlaylists = playlistDAO.getSuggestedPlaylists(loggedUser);
+        } catch (ActionNotCompletedException e) {
+            return new ArrayList<Playlist>();
+        }
+        return suggestedPlaylists;
+    }
+
 }
