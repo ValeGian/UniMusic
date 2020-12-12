@@ -387,7 +387,22 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public List<Playlist> getAllPlaylist(User user) throws ActionNotCompletedException{
-        return null;
+        MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
+        List<Playlist> playlists = new ArrayList<Playlist>();
+
+        Bson match = match(eq("_id", user.getUsername()));
+        Bson unwind = unwind("$createdPlaylists");
+
+        try (MongoCursor<Document> cursor = usersCollection.aggregate(Arrays.asList(match, unwind)).iterator()) {
+            while(cursor.hasNext()) {
+                Document result = cursor.next();
+                playlists.add(new Playlist(result.get("createdPlaylists", Document.class), user.getUsername()));
+            }
+        }catch (MongoException mongoEx) {
+            logger.error(mongoEx.getMessage());
+            throw new ActionNotCompletedException(mongoEx);
+        }
+        return playlists;
     }
 
     @Override
