@@ -180,6 +180,8 @@ public class UserDAOImpl implements UserDAO{
         try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
             session.run("MATCH (following:User { username: $following }) "
                             + "MATCH (followed:User { username: $followed }) "
+                            + "WHERE following <> followed " +
+                            ""
                             + "MERGE (following)-[:FOLLOWS_USER]->(followed)",
                     parameters("following", userFollowing.getUsername(), "followed", userFollowed.getUsername())
             );

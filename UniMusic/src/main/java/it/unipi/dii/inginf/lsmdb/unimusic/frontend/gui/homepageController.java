@@ -1,6 +1,7 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui;
 
 import it.unipi.dii.inginf.lsmdb.unimusic.frontend.MiddlewareConnector;
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Playlist;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Song;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.User;
 import javafx.event.ActionEvent;
@@ -73,13 +74,14 @@ public class homepageController implements Initializable {
     }
 
     private void displaySuggPlaylists() {
-        /*try {
-            List<Song> hotSongs = connector.getHotSongs();
-        } catch (ActionNotCompletedException e) {
-
+        List<Playlist> sugPlaylists = connector.getSuggestedPlaylists();
+        if(sugPlaylists.size() == 0)
+            displayEmpty(suggPlaylistsPane);
+        else {
+            for(Playlist playlist: sugPlaylists) {
+                suggPlaylistsPane.getChildren().add(createPlaylistPreview(playlist));
+            }
         }
-         */
-        displayEmpty(suggPlaylistsPane);
     }
 
     private void displaySuggUsers() {
@@ -122,6 +124,10 @@ public class homepageController implements Initializable {
         Image songImage;
         VBox songGraphic = new VBox(5);
         try {
+
+            if(song.getAlbum().getImage() == null || song.getAlbum().getImage().equals(""))
+                throw new Exception();
+
             songImage = new Image(
                     song.getAlbum().getImage(),
                     App.previewImageWidth,
@@ -154,6 +160,56 @@ public class homepageController implements Initializable {
 
         songPreview.setGraphic(songGraphic);
         return songPreview;
+    }
+
+    private Button createPlaylistPreview(Playlist playlist) {
+        Button playlistPreview = new Button(); playlistPreview.setStyle("-fx-background-color: transparent");
+        playlistPreview.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                System.out.println(playlist.getUrlImage());
+            }
+        });
+
+        Image playlistImage;
+        VBox playlistGraphic = new VBox(5);
+        try {
+
+            if(playlist.getUrlImage() == null || playlist.getUrlImage().equals("")) {
+                throw new Exception();
+            }
+
+            playlistImage = new Image(
+                    playlist.getUrlImage(),
+                    App.previewImageWidth,
+                    0,
+                    true,
+                    true,
+                    true
+            );
+
+            if(playlistImage.isError()) {
+                throw new Exception();
+            }
+
+        }catch(Exception ex){
+            playlistImage = new Image(
+                    "file:src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/empty.jpg",
+                    App.previewImageWidth,
+                    0,
+                    true,
+                    true,
+                    true
+            );
+        }
+        System.out.println(playlistImage.getUrl());
+        ImageView playlistImageView = new ImageView(playlistImage);
+        Text pName = new Text(playlist.getName()); pName.setWrappingWidth(App.previewImageWidth); pName.setFill(Color.WHITE);
+
+        playlistGraphic.getChildren().addAll(playlistImageView, pName);
+
+        playlistPreview.setGraphic(playlistGraphic);
+        return playlistPreview;
     }
 
     private Button createUserPreview(User user) {

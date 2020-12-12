@@ -23,11 +23,11 @@ public class MusicScraper {
         int noResponse = 0;
         int i;
 
-        for(i = 1; i < 100; i++) {
+        for(i = 500; i < 1001; i++) {
 
             StringBuffer responseGenius = getResponse(
                     "https://api.genius.com/songs/" + i, " " +
-                    "BQCdh8aec2FNVTMsnCm0CyxjpshKE0JnTHWpAQpQzTXZh2kmPkvMLz2M4YCXNyR6mLOeDNhmu5Ok6BVG_L-HMMlELGA_i0GODqBcCaUqgw-bPTObEG0idAKntXoTFXabYaXqDEsv4Jje");
+                    "Yfr3zMge1KSmUXSrHkp9BeT8nxcm_kPfJUUa4TvrNyjjL2HHKLPS88Atx1mfdPLr");
             if(responseGenius == null){
                 noResponse++;
                 continue;
@@ -69,7 +69,12 @@ public class MusicScraper {
                 continue;
             }
 
-            StringBuffer responseSpotify = getResponse("https://api.spotify.com/v1/tracks/" + uriSpotify, " BQCpfpPIujVBtY-Rup5HzXrXSmAo4cuQJJLBgjz4EW7PGZ7bP3WqX9BzFCJRslx0Xl8JbtwjUC6Ueui-8XsKgUbLroYI5Z3OuiBrLg2YzCP0P5LAkLjT2lsRnHD1yc9IWlmS_NWqZvqdX7szorKT7Eh9OJRWXJPPJw-FuPjiNg");
+            StringBuffer responseSpotify = getResponse(
+                    "https://api.spotify.com/v1/tracks/" + uriSpotify,
+                    " BQCL1Y5P1n6eh8fOnFzRxrWAwAHrEkwqkNlaSQamX6seGUnvCv2NmGKVdEg4rKYQ7BL4UxNNBE7QUiJuaZ8AWCMM_oGOXrwvykdB-1bDfS_05JgTbT0f9-_u8Pi6eohjLrmM1hACRxWe" +
+                            "" +
+                            "" +
+                            "");
             if(responseSpotify == null) {
                 System.out.println("Spotify response missed, check the spotify bearer if the problem persists!");
                 miss++;
