@@ -32,11 +32,10 @@ public class searchBarController implements Initializable {
     @FXML private Button closeSearchButton;
     @FXML private TextField searchInput;
 
-    @FXML private CheckBox songCheck;
+    @FXML private CheckBox titleCheck;
     @FXML private CheckBox artistCheck;
     @FXML private CheckBox albumCheck;
 
-    @FXML private ScrollPane searchScroll;
     @FXML private AnchorPane anchorSearch;
 
     @FXML private VBox resultBox;
@@ -145,12 +144,12 @@ public class searchBarController implements Initializable {
         else if(albumCheck.isSelected())
             return albumCheck.getText();
         else
-            return songCheck.getText();
+            return titleCheck.getText();
     }
 
     private void initializeCheckBox() {
 
-        songCheck.setOnAction(new EventHandler<ActionEvent>() {
+        titleCheck.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 artistCheck.setSelected(false);
@@ -161,7 +160,7 @@ public class searchBarController implements Initializable {
         artistCheck.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                songCheck.setSelected(false);
+                titleCheck.setSelected(false);
                 albumCheck.setSelected(false);
             }
         });
@@ -169,7 +168,7 @@ public class searchBarController implements Initializable {
         albumCheck.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                songCheck.setSelected(false);
+                titleCheck.setSelected(false);
                 artistCheck.setSelected(false);
             }
         });

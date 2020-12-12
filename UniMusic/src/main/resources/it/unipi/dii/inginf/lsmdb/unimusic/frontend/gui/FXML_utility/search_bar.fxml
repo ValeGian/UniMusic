@@ -41,7 +41,7 @@
                   <HBox spacing="40.0">
                      <children>
                         <Label text="Filter by:" />
-                        <CheckBox fx:id="songCheck" mnemonicParsing="false" selected="true" text="Song" textFill="WHITE" />
+                        <CheckBox fx:id="titleCheck" mnemonicParsing="false" selected="true" text="Title" textFill="WHITE" />
                         <CheckBox fx:id="artistCheck" mnemonicParsing="false" text="Artist" textFill="WHITE" />
                         <CheckBox fx:id="albumCheck" mnemonicParsing="false" text="Album" textFill="WHITE" />
                      </children>
