@@ -23,46 +23,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c6dccbe1-0415-4611-95fc-f19c418b4dcd" name="Default Changelist" comment="Script che genere user">
-      <change afterPath="$PROJECT_DIR$/.idea/cssdialects.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/frontend/MiddlewareConnector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/frontend/MiddlewareConnector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/songPageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/songPageController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/PlaylistDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/PlaylistDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/databasesPopulation/MusicScraper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/databasesPopulation/MusicScraper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/UserDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/UserDAOImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/default.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/default.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/songPage.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/songPage.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/App.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/FXML_utility/search_bar.fxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/persistence/mongoconnection/Collections.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/inginf/lsmdb/unimusic/middleware/persistence/mongoconnection/Collections.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/default.css" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/homepage.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/homepageController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/app_background.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/contacts.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/heart.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/house.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/logout.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/plus.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/search.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/welcome.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/welcomeController$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/welcomeController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/PlaylistDAO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/PlaylistDAOImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/SongDAO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/SongDAOImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/UserDAO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/dao/UserDAOImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/entities/Album.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/entities/Playlist.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/entities/PrivilegeLevel.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/entities/Song.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/entities/User.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/exception/ActionNotCompletedException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/persistence/mongoconnection/Collections.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/persistence/mongoconnection/MongoDriver.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/middleware/persistence/neo4jconnection/Neo4jDriver.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/scraping/MusicScraper.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/unipi/dii/inginf/lsmdb/unimusic/scraping/ScraperUtil.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -130,10 +96,11 @@
       <recent name="C:\LSMDB_git_project\LSMDB_UniMusic\UniMusic\src\main\resources\it\unipi\dii\inginf\lsmdb\unimusic\frontend\gui\FXML_utility" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.App">
+  <component name="RunManager" selected="Application.MusicScraper">
     <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui.App" />
       <module name="UniMusic" />
+      <option name="VM_PARAMETERS" value="--module-path C:\javafx-sdk-15.0.1 --add-modules javafx.controls,javafx.fxml" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui.*" />
@@ -143,6 +110,20 @@
       <method v="2">
         <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="javafx:compile" />
         <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="javafx:run" />
+      </method>
+    </configuration>
+    <configuration name="MusicScraper" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="it.unipi.dii.inginf.lsmdb.unimusic.databasesPopulation.MusicScraper" />
+      <module name="UniMusic" />
+      <option name="VM_PARAMETERS" value="--module-path C:\javafx-sdk-15.0.1 --add-modules javafx.controls,javafx.fxml" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="it.unipi.dii.inginf.lsmdb.unimusic.databasesPopulation.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="SongDAOImpl" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -158,13 +139,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -200,22 +183,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SongDAOImplTest.WHEN_findArtistsWithMostNumberOfHit_has_maxNumber_negative_THEN_throws_IllegalArgumentException" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="UniMusic" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="it.unipi.dii.inginf.lsmdb.unimusic.middleware.dao.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="it.unipi.dii.inginf.lsmdb.unimusic.middleware.dao" />
-      <option name="MAIN_CLASS_NAME" value="it.unipi.dii.inginf.lsmdb.unimusic.middleware.dao.SongDAOImplTest" />
-      <option name="METHOD_NAME" value="WHEN_findArtistsWithMostNumberOfHit_has_maxNumber_negative_THEN_throws_IllegalArgumentException" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Run" type="MavenRunConfiguration" factoryName="Maven">
       <MavenSettings>
         <option name="myGeneralSettings" />
@@ -246,18 +213,18 @@
     <list>
       <item itemvalue="Application.App" />
       <item itemvalue="Application.SongDAOImpl" />
+      <item itemvalue="Application.MusicScraper" />
       <item itemvalue="JUnit.SongDAOImplTest" />
-      <item itemvalue="JUnit.SongDAOImplTest.WHEN_findArtistsWithMostNumberOfHit_has_maxNumber_negative_THEN_throws_IllegalArgumentException" />
       <item itemvalue="JUnit.SongDAOImplTest.WHEN_crateSong_has_song_null_THEN_throws_IllegalArgumentException" />
       <item itemvalue="Maven.Run" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.MusicScraper" />
         <item itemvalue="Application.App" />
         <item itemvalue="Application.SongDAOImpl" />
         <item itemvalue="JUnit.SongDAOImplTest" />
         <item itemvalue="JUnit.SongDAOImplTest.WHEN_crateSong_has_song_null_THEN_throws_IllegalArgumentException" />
-        <item itemvalue="JUnit.SongDAOImplTest.WHEN_findArtistsWithMostNumberOfHit_has_maxNumber_negative_THEN_throws_IllegalArgumentException" />
       </list>
     </recent_temporary>
   </component>
@@ -391,11 +358,11 @@
     </state>
     <state x="221" y="0" key="#Project_Structure/0.0.1366.728@0.0.1366.728" timestamp="1607612141023" />
     <state x="249" y="0" key="#Project_Structure/0.0.1536.824@0.0.1536.824" timestamp="1607290551219" />
-    <state x="397" y="62" width="1089" height="737" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1607683877705">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state x="447" y="70" width="1089" height="737" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1607793314768">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="397" y="62" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1607683877705" />
-    <state x="447" y="70" width="1089" height="737" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1607339024537" />
+    <state x="447" y="70" width="1089" height="737" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1607793314768" />
     <state x="510" y="113" key="#com.intellij.ide.util.MemberChooser" timestamp="1607707623042">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -418,26 +385,26 @@
     </state>
     <state x="488" y="148" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1607682998942" />
     <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1607292460495" />
-    <state width="1323" height="47" key="GridCell.Tab.0.bottom" timestamp="1607709287194">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state width="1493" height="173" key="GridCell.Tab.0.bottom" timestamp="1607793272477">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1323" height="47" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1607709287194" />
-    <state width="1493" height="175" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1607294971563" />
-    <state width="1323" height="47" key="GridCell.Tab.0.center" timestamp="1607709287193">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state width="1493" height="173" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1607793272477" />
+    <state width="1493" height="173" key="GridCell.Tab.0.center" timestamp="1607793272477">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1323" height="47" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1607709287193" />
-    <state width="1493" height="175" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1607294971563" />
-    <state width="1323" height="47" key="GridCell.Tab.0.left" timestamp="1607709287193">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state width="1493" height="173" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1607793272477" />
+    <state width="1493" height="173" key="GridCell.Tab.0.left" timestamp="1607793272477">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1323" height="47" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1607709287193" />
-    <state width="1493" height="175" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1607294971563" />
-    <state width="1323" height="47" key="GridCell.Tab.0.right" timestamp="1607709287193">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state width="1493" height="173" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1607793272477" />
+    <state width="1493" height="173" key="GridCell.Tab.0.right" timestamp="1607793272477">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1323" height="47" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1607709287193" />
-    <state width="1493" height="175" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1607294971563" />
+    <state width="1493" height="173" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1607793272477" />
     <state x="266" y="38" key="Maven.ArtifactSearchDialog" timestamp="1607614507691">
       <screen x="0" y="0" width="1366" height="728" />
     </state>

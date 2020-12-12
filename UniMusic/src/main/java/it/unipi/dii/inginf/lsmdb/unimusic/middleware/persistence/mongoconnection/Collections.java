@@ -2,8 +2,7 @@ package it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnectio
 
 public enum Collections {
     USERS("users"),
-    SONGS("songs"),
-    PLAYLISTS("playlists");
+    SONGS("songs");
 
     private String collName;
     private Collections(String collName) {
