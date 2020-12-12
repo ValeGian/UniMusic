@@ -71,13 +71,12 @@ public class UserDAOImpl implements UserDAO{
 
         Song songFinta = new Song(); songFinta.setID("Boh");
 
-        /*
-        Song songFinta = new Song(); songFinta.setID("Boh");
-
         userDAO.likeSong(user1, song2);
         System.out.println(userDAO.userLikesSong(user1, song2));
         userDAO.deleteLike(user1, song2);
         System.out.println(userDAO.userLikesSong(user1, song2));
+        System.out.println(userDAO.userLikesSong(null, song2));
+        System.out.println(userDAO.userLikesSong(user1, null));
 
         /*
         for(User uno: users) {
@@ -327,23 +326,21 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public void likeSong(User user, Song song) throws ActionNotCompletedException {
-        if(!userLikesSong(user, song)) {
-            try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
-                session.run(
-                        "MATCH (u:User { username: $username }) "
-                                + "MATCH (s:Song { songId: $songId }) "
-                                + "MERGE (u)-[:LIKES {day: date()}]->(s)",
-                        parameters("username", user.getUsername(), "songId", song.getID())
-                );
-                logger.info("User <" + user.getUsername() + "> likes song <" + song.getID() + ">");
+        try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
+            session.run(
+                    "MATCH (u:User { username: $username }) "
+                            + "MATCH (s:Song { songId: $songId }) "
+                            + "MERGE (u)-[:LIKES {day: date()}]->(s)",
+                    parameters("username", user.getUsername(), "songId", song.getID())
+            );
+            logger.info("User <" + user.getUsername() + "> likes song <" + song.getID() + ">");
 
-                // Handle the redundancy $likeCount
-                SongDAOImpl songDAO = new SongDAOImpl();
-                songDAO.incrementLikeCount(song);
-            } catch (Neo4jException n4jEx) {
-                logger.error(n4jEx.getMessage());
-                throw new ActionNotCompletedException(n4jEx);
-            }
+            // Handle the redundancy $likeCount
+            SongDAOImpl songDAO = new SongDAOImpl();
+            songDAO.incrementLikeCount(song);
+        } catch (Neo4jException n4jEx) {
+            logger.error(n4jEx.getMessage());
+            throw new ActionNotCompletedException(n4jEx);
         }
     }
 
@@ -369,22 +366,20 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public void deleteLike(User user, Song song) throws ActionNotCompletedException {
-        if(userLikesSong(user, song)) {
-            try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
-                session.run(
-                        "MATCH (:User { username: $username })-[l:LIKES]->(:Song { songId: $songId }) "
-                                + "DELETE l",
-                        parameters("username", user.getUsername(), "songId", song.getID())
-                );
-                logger.info("Deleted user <" + user.getUsername() + "> likes song <" + song.getID() + ">");
+        try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
+            session.run(
+                    "MATCH (:User { username: $username })-[l:LIKES]->(:Song { songId: $songId }) "
+                            + "DELETE l",
+                    parameters("username", user.getUsername(), "songId", song.getID())
+            );
+            logger.info("Deleted user <" + user.getUsername() + "> likes song <" + song.getID() + ">");
 
-                // Handle the redundancy $likeCount
-                SongDAOImpl songDAO = new SongDAOImpl();
-                songDAO.decrementLikeCount(song);
-            } catch (Neo4jException n4jEx) {
-                logger.error(n4jEx.getMessage());
-                throw new ActionNotCompletedException(n4jEx);
-            }
+            // Handle the redundancy $likeCount
+            SongDAOImpl songDAO = new SongDAOImpl();
+            songDAO.decrementLikeCount(song);
+        } catch (Neo4jException n4jEx) {
+            logger.error(n4jEx.getMessage());
+            throw new ActionNotCompletedException(n4jEx);
         }
     }
 
