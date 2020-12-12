@@ -1,19 +1,15 @@
-package it.unipi.dii.inginf.lsmdb.unimusic.scraping;
+package it.unipi.dii.inginf.lsmdb.unimusic.databasesPopulation;
 
-import com.mongodb.client.*;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.dao.SongDAOImpl;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Album;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Song;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
-import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.MongoDriver;
-import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.json.*;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Class that takes care of performing all actions related to scarping.

@@ -1,4 +1,4 @@
-package it.unipi.dii.inginf.lsmdb.unimusic.scraping;
+package it.unipi.dii.inginf.lsmdb.unimusic.databasesPopulation;
 
 import java.io.IOException;
 

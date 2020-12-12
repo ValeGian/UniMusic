@@ -119,4 +119,14 @@ public class MiddlewareConnector {
             return songDAO.getSongsByPartialAlbum(partialInput);
     }
 
+    //-----------------PLAYLIST-------------------------------------------------------------------
+
+    public void addSong(Playlist playlist, Song song) throws ActionNotCompletedException {
+        playlistDAO.addSong(playlist, song);
+    }
+
+    public void createPlaylist(Playlist playlist) throws ActionNotCompletedException {
+        playlistDAO.createPlaylist(playlist);
+    }
+
 }
