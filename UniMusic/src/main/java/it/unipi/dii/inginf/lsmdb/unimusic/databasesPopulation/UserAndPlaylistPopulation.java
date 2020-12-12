@@ -33,40 +33,9 @@ public class UserAndPlaylistPopulation {
         instance.completelyRandomUserFollows(2000);
          */
 
-        UserDAO userDAO = new UserDAOImpl();
-        Playlist playlist1 = new Playlist(); playlist1.setID("5fd520bb5c73c35dc654fd80");
-        Playlist playlist2 = new Playlist(); playlist2.setID("5fd520bb5c73c35dc654fd7f");
-        Playlist playlist3 = new Playlist(); playlist3.setID("5fd520bb5c73c35dc654fd7e");
-        Playlist playlist4 = new Playlist(); playlist4.setID("5fd520bb5c73c35dc654fd7d");
-        Playlist playlist5 = new Playlist(); playlist5.setID("5fd520bb5c73c35dc654fd7c");
-
-        userDAO.followPlaylist(instance.getRandomUser(), playlist1);
-        userDAO.followPlaylist(instance.getRandomUser(), playlist1);
-        userDAO.followPlaylist(instance.getRandomUser(), playlist2);
-        userDAO.followPlaylist(instance.getRandomUser(), playlist2);
-        userDAO.followPlaylist(instance.getRandomUser(), playlist2);
-        userDAO.followPlaylist(instance.getRandomUser(), playlist2);
-        userDAO.followPlaylist(instance.getRandomUser(), playlist3);
-        userDAO.followPlaylist(instance.getRandomUser(), playlist4);
-        userDAO.followPlaylist(instance.getRandomUser(), playlist4);
-        userDAO.followPlaylist(instance.getRandomUser(), playlist5);
-        userDAO.followPlaylist(instance.getRandomUser(), playlist5);
-        userDAO.followPlaylist(instance.getRandomUser(), playlist5);
-        userDAO.followPlaylist(instance.getRandomUser(), playlist5);
-        userDAO.followPlaylist(instance.getRandomUser(), playlist5);
-        userDAO.followPlaylist(instance.getRandomUser(), playlist5);
-
-    public static void main(String[] args){
-
-        try {
-            populateWithUser();
-            completelyRandomLikes(50);
-        } catch (ActionNotCompletedException e) {
-            e.printStackTrace();
-        }
     }
 
-    private static void populateWithUser(int howManyUsers){
+    private void populateWithUser(int howManyUsers){
         Random generator = new Random();
 
         String[] firstName =  new String[] {"Emily","Hannah","Madison","Ashley","Sarah","Alexis","Samantha","Jessica","Elizabeth","Taylor","Lauren","Alyssa","Kayla","Abigail","Brianna","Olivia","Emma","Megan","Grace","Victoria","Rachel","Anna","Sydney","Destiny","Morgan","Jennifer","Jasmine","Haley","Julia","Kaitlyn","Nicole","Amanda","Katherine","Natalie","Hailey","Alexandra","Adam", "Alex", "Aaron", "Ben", "Carl", "Dan", "David", "Edward", "Fred", "Frank", "George", "Hal", "Hank", "Ike", "John", "Jack", "Joe", "Larry", "Monte", "Matthew", "Mark", "Nathan", "Otto", "Paul", "Peter", "Roger", "Roger", "Steve", "Thomas", "Tim", "Ty", "Victor", "Walter"};
@@ -102,7 +71,7 @@ public class UserAndPlaylistPopulation {
 
     }
 
-    public static Song getRandomSong() throws ActionNotCompletedException{
+    public Song getRandomSong() throws ActionNotCompletedException{
         MongoCollection<Document> songsCollection = MongoDriver.getInstance().getCollection(Collections.SONGS);
         Song song = null;
 
@@ -120,7 +89,7 @@ public class UserAndPlaylistPopulation {
         return song;
     }
 
-    public static User getRandomUser() throws ActionNotCompletedException{
+    public User getRandomUser() throws ActionNotCompletedException{
         MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
         User user = null;
 
@@ -140,7 +109,7 @@ public class UserAndPlaylistPopulation {
     }
 
     //select some random users and add random number of playlist to them, with a random number of random songs
-    public static void createRandomPlaylist(int numUsers, int maxNumPlaylistsPerUser, int maxNumSongsPerPlaylists) throws ActionNotCompletedException{
+    public void createRandomPlaylist(int numUsers, int maxNumPlaylistsPerUser, int maxNumSongsPerPlaylists) throws ActionNotCompletedException{
         Random random = new Random();
         for (int i = 0; i < numUsers; i++){
             User user = getRandomUser();
@@ -154,7 +123,7 @@ public class UserAndPlaylistPopulation {
         }
     }
 
-    public static void addRandomSongs(Playlist playlist, int numSong) throws ActionNotCompletedException{
+    public void addRandomSongs(Playlist playlist, int numSong) throws ActionNotCompletedException{
         for (int i = 0; i < numSong; i++){
             Song song = getRandomSong();
             connector.addSong(playlist, song);
@@ -162,7 +131,7 @@ public class UserAndPlaylistPopulation {
     }
 
     //put some likes to random songs from a user
-    public static void likeRandomSongs(User user, int numLikes) throws ActionNotCompletedException{
+    public void likeRandomSongs(User user, int numLikes) throws ActionNotCompletedException{
         UserDAO userDao = new UserDAOImpl();
 
         for (int i = 0; i < numLikes; i++)
@@ -170,7 +139,7 @@ public class UserAndPlaylistPopulation {
     }
 
     //put some likes to random songs from random users
-    public static void completelyRandomLikes(int numLikes) throws ActionNotCompletedException{
+    public void completelyRandomLikes(int numLikes) throws ActionNotCompletedException{
         UserDAO userDao = new UserDAOImpl();
 
         for (int i = 0; i < numLikes; i++)
