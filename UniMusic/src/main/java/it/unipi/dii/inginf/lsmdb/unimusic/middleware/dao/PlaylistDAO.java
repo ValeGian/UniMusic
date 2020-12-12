@@ -29,6 +29,8 @@ public interface PlaylistDAO {
 
     public void deletePlaylist(Playlist playlist) throws ActionNotCompletedException;
 
+    public boolean isSongFavourite(User user, Song song);
+
     public List<Song> getAllSongs(Playlist playlist) throws ActionNotCompletedException;
 
     public List<Playlist> getSuggestedPlaylists(User user) throws ActionNotCompletedException;

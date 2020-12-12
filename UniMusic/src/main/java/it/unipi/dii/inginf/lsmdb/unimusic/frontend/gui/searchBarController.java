@@ -9,6 +9,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -32,11 +33,10 @@ public class searchBarController implements Initializable {
     @FXML private Button closeSearchButton;
     @FXML private TextField searchInput;
 
-    @FXML private CheckBox songCheck;
+    @FXML private CheckBox titleCheck;
     @FXML private CheckBox artistCheck;
     @FXML private CheckBox albumCheck;
 
-    @FXML private ScrollPane searchScroll;
     @FXML private AnchorPane anchorSearch;
 
     @FXML private VBox resultBox;
@@ -77,8 +77,17 @@ public class searchBarController implements Initializable {
 
        resultBox.getChildren().clear();
 
-        for(Song song: songsFiltered)
-            resultBox.getChildren().addAll(createSongPreview(song), new Separator());
+       if(songsFiltered.size() != 0) {
+           for (Song song : songsFiltered)
+               resultBox.getChildren().addAll(createSongPreview(song), new Separator());
+           if(songsFiltered.size() < 4) {
+               TextField fill = new TextField("No more result found"); fill.setStyle("-fx-background-color: black;"); fill.setMinHeight((4 - songsFiltered.size()) * 150);fill.setMinWidth(500); fill.setAlignment(Pos.CENTER);
+               resultBox.getChildren().add(fill);
+           }
+       }else{
+           TextField empty = new TextField("No result found"); empty.setStyle("-fx-background-color: black;");empty.setMinWidth(500);empty.setPrefHeight(500); empty.setAlignment(Pos.CENTER);
+           resultBox.getChildren().add(empty);
+       }
 
         anchorSearch.setVisible(true);
     }
@@ -145,12 +154,12 @@ public class searchBarController implements Initializable {
         else if(albumCheck.isSelected())
             return albumCheck.getText();
         else
-            return songCheck.getText();
+            return titleCheck.getText();
     }
 
     private void initializeCheckBox() {
 
-        songCheck.setOnAction(new EventHandler<ActionEvent>() {
+        titleCheck.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 artistCheck.setSelected(false);
@@ -161,7 +170,7 @@ public class searchBarController implements Initializable {
         artistCheck.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                songCheck.setSelected(false);
+                titleCheck.setSelected(false);
                 albumCheck.setSelected(false);
             }
         });
@@ -169,7 +178,7 @@ public class searchBarController implements Initializable {
         albumCheck.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                songCheck.setSelected(false);
+                titleCheck.setSelected(false);
                 artistCheck.setSelected(false);
             }
         });

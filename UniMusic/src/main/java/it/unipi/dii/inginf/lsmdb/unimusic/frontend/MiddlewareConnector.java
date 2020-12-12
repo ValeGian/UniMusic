@@ -111,7 +111,7 @@ public class MiddlewareConnector {
 
     public List<Song> filterSong(String partialInput, String attributeField) throws ActionNotCompletedException {
 
-        if(attributeField.equals("Song"))
+        if(attributeField.equals("Title"))
             return songDAO.getSongsByPartialTitle(partialInput);
         else if(attributeField.equals("Artist"))
             return songDAO.getSongsByPartialArtist(partialInput);

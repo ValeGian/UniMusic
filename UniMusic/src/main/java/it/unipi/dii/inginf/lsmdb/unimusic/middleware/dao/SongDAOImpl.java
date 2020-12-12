@@ -22,6 +22,7 @@ import org.neo4j.driver.Session;
 import org.neo4j.driver.TransactionWork;
 import org.neo4j.driver.exceptions.Neo4jException;
 
+import java.time.LocalDate;
 import java.time.Year;
 import java.util.*;
 
@@ -333,11 +334,13 @@ public class SongDAOImpl implements SongDAO{
         {
             session.writeTransaction((TransactionWork<List<Song>>) tx -> {
 
-                String query = "MATCH (s:Song)<-[l:LIKES {day:date()}]-(u:User) " +
+                LocalDate lastMonth = LocalDate.now().minusDays(30);
+                String query = "MATCH (s:Song)<-[l:LIKES]-(u:User) " +
+                        "WHERE l.day IN [date(), date($lastMonth)] " +
                         "WITH s, COUNT(*) as num ORDER BY num DESC " +
                         "RETURN s.songId as songId, s.title as title, s.artist as artist, s.imageUrl as imageUrl";
 
-                Result result = tx.run(query);
+                Result result = tx.run(query, parameters("lastMonth", lastMonth.toString()));
                 while(result.hasNext())
                     hotSongs.add(new Song(result.next()));
 
