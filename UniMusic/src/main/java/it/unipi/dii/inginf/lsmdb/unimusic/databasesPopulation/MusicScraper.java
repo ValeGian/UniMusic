@@ -23,9 +23,11 @@ public class MusicScraper {
         int noResponse = 0;
         int i;
 
-        for(i = 1; i < 1000000; i++) {
+        for(i = 1; i < 100; i++) {
 
-            StringBuffer responseGenius = getResponse("https://api.genius.com/songs/" + i, " Yfr3zMge1KSmUXSrHkp9BeT8nxcm_kPfJUUa4TvrNyjjL2HHKLPS88Atx1mfdPLr");
+            StringBuffer responseGenius = getResponse(
+                    "https://api.genius.com/songs/" + i, " " +
+                    "BQCdh8aec2FNVTMsnCm0CyxjpshKE0JnTHWpAQpQzTXZh2kmPkvMLz2M4YCXNyR6mLOeDNhmu5Ok6BVG_L-HMMlELGA_i0GODqBcCaUqgw-bPTObEG0idAKntXoTFXabYaXqDEsv4Jje");
             if(responseGenius == null){
                 noResponse++;
                 continue;
