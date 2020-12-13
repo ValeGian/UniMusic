@@ -74,7 +74,7 @@ public class SongDAOImpl implements SongDAO{
 
         PlaylistDAOImpl playlist = new PlaylistDAOImpl();
         //playlist.completelyRandomLikes(23);
-        List<Song> songExample2 = song.getHotSongs();
+        List<Song> songExample2 = song.getHotSongs(40);
         for(Song s: songExample2) {
             if(s != null)
                 logger.info(s.toString());
@@ -254,6 +254,7 @@ public class SongDAOImpl implements SongDAO{
      * @return the album with the highest average of rating for every decade.
      * @throws ActionNotCompletedException
      */
+    @Override
     public List<Document> findTopRatedAlbumPerDecade() throws ActionNotCompletedException {
 
         MongoCollection<Document> songCollection = MongoDriver.getInstance().getCollection(Collections.SONGS);
@@ -294,6 +295,7 @@ public class SongDAOImpl implements SongDAO{
      * @return artists which made the highest number of “hit songs”. A song is a “hit” if it received more than hitLimit likes.
      * @throws ActionNotCompletedException
      */
+    @Override
     public List<Pair<String, Integer>> findArtistsWithMostNumberOfHit(int hitLimit, int maxNumber) throws ActionNotCompletedException {
 
         if(maxNumber < 0)
@@ -323,10 +325,11 @@ public class SongDAOImpl implements SongDAO{
     /**
      * It's an Analytic function.
      * @return songs that received more likes in the current day.
+     * @param limit Maximum number of songs to return.
      * @throws ActionNotCompletedException
      */
     @Override
-    public List<Song> getHotSongs() throws ActionNotCompletedException {
+    public List<Song> getHotSongs(int limit) throws ActionNotCompletedException {
 
         List<Song> hotSongs = new ArrayList<>();
 
@@ -338,9 +341,10 @@ public class SongDAOImpl implements SongDAO{
                 String query = "MATCH (s:Song)<-[l:LIKES]-(u:User) " +
                         "WHERE l.day IN [date(), date($lastMonth)] " +
                         "WITH s, COUNT(*) as num ORDER BY num DESC " +
-                        "RETURN s.songId as songId, s.title as title, s.artist as artist, s.imageUrl as imageUrl";
+                        "RETURN s.songId as songId, s.title as title, s.artist as artist, s.imageUrl as imageUrl " +
+                        "LIMIT $limit";
 
-                Result result = tx.run(query, parameters("lastMonth", lastMonth.toString()));
+                Result result = tx.run(query, parameters("lastMonth", lastMonth.toString(), "limit", limit));
                 while(result.hasNext())
                     hotSongs.add(new Song(result.next()));
 
@@ -360,7 +364,8 @@ public class SongDAOImpl implements SongDAO{
      * @param song the song you want to update.
      * @throws ActionNotCompletedException
      */
-    void incrementLikeCount(Song song) throws ActionNotCompletedException{
+    @Override
+    public void incrementLikeCount(Song song) throws ActionNotCompletedException{
 
         if(song == null || song.getID() == null)
             throw new IllegalArgumentException();
@@ -381,7 +386,8 @@ public class SongDAOImpl implements SongDAO{
      * @param song the song you want to update.
      * @throws ActionNotCompletedException
      */
-    void decrementLikeCount(Song song) throws ActionNotCompletedException{
+    @Override
+    public void decrementLikeCount(Song song) throws ActionNotCompletedException{
 
         if(song == null || song.getID() == null)
             throw new IllegalArgumentException();

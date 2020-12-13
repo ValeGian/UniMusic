@@ -76,7 +76,7 @@ public class MiddlewareConnector {
     public List<Song> getHotSongs() {
         List<Song> hotSongs = new ArrayList<>();
         try {
-            hotSongs = songDAO.getHotSongs();
+            hotSongs = songDAO.getHotSongs(40);
         } catch (ActionNotCompletedException ancEx) {
             return new ArrayList<Song>();
         }
