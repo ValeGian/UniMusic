@@ -143,4 +143,19 @@ public class MiddlewareConnector {
         return suggestedPlaylists;
     }
 
+    public Playlist getPlaylistById(String ID) throws ActionNotCompletedException{
+        return playlistDAO.getPlaylist(ID);
+    }
+
+    public List<Song> getPlaylistSongs(Playlist playlist){
+        List<Song> result = null;
+
+        try {
+            result = playlistDAO.getAllSongs(playlist);
+        } catch (ActionNotCompletedException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
 }
