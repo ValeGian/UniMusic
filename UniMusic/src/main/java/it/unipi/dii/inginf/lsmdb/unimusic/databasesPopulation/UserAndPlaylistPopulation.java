@@ -117,6 +117,7 @@ public class UserAndPlaylistPopulation {
             int numPlaylists = random.nextInt(maxNumPlaylistsPerUser);
             for (int j = 0; j < numPlaylists; j++){
                 Playlist playlist = new Playlist(user.getUsername(), "Playlist " + (j + 1) + " by " + user.getFirstName());
+                playlist.setUrlImage(getRandomSong().getAlbum().getImage());
                 connector.createPlaylist(playlist);
                 addRandomSongs(playlist, random.nextInt(maxNumSongsPerPlaylists));
             }
