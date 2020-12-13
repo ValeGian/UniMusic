@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class homepageController implements Initializable {
-    private MiddlewareConnector connector;
+    private static MiddlewareConnector connector = MiddlewareConnector.getInstance();
 
     @FXML private ScrollPane scrollPane;
     @FXML private VBox verticalScroll;
@@ -40,7 +40,6 @@ public class homepageController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        connector = MiddlewareConnector.getInstance();
 
         scrollPane.setFitToWidth(true);
         verticalScroll.setSpacing(75);
@@ -51,8 +50,8 @@ public class homepageController implements Initializable {
         suggPlaylistsScroll.setFitToHeight(true); suggPlaylistsScroll.setMinViewportHeight(340);
         suggPlaylistsPane.setSpacing(5);
 
-        suggUsersScroll.setFitToHeight(true); suggUsersScroll.setMinViewportHeight(100);
-        suggUsersPane.setSpacing(20);
+        suggUsersScroll.setFitToHeight(true); suggUsersScroll.setMinViewportHeight(200);
+        suggUsersPane.setSpacing(5);
 
         displayHotSongs();
         displaySuggPlaylists();
@@ -202,7 +201,6 @@ public class homepageController implements Initializable {
                     true
             );
         }
-        System.out.println(playlistImage.getUrl());
         ImageView playlistImageView = new ImageView(playlistImage);
         Text pName = new Text(playlist.getName()); pName.setWrappingWidth(App.previewImageWidth); pName.setFill(Color.WHITE);
 
@@ -214,10 +212,26 @@ public class homepageController implements Initializable {
 
     private Button createUserPreview(User user) {
         Button songPreview = new Button(); songPreview.setStyle("-fx-background-color: transparent");
+        songPreview.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                System.out.println(user.getUsername());
+            }
+        });
 
-        Text username = new Text(user.getUsername()); username.setFill(Color.WHITE);
+        Image userImage = new Image(
+                "file:src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/user.png",
+                App.previewImageWidth,
+                0,
+                true,
+                true,
+                true
+        );
+        ImageView userImageView = new ImageView(userImage);
+        Text username = new Text(user.getUsername()); username.setWrappingWidth(App.previewImageWidth); username.setFill(Color.WHITE);
 
-        songPreview.setGraphic(username);
+        VBox userGraphic = new VBox(5); userGraphic.getChildren().addAll(userImageView, username);
+        songPreview.setGraphic(userGraphic);
         return songPreview;
     }
 }

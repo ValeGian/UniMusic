@@ -12,22 +12,26 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /**
- * Class that takes care of performing all actions related to scarping.
+ * Class that takes care of performing all actions related to scraping.
  * It is used to fill databases with all the information needed about songs.
  */
 public class MusicScraper {
 
     public static void main(String[] args) throws ActionNotCompletedException {
+        populateWithSong(500, 1000, "BQBAdzoql0K9SxXMvmATIaEPdXWmMLL4o35BgbSzs7AGlFJwSZ-nv1aYe4wSqtC-hbVgLwLWJPrJ_oEhMPnzxpaxPNe_NP-Z_48AVgkGle8eHbIYkcOMlJ79m6EZeEqJEOaPwAalCI4IsCkGsircI52TRol4VR6mpsRISWcMNA");
+    }
+
+
+    private static void populateWithSong(int startId, int endId, String spotifyBearer) throws ActionNotCompletedException {
 
         int miss = 0;
         int noResponse = 0;
         int i;
 
-        for(i = 500; i < 1001; i++) {
+        for(i = startId; i < endId; i++) {
 
             StringBuffer responseGenius = getResponse(
-                    "https://api.genius.com/songs/" + i, " " +
-                    "Yfr3zMge1KSmUXSrHkp9BeT8nxcm_kPfJUUa4TvrNyjjL2HHKLPS88Atx1mfdPLr");
+                    "https://api.genius.com/songs/" + i, "Yfr3zMge1KSmUXSrHkp9BeT8nxcm_kPfJUUa4TvrNyjjL2HHKLPS88Atx1mfdPLr");
             if(responseGenius == null){
                 noResponse++;
                 continue;
@@ -69,12 +73,8 @@ public class MusicScraper {
                 continue;
             }
 
-            StringBuffer responseSpotify = getResponse(
-                    "https://api.spotify.com/v1/tracks/" + uriSpotify,
-                    " BQCL1Y5P1n6eh8fOnFzRxrWAwAHrEkwqkNlaSQamX6seGUnvCv2NmGKVdEg4rKYQ7BL4UxNNBE7QUiJuaZ8AWCMM_oGOXrwvykdB-1bDfS_05JgTbT0f9-_u8Pi6eohjLrmM1hACRxWe" +
-                            "" +
-                            "" +
-                            "");
+            StringBuffer responseSpotify = getResponse("https://api.spotify.com/v1/tracks/" + uriSpotify, spotifyBearer);
+
             if(responseSpotify == null) {
                 System.out.println("Spotify response missed, check the spotify bearer if the problem persists!");
                 miss++;

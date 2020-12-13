@@ -16,6 +16,7 @@ import org.bson.conversions.Bson;
 import org.neo4j.driver.*;
 import org.neo4j.driver.exceptions.Neo4jException;
 
+import javax.swing.plaf.synth.SynthScrollBarUI;
 import java.util.ArrayList;
 
 import java.util.Arrays;
@@ -250,6 +251,29 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
+    public boolean isFollowedBy(User followed, User following) {
+        try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
+            Boolean follows = session.readTransaction((TransactionWork<Boolean>) tx -> {
+                Result result = tx.run(
+                        "MATCH (:User { username: $following })-[f:FOLLOWS_USER]->(:User { username: $followed }) "
+                                + "RETURN count(*) AS Times",
+                        parameters("following", following.getUsername(), "followed", followed.getUsername())
+                );
+                if ((result.hasNext())) {
+                    int times = result.next().get("Times").asInt();
+                    if(times > 0)
+                        return true;
+                }
+                return false;
+            });
+            return follows;
+        } catch (Exception e) {
+            logger.warn(e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
     public void unfollowPlaylist(User user, Playlist playlist) throws ActionNotCompletedException {
         try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
             session.run(
@@ -290,16 +314,19 @@ public class UserDAOImpl implements UserDAO{
             Boolean likes = session.readTransaction((TransactionWork<Boolean>) tx -> {
                 Result result = tx.run(
                         "MATCH (:User { username: $username })-[l:LIKES]->(:Song { songId: $songId }) "
-                        + "RETURN l",
+                        + "RETURN count(*) AS Times",
                         parameters("username", user.getUsername(), "songId", song.getID())
                 );
                 if ((result.hasNext())) {
-                    return true;
-                }else
-                    return false;
+                    int times = result.next().get("Times").asInt();
+                    if(times > 0)
+                        return true;
+                }
+                return false;
             });
             return likes;
         } catch (Exception e) {
+            logger.warn(e.getMessage());
             return false;
         }
     }

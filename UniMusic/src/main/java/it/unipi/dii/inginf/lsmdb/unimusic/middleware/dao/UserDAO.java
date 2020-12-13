@@ -28,6 +28,8 @@ public interface UserDAO {
 
     public void followPlaylist(User user, Playlist playlist) throws ActionNotCompletedException;
 
+    public boolean isFollowedBy(User followed, User following);
+
     public void unfollowPlaylist(User user, Playlist playlist) throws ActionNotCompletedException;
 
     public void likeSong(User user, Song song) throws ActionNotCompletedException;

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="root" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui.userPageController">
+    <stylesheets>
+        <URL value="@default.css" />
+    </stylesheets>
+    <AnchorPane layoutX="238.0" layoutY="83.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
+      <children>
+         <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" vbarPolicy="NEVER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0">
+            <content>
+               <VBox prefHeight="200.0" prefWidth="100.0">
+                  <children>
+                     <AnchorPane fx:id="parentPane" prefHeight="200.0" prefWidth="200.0">
+                        <children>
+                           <TextField fx:id="followsYou" alignment="CENTER" style="-fx-font-size: 20px;" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" promptText="Follows You" visible="false" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="0.0" />
+                           <TextField fx:id="userCompleteName" editable="false" style="-fx-font-size: 48px;" text="FirstName LastName" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="15.0">
+                           </TextField>
+                           <Button fx:id="followButton" mnemonicParsing="false" style="-fx-background-color: green;" text="Follow" textFill="WHITE" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="105.0">
+                              <font>
+                                 <Font name="System Bold" size="16.0" />
+                              </font>
+                           </Button>
+                           <HBox spacing="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="170.0">
+                              <children>
+                                 <Button mnemonicParsing="false" style="-fx-background-color: transparent;" text="Playlists" textFill="WHITE">
+                                    <font>
+                                       <Font name="System Bold" size="26.0" />
+                                    </font>
+                                 </Button>
+                                 <Separator maxHeight="-Infinity" minHeight="-Infinity" orientation="VERTICAL" prefHeight="56.0" />
+                                 <Button mnemonicParsing="false" style="-fx-background-color: transparent;" text="Following" textFill="WHITE">
+                                    <font>
+                                       <Font name="System Bold" size="26.0" />
+                                    </font>
+                                 </Button>
+                                 <Separator maxHeight="-Infinity" minHeight="-Infinity" orientation="VERTICAL" prefHeight="56.0" />
+                                 <Button mnemonicParsing="false" style="-fx-background-color: transparent;" text="Followed" textFill="WHITE">
+                                    <font>
+                                       <Font name="System Bold" size="26.0" />
+                                    </font>
+                                 </Button>
+                              </children>
+                           </HBox>
+                           <Separator prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="230.0" />
+                           <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="235.0" />
+                        </children>
+                     </AnchorPane>
+                  </children>
+               </VBox>
+            </content>
+         </ScrollPane>
+      </children></AnchorPane>
+    <fx:include source="FXML_utility/side_menu.fxml" />
+    <fx:include source="FXML_utility/search_bar.fxml" />
+</AnchorPane>
