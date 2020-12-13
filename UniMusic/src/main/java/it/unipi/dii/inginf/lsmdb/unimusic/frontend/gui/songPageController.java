@@ -90,7 +90,12 @@ public class songPageController implements Initializable {
     private void displaySongInformation(){
 
         titleText.setText(songToDisplay.getTitle());
-        artistText.setText(songToDisplay.getArtist());
+        String artists = songToDisplay.getArtist() + " feat ";
+        for(String artist: songToDisplay.getFeaturedArtists())
+            artists += artist + ", ";
+
+
+        artistText.setText(artists.substring(0, artists.length()-2));
         albumText.setText(songToDisplay.getAlbum().getTitle());
 
         String releasedYear = (songToDisplay.getReleaseYear() == 0)?"Release year unknown":("" + songToDisplay.getReleaseYear());

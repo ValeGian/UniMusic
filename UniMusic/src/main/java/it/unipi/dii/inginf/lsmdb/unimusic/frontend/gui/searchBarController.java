@@ -17,6 +17,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -278,7 +279,7 @@ public class searchBarController implements Initializable {
             public void handle(ActionEvent actionEvent) {
 
                 try {
-                    //personalProfileController.getPersonalProfile(user);
+                    userPageController.getUserPage(user);
                     throw new IOException();
                 } catch (IOException e) {
 
@@ -290,9 +291,9 @@ public class searchBarController implements Initializable {
         Image userImage = new Image(filePath,140,0,true,true,true);
         ImageView songImageView = new ImageView(userImage);
 
-        TextField username = new TextField(user.getUsername());username.setStyle("-fx-text-fill: white");username.setAlignment(Pos.CENTER);
+        Text username = new Text(user.getUsername()); username.setFill(Color.WHITE);
 
-        HBox userGraphic = new HBox(2, songImageView, username);
+        HBox userGraphic = new HBox(20, songImageView, username);
         userPreview.setGraphic(userGraphic);
 
         return userPreview;
