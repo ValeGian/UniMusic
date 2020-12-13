@@ -92,6 +92,7 @@ public class MiddlewareConnector {
         userDAO.unfollowUser(loggedUser, userToBeUnfollowed);
     }
 
+
     //--------------------------SONG-------------------------------------------------------------------
 
     public List<Song> getHotSongs() {
@@ -150,6 +151,13 @@ public class MiddlewareConnector {
         playlistDAO.addSong(playlist, song);
     }
 
+    public void addSongToFavourite(User user, Song song){
+        try {
+            playlistDAO.addSongToFavourite(user, song);
+        } catch (ActionNotCompletedException e) {
+            e.printStackTrace();
+        }
+    }
     public void createPlaylist(Playlist playlist) throws ActionNotCompletedException {
         playlistDAO.createPlaylist(playlist);
     }
@@ -178,5 +186,7 @@ public class MiddlewareConnector {
         }
         return result;
     }
+
+//------------------------------- USER -----------------------------------
 
 }
