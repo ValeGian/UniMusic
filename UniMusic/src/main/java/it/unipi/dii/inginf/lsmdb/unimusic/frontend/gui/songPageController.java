@@ -43,6 +43,17 @@ public class songPageController implements Initializable {
     @FXML private ImageView likeImg;
 
 
+    /**
+     * @param song The song to be displayed in the page.
+     * @throws IOException
+     */
+    public static void getSongPage(Song song) throws IOException {
+        songToDisplay = connector.getSongById(song);
+        App.setRoot("songPage");
+
+    }
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setAlbumImage();
@@ -51,13 +62,47 @@ public class songPageController implements Initializable {
         setUrls();
     }
 
-    private void setUrls() {
 
-        youtubeUrlText.setText("YOUTUBE URL:   " + songToDisplay.getYoutubeMediaURL());
-        spotifyUrlText.setText("SPOTIFY URL:   " + songToDisplay.getSpotifyMediaURL());
-        geniusUrlText.setText("GENIUS URL:   " + songToDisplay.getGeniusMediaURL());
+    /**
+     * Set the image of the album in the page.
+     */
+    private void setAlbumImage() {
+        Image songImage;
+        try {
+            songImage = new Image(songToDisplay.getAlbum().getImage(),310,0,true,true,true);
+
+            if(songImage.isError()) {
+                throw new Exception();
+            }
+
+        }catch(Exception ex){
+            String filePath = "file:src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/empty.jpg";
+            songImage = new Image(filePath,310,0,true,true,true);
+        }
+
+        imageAlbum.setImage(songImage);
     }
 
+
+    /**
+     * Add all song's information.
+     */
+    private void displaySongInformation(){
+
+        titleText.setText(songToDisplay.getTitle());
+        artistText.setText(songToDisplay.getArtist());
+        albumText.setText(songToDisplay.getAlbum().getTitle());
+
+        String releasedYear = (songToDisplay.getReleaseYear() == 0)?"Release year unknown":("" + songToDisplay.getReleaseYear());
+        releasedYearText.setText(releasedYear);
+
+        genreText.setText(songToDisplay.getGenre());
+    }
+
+
+    /**
+     * Initializes all the actions associated to the button in the page.
+     */
     private void initializeButton() {
 
         likeButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -116,51 +161,15 @@ public class songPageController implements Initializable {
         ratingLabel.setText("Rating: " + formatter.format(songToDisplay.getRating()));
     }
 
-    private void setAlbumImage() {
-        Image songImage;
-        try {
-            songImage = new Image(
-                    songToDisplay.getAlbum().getImage(),
-                    310,
-                    0,
-                    true,
-                    true,
-                    true
-            );
 
-            if(songImage.isError()) {
-                throw new Exception();
-            }
+    /**
+     * Set the urls to other web site to display where is possible to listen to this song.
+     */
+    private void setUrls() {
 
-        }catch(Exception ex){
-            songImage = new Image(
-                    "file:src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/empty.jpg",
-                    310,
-                    0,
-                    true,
-                    true,
-                    true
-            );
-        }
-
-        imageAlbum.setImage(songImage);
+        youtubeUrlText.setText("YOUTUBE URL:   " + songToDisplay.getYoutubeMediaURL());
+        spotifyUrlText.setText("SPOTIFY URL:   " + songToDisplay.getSpotifyMediaURL());
+        geniusUrlText.setText("GENIUS URL:   " + songToDisplay.getGeniusMediaURL());
     }
 
-    private void displaySongInformation(){
-
-        titleText.setText(songToDisplay.getTitle());
-        artistText.setText(songToDisplay.getArtist());
-        albumText.setText(songToDisplay.getAlbum().getTitle());
-
-        String releasedYear = (songToDisplay.getReleaseYear() == 0)?"Release year unknown":("" + songToDisplay.getReleaseYear());
-        releasedYearText.setText(releasedYear);
-
-        genreText.setText(songToDisplay.getGenre());
-    }
-
-    public static void getSongPage(Song song) throws IOException {
-        songToDisplay = connector.getSongById(song);
-        App.setRoot("songPage");
-
-    }
 }

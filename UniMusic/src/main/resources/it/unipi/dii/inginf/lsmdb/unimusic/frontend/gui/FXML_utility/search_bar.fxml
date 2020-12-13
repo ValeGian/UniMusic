@@ -38,12 +38,14 @@
                            <Font size="16.0" />
                        </font>
                    </TextField>
-                  <HBox spacing="40.0">
+                  <HBox spacing="30.0">
                      <children>
-                        <Label text="Filter by:" />
+                        <Label text="Filter Song by:" />
                         <CheckBox fx:id="titleCheck" mnemonicParsing="false" selected="true" text="Title" textFill="WHITE" />
                         <CheckBox fx:id="artistCheck" mnemonicParsing="false" text="Artist" textFill="WHITE" />
                         <CheckBox fx:id="albumCheck" mnemonicParsing="false" text="Album" textFill="WHITE" />
+                        <Label text="Filter User by:" />
+                        <CheckBox fx:id="userCheck" mnemonicParsing="false" text="Username" textFill="WHITE" />
                      </children>
                      <padding>
                         <Insets left="50.0" top="10.0" />

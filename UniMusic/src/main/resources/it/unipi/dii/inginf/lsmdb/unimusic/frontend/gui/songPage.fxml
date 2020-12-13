@@ -30,7 +30,7 @@
                         </ImageView>
                         <VBox layoutX="517.0" layoutY="24.0" prefHeight="200.0" prefWidth="150.0" spacing="20.0" AnchorPane.leftAnchor="517.0">
                            <children>
-                              <TextField fx:id="titleText" alignment="CENTER" editable="false" minWidth="480.0" promptText="C.R.E.A.M. by Wu-Tang Clan" style="-fx-font-size: 2em;">
+                              <TextField fx:id="titleText" alignment="CENTER" editable="false" minWidth="480.0" maxWidth="600.0" promptText="C.R.E.A.M. by Wu-Tang Clan" style="-fx-font-size: 2em;">
                                  <font>
                                     <Font name="Arial" size="16.0" />
                                  </font>

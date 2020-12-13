@@ -14,6 +14,8 @@ public interface UserDAO {
 
     public User getUserByUsername(String username) throws ActionNotCompletedException;
 
+    public List<User> getUserByPartialUsername(String partialUsername) throws ActionNotCompletedException;
+
     public List<User> getSuggestedUsers(User user) throws ActionNotCompletedException;
 
     public List<User> getSuggestedUsers(User user, int limit) throws ActionNotCompletedException;

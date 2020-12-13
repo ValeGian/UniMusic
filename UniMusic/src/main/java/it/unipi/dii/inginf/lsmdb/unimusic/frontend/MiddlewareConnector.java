@@ -52,6 +52,10 @@ public class MiddlewareConnector {
         return false;
     }
 
+    public List<User> getUsersByPartialInput(String partialUsername) throws ActionNotCompletedException {
+
+        return userDAO.getUserByPartialUsername(partialUsername);
+    }
 
     public void logout() {
         loggedUser = null;

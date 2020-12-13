@@ -133,6 +133,32 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
+    public List<User> getUserByPartialUsername(String partialUsername) throws ActionNotCompletedException {
+        return getUserByPartialUsername(partialUsername, 40);
+    }
+
+    private List<User> getUserByPartialUsername(String partialUsername, int limitResult) throws ActionNotCompletedException {
+        if(limitResult < 0)
+            throw new IllegalArgumentException();
+
+        MongoCollection<Document> userCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
+        List<User> usersToReturn = new ArrayList<>();
+
+        Bson match = match(regex("_id", "(?i)^" + partialUsername + ".*"));
+
+        try (MongoCursor<Document> cursor = userCollection.aggregate(Arrays.asList(match, limit(limitResult))).iterator()) {
+            while(cursor.hasNext()) {
+                usersToReturn.add(new User(cursor.next()));
+            }
+        } catch (MongoException mongoEx) {
+            logger.error(mongoEx.getMessage());
+            throw new ActionNotCompletedException(mongoEx);
+        }
+        return usersToReturn;
+    }
+
+
+    @Override
     public List<User> getSuggestedUsers(User user) throws ActionNotCompletedException {
         return getSuggestedUsers(user, 40);
     }
