@@ -12,14 +12,20 @@ import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.User;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.Collections;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.MongoDriver;
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.neo4jconnection.Neo4jDriver;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.neo4j.driver.Result;
+import org.neo4j.driver.Session;
+import org.neo4j.driver.TransactionWork;
 
 import java.time.Year;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import static com.mongodb.client.model.Aggregates.sample;
+import static org.neo4j.driver.Values.parameters;
 
 public class UserAndPlaylistPopulation {
     private static MiddlewareConnector connector = MiddlewareConnector.getInstance();
@@ -32,7 +38,9 @@ public class UserAndPlaylistPopulation {
         instance.completelyRandomLikes(3000);
         instance.completelyRandomUserFollows(2000);
          */
-
+        Playlist p = instance.getRandomPlaylist();
+        System.out.println(p.getID() + "       " + p.getAuthor());
+        instance.completelyRandomPlaylistFollow(3);
     }
 
     private void populateWithUser(int howManyUsers){
@@ -156,4 +164,24 @@ public class UserAndPlaylistPopulation {
         }
     }
 
+    public Playlist getRandomPlaylist() throws ActionNotCompletedException {
+        Playlist playlist = null;
+        try ( Session session = Neo4jDriver.getInstance().getDriver().session() )
+        {
+            playlist = session.readTransaction((TransactionWork<Playlist>) tx -> {
+                Result result = tx.run(     "MATCH (p:Playlist) \n" +
+                                "RETURN p, rand() as r\n" +
+                                "ORDER BY r\n" +
+                                "LIMIT 1;");
+                return new Playlist(result.next().get("p"));
+            });
+        }
+        return playlist;
+    }
+
+    public void completelyRandomPlaylistFollow(int numFollow) throws ActionNotCompletedException{
+        UserDAO userDAO = new UserDAOImpl();
+        for (int i = 0; i < numFollow; i++)
+            userDAO.followPlaylist(getRandomUser(), getRandomPlaylist());
+    }
 }
