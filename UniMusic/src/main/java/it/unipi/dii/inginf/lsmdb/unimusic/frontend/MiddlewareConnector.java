@@ -19,7 +19,6 @@ public class MiddlewareConnector {
     private User loggedUser = new User("");
 
     private MiddlewareConnector() {
-
     }
 
     public static MiddlewareConnector getInstance() { return instance; }

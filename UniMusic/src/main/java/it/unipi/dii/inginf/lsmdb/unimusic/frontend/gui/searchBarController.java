@@ -13,6 +13,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -54,29 +56,14 @@ public class searchBarController implements Initializable {
      */
     private void initializeSearch() {
 
+        searchInput.addEventHandler(KeyEvent.KEY_RELEASED, e -> {
+            handleSearchInput();
+        });
+
         searchButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-
-                String partialInput = searchInput.getText();
-                if(partialInput.equals("")){
-                    displayNoInputInserted();
-                    return;
-                }
-                String attributeField = findSelected();
-                if(attributeField == null)
-                    return;
-                try {
-                    if (!attributeField.equals("Username")) {
-                        List<Song> songsFiltered = connector.filterSong(partialInput, attributeField);
-                        displaySong(songsFiltered);
-                    } else{
-                        List<User> userFiltered = connector.getUsersByPartialInput(partialInput);
-                        displayUser(userFiltered);
-                    }
-                } catch (ActionNotCompletedException e) {
-                    return;
-                }
+                handleSearchInput();
             }
         });
 
@@ -88,6 +75,28 @@ public class searchBarController implements Initializable {
             }
         });
 
+    }
+
+    public void handleSearchInput(){
+        String partialInput = searchInput.getText();
+        if(partialInput.equals("")){
+            displayNoInputInserted();
+            return;
+        }
+        String attributeField = findSelected();
+        if(attributeField == null)
+            return;
+        try {
+            if (!attributeField.equals("Username")) {
+                List<Song> songsFiltered = connector.filterSong(partialInput, attributeField);
+                displaySong(songsFiltered);
+            } else{
+                List<User> userFiltered = connector.getUsersByPartialInput(partialInput);
+                displayUser(userFiltered);
+            }
+        } catch (ActionNotCompletedException ex) {
+            return;
+        }
     }
 
 
