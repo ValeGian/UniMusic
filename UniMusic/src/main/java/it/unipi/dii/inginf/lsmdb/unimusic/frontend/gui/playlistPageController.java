@@ -3,6 +3,7 @@ package it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui;
 import it.unipi.dii.inginf.lsmdb.unimusic.frontend.MiddlewareConnector;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Playlist;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Song;
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.User;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -13,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -86,12 +88,40 @@ public class playlistPageController implements Initializable {
 
         TextField title = new TextField(song.getTitle()); title.setStyle("-fx-background-color: transparent");
         TextField artist = new TextField(song.getArtist()); artist.setStyle("-fx-background-color: transparent");
-        ImageView imageView = new ImageView();
-        setSongImage(imageView, song);
+        ImageView songImageView = new ImageView();
+        setSongImage(songImageView, song);
 
-        title.setPrefWidth(600); artist.setPrefWidth(400);
-        songBox = new HBox(imageView, title, artist); songBox.setStyle("-fx-background-color: transparent");
-        songBox.setPrefHeight(100);
+        title.setMinWidth(400); artist.setMinWidth(300);
+
+        ImageView heartImageView = new ImageView();
+        Image heartImage = new Image("file:src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/heart.png");
+        heartImageView.setImage(heartImage); heartImageView.setY(60);
+
+        //adding the possibility to click on the heart to add a song to favourites
+        heartImageView.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+                connector.addSongToFavourite(connector.getLoggedUser(), song);
+                event.consume();
+            }
+        });
+
+        //adding the event to move to the song page by clicking it
+        title.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+                try {
+                    songPageController.getSongPage(song);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                event.consume();
+            }
+        });
+        songBox = new HBox(heartImageView, songImageView, title, artist); songBox.setStyle("-fx-background-color: transparent");
+        songBox.setPrefHeight(120);
 
         return songBox;
     }
