@@ -16,7 +16,7 @@ public class MiddlewareConnector {
     private final PlaylistDAO playlistDAO = new PlaylistDAOImpl();
     private final SongDAO songDAO = new SongDAOImpl();
 
-    private User loggedUser = new User("");
+    private User loggedUser = new User("AleLew1996", "43", "Alex", "Lewis", 24);
 
     private MiddlewareConnector() {
 
@@ -28,6 +28,8 @@ public class MiddlewareConnector {
         MongoDriver.getInstance().closeConnection();
         Neo4jDriver.getInstance().closeDriver();
     }
+
+    public User getLoggedUser() { return loggedUser; }
 
     //-----------------USER-------------------------------------------------------------------
 
@@ -52,6 +54,10 @@ public class MiddlewareConnector {
         return false;
     }
 
+    public User getUser(User user) throws ActionNotCompletedException {
+        return userDAO.getUserByUsername(user.getUsername());
+    }
+
     public List<User> getUsersByPartialInput(String partialUsername) throws ActionNotCompletedException {
 
         return userDAO.getUserByPartialUsername(partialUsername);
@@ -69,6 +75,22 @@ public class MiddlewareConnector {
             return new ArrayList<User>();
         }
         return suggUsers;
+    }
+
+    public boolean follows(User followed) {
+        return userDAO.isFollowedBy(followed, loggedUser);
+    }
+
+    public boolean isFollowedBy(User following) {
+        return userDAO.isFollowedBy(loggedUser, following);
+    }
+
+    public void follow(User userToBeFollowed) throws ActionNotCompletedException {
+        userDAO.followUser(loggedUser, userToBeFollowed);
+    }
+
+    public void unfollow(User userToBeUnfollowed) throws ActionNotCompletedException {
+        userDAO.unfollowUser(loggedUser, userToBeUnfollowed);
     }
 
     //--------------------------SONG-------------------------------------------------------------------
