@@ -39,7 +39,7 @@ public class sideBarController implements Initializable {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    App.setRoot("personalProfile");
+                    userPageController.getUserPage(MiddlewareConnector.getInstance().getLoggedUser());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
