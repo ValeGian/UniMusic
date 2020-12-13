@@ -202,7 +202,6 @@ public class homepageController implements Initializable {
                     true
             );
         }
-        System.out.println(playlistImage.getUrl());
         ImageView playlistImageView = new ImageView(playlistImage);
         Text pName = new Text(playlist.getName()); pName.setWrappingWidth(App.previewImageWidth); pName.setFill(Color.WHITE);
 
