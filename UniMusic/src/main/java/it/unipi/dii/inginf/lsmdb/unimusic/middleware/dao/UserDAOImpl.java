@@ -251,6 +251,29 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
+    public boolean isFollowingPlaylist(User user, Playlist playlist) {
+        try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
+            Boolean follows = session.readTransaction((TransactionWork<Boolean>) tx -> {
+                Result result = tx.run(
+                        "MATCH (:User { username: $username })-[f:FOLLOWS_PLAYLIST]->(:Playlist { playlistId: $playlistId }) "
+                                + "RETURN count(*) AS Times",
+                        parameters("username", user.getUsername(), "playlistId", playlist.getID())
+                );
+                if ((result.hasNext())) {
+                    int times = result.next().get("Times").asInt();
+                    if(times > 0)
+                        return true;
+                }
+                return false;
+            });
+            return follows;
+        } catch (Exception e) {
+            logger.warn(e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
     public boolean isFollowedBy(User followed, User following) {
         try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
             Boolean follows = session.readTransaction((TransactionWork<Boolean>) tx -> {

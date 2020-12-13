@@ -46,6 +46,7 @@ public class MiddlewareConnector {
             try {
                 loggedUser = userDAO.getUserByUsername(username);
             } catch (ActionNotCompletedException e) {
+                e.printStackTrace();
                 return false;
             }
             return true;
@@ -71,6 +72,7 @@ public class MiddlewareConnector {
         try {
             suggUsers = userDAO.getSuggestedUsers(loggedUser);
         } catch (ActionNotCompletedException ancEx) {
+            ancEx.printStackTrace();
             return new ArrayList<User>();
         }
         return suggUsers;
@@ -100,6 +102,7 @@ public class MiddlewareConnector {
         try {
             hotSongs = songDAO.getHotSongs(40);
         } catch (ActionNotCompletedException ancEx) {
+            ancEx.printStackTrace();
             return new ArrayList<Song>();
         }
         return hotSongs;
@@ -158,6 +161,7 @@ public class MiddlewareConnector {
             e.printStackTrace();
         }
     }
+
     public void createPlaylist(Playlist playlist) throws ActionNotCompletedException {
         playlistDAO.createPlaylist(playlist);
     }
@@ -187,6 +191,26 @@ public class MiddlewareConnector {
         return result;
     }
 
-//------------------------------- USER -----------------------------------
+    public List<Playlist> getUserPlaylists(User user) {
+        List<Playlist> playlistList = new ArrayList<>();
+        try {
+            playlistList = userDAO.getAllPlaylist(user);
+        } catch (ActionNotCompletedException e) {
+            e.printStackTrace();
+            return new ArrayList<Playlist>();
+        }
+        return playlistList;
+    }
 
+    public boolean isFollowingPlaylist(Playlist playlist) {
+        return userDAO.isFollowingPlaylist(loggedUser, playlist);
+    }
+
+    public void followPlaylist(Playlist playlist) throws ActionNotCompletedException {
+        userDAO.followPlaylist(loggedUser, playlist);
+    }
+
+    public void unfollowPlaylist(Playlist playlist) throws ActionNotCompletedException {
+        userDAO.unfollowPlaylist(loggedUser, playlist);
+    }
 }

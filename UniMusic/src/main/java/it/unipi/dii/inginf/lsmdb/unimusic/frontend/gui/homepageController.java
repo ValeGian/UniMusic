@@ -123,7 +123,6 @@ public class homepageController implements Initializable {
         Image songImage;
         VBox songGraphic = new VBox(5);
         try {
-
             if(song.getAlbum().getImage() == null || song.getAlbum().getImage().equals(""))
                 throw new Exception();
 
@@ -215,7 +214,11 @@ public class homepageController implements Initializable {
         songPreview.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                System.out.println(user.getUsername());
+                try {
+                    userPageController.getUserPage(user);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
