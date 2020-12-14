@@ -48,7 +48,11 @@ public class sideBarController implements Initializable {
             statistics.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
-                    System.out.println("Statistics");
+                    try {
+                        App.setRoot("statistics");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         }
