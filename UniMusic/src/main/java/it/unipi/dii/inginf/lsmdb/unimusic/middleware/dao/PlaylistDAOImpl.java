@@ -48,23 +48,28 @@ public class PlaylistDAOImpl implements PlaylistDAO{
         SongDAOImpl s = new SongDAOImpl();
         Playlist playlist1 = new Playlist("", "5fd4b32b3ec622679f961d40", "");
         Playlist playlist2 = new Playlist("", "5fd4b32b3ec622679f961d3e", "");
-
+        Playlist playlist3 = new Playlist("gaetano", "", "Playlistina toptop", "urlimmagine.png");
         User user1 = new User("lorenzo");
         User user2 = new User("gaetano");
         User user3 = new User("gesu");
         User user4 = new User("PauCha1990");
         User user5 = new User("FraBon1983");
         try {
+            //p.createPlaylist(playlist3);
             //u.followUser(user2, user5);
-            u.followPlaylist(user2, playlist1);
+            u.followPlaylist(user2, playlist2);
             //List<Song> list = p.getAllSongs(playlist);
             Song song = new Song();
             song.setID("rock1");
             //p.deleteSongFromFavourite(user1, song);
 
-            List<Playlist> list = p.getSuggestedPlaylists(user1);
+            List<Playlist> list = u.getAllPlaylist(user2);
             for (int i = 0;i < list.size(); i++)
-                System.out.println(list.get(i).getID() + "   " + list.get(i).getName());
+                System.out.println(list.get(i).getID() + "   " + list.get(i).getName() + "  " + list.get(i).getAuthor() + "    " + list.get(i).getUrlImage());
+
+            List<String> generi = u.getFavouriteGenres(3);
+                for (String genere: generi)
+                    System.out.println(genere);
         } catch (ActionNotCompletedException e) {
             e.printStackTrace();
         }
@@ -285,6 +290,7 @@ public class PlaylistDAOImpl implements PlaylistDAO{
                                     "WHERE NOT (me)-[:FOLLOWS_USER]->(suggestedUser)  \n" +
                                     "AND me <> suggestedUser \n" +
                                     "AND NOT (me)-[:FOLLOWS_PLAYLIST]->(suggestedPlaylist)\n" +
+                                    "AND NOT (followed)-[:FOLLOWS_PLAYLIST]->(suggestedPlaylist)\n" +
                                     "RETURN suggestedPlaylist, count(*) AS Strength \n" +
                                     "ORDER BY Strength DESC LIMIT $limit",
                             parameters("me", user.getUsername(), "limit", limit - firstSuggestionsSize)
