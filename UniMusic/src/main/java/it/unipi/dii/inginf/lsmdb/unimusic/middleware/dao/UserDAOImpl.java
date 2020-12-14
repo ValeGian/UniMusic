@@ -95,7 +95,10 @@ public class UserDAOImpl implements UserDAO{
             createUserDocument(user);
             createUserNode(user);
 
-            Playlist playlist = new Playlist(user.getUsername(), "Favourites");
+            Playlist playlist = new Playlist(
+                    user.getUsername(), "Favourites of "
+                    + user.getFirstName() + " " + user.getLastName()
+            );
             playlist.setFavourite(true);
             PlaylistDAO playlistDAO = new PlaylistDAOImpl();
             playlistDAO.createPlaylist(playlist);
@@ -403,6 +406,28 @@ public class UserDAOImpl implements UserDAO{
             throw new ActionNotCompletedException(mongoEx);
         }
         return playlists;
+    }
+
+    @Override
+    public List<Playlist> getFollowedPlaylist(User user) throws ActionNotCompletedException {
+        try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
+            List<Playlist> playlists = session.readTransaction((TransactionWork<List<Playlist>>) tx -> {
+                Result result = tx.run(
+                        "MATCH (:User {username: $username})-[:FOLLOWS_PLAYLIST]->(playlist:Playlist) RETURN playlist ",
+                        parameters("username", user.getUsername())
+                );
+                List<Playlist> tmpList = new ArrayList<>();
+                while ((result.hasNext())) {
+                    Playlist playlist = new Playlist(result.next().get("playlist"));
+                    playlist.setAuthor(user.getUsername());
+                    tmpList.add(playlist);
+                }
+                return tmpList;
+            });
+            return playlists;
+        } catch (Neo4jException n4jEx) {
+            throw new ActionNotCompletedException(n4jEx);
+        }
     }
 
     @Override

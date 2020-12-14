@@ -44,5 +44,7 @@ public interface UserDAO {
 
     public List<Playlist> getAllPlaylist(User user) throws ActionNotCompletedException;
 
+    public List<Playlist> getFollowedPlaylist(User user) throws ActionNotCompletedException;
+
     public List<String> getFavouriteGenres(User user, int numGenres) throws ActionNotCompletedException;
 }
