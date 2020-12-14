@@ -1,5 +1,6 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.frontend;
 
+import it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui.App;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.dao.*;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.*;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
@@ -17,8 +18,9 @@ public class MiddlewareConnector {
     private final SongDAO songDAO = new SongDAOImpl();
 
     private User loggedUser = new User("AleLew1996", "43", "Alex", "Lewis", 24);
-
+    //private User loggedUser = new User("valegiann", "root", "Valerio", "Giannini", 22);
     private MiddlewareConnector() {
+        //loggedUser.setPrivilegeLevel(PrivilegeLevel.ADMIN);
     }
 
     public static MiddlewareConnector getInstance() { return instance; }
@@ -67,8 +69,12 @@ public class MiddlewareConnector {
         loggedUser = null;
     }
 
+    public void deleteUser(User user) throws ActionNotCompletedException{
+        userDAO.deleteUser(user);
+    }
+
     public List<User> getSuggestedUsers() {
-        List<User> suggUsers = new ArrayList<>();
+        List<User> suggUsers;
         try {
             suggUsers = userDAO.getSuggestedUsers(loggedUser);
         } catch (ActionNotCompletedException ancEx) {
@@ -76,6 +82,28 @@ public class MiddlewareConnector {
             return new ArrayList<User>();
         }
         return suggUsers;
+    }
+
+    public List<User> getFollowedUsers(User user) {
+        List<User> followedUsers;
+        try {
+            followedUsers = userDAO.getFollowedUsers(user);
+        } catch (ActionNotCompletedException ancEx) {
+            ancEx.printStackTrace();
+            return new ArrayList<User>();
+        }
+        return followedUsers;
+    }
+
+    public List<User> getFollowers(User user) {
+        List<User> followingUsers;
+        try {
+            followingUsers = userDAO.getFollowers(user);
+        } catch (ActionNotCompletedException ancEx) {
+            ancEx.printStackTrace();
+            return new ArrayList<User>();
+        }
+        return followingUsers;
     }
 
     public boolean follows(User followed) {
@@ -98,7 +126,7 @@ public class MiddlewareConnector {
     //--------------------------SONG-------------------------------------------------------------------
 
     public List<Song> getHotSongs() {
-        List<Song> hotSongs = new ArrayList<>();
+        List<Song> hotSongs;
         try {
             hotSongs = songDAO.getHotSongs(40);
         } catch (ActionNotCompletedException ancEx) {

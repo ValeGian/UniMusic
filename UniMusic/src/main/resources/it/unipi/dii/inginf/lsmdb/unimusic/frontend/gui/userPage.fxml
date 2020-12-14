@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.net.URL?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -23,13 +26,32 @@
                   <children>
                      <AnchorPane fx:id="parentPane" prefHeight="200.0" prefWidth="200.0">
                         <children>
-                           <TextField fx:id="followsYou" alignment="CENTER" style="-fx-font-size: 20px;" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" promptText="Follows You" visible="false" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="0.0" />
+                           <TextField fx:id="followsYou" alignment="CENTER" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" promptText="Follows You" style="-fx-font-size: 20px;" visible="false" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="0.0" />
                            <TextField fx:id="userCompleteName" editable="false" style="-fx-font-size: 48px;" text="FirstName LastName" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="15.0">
                            </TextField>
                            <Button fx:id="followButton" mnemonicParsing="false" style="-fx-background-color: green;" text="Follow" textFill="WHITE" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="105.0">
                               <font>
                                  <Font name="System Bold" size="16.0" />
                               </font>
+                           </Button>
+                           <Button fx:id="deleteButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="160.0" style="-fx-background-color: transparent;" text="Button" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="105.0">
+                              <graphic>
+                                 <HBox maxWidth="-Infinity" minWidth="-Infinity">
+                                    <children>
+                                       <ImageView pickOnBounds="true" preserveRatio="true">
+                                          <image>
+                                             <Image url="@img/delete.png" />
+                                          </image>
+                                       </ImageView>
+                                       <Pane prefWidth="10.0" />
+                                       <Label style="-fx-text-fill: red;" text="Delete this profile" textFill="RED">
+                                          <font>
+                                             <Font name="System Bold" size="18.0" />
+                                          </font>
+                                       </Label>
+                                    </children>
+                                 </HBox>
+                              </graphic>
                            </Button>
                            <HBox spacing="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="170.0">
                               <children>
