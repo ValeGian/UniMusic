@@ -174,6 +174,7 @@ public class UserDAOImpl implements UserDAO{
     public List<User> getSuggestedUsers(User user, int limit) throws ActionNotCompletedException {
         List<User> list = new ArrayList<>();
         try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
+            //First layer Suggestion
             list = session.readTransaction((TransactionWork<List<User>>) tx -> {
                 Result result = tx.run(
                         "MATCH (me:User {username: $me})-[:FOLLOWS_USER]->(followed:User)"
@@ -182,13 +183,34 @@ public class UserDAOImpl implements UserDAO{
                         + "ORDER BY Strength DESC LIMIT $limit",
                         parameters("me", user.getUsername(), "limit", limit)
                 );
-                ArrayList<User> users = new ArrayList<>();
+                ArrayList<User> firstLayerUsers = new ArrayList<>();
                 while ((result.hasNext())){
                     Record r = result.next();
-                    users.add(new User(r.get("suggested").get("username").asString()));
+                    firstLayerUsers.add(new User(r.get("suggested").get("username").asString()));
                 }
-                return users;
+                return firstLayerUsers;
             });
+
+            final int firstSuggestionSize = list.size();
+            if(firstSuggestionSize < limit) {
+                //Second layer suggestion
+                List<User> secondLayerSuggestion = session.readTransaction((TransactionWork<List<User>>) tx -> {
+                    Result result = tx.run(
+                            "MATCH (me:User {username: $username})-[:LIKES]->()<-[:LIKES]-(suggested:User) "
+                                    + "WHERE NOT (me)-[:FOLLOWS_USER]->(suggested) "
+                                    + "AND NOT (me)-[:FOLLOWS_USER]->()-[:FOLLOWS_USER]->(suggested) AND me <> suggested "
+                                    + "RETURN suggested, count(*) AS Strength ORDER BY Strength DESC LIMIT $limit",
+                            parameters("username", user.getUsername(), "limit", limit - firstSuggestionSize)
+                    );
+                    ArrayList<User> secondLayerUsers = new ArrayList<>();
+                    while ((result.hasNext())){
+                        Record r = result.next();
+                        secondLayerUsers.add(new User(r.get("suggested").get("username").asString()));
+                    }
+                    return secondLayerUsers;
+                });
+                list.addAll(secondLayerSuggestion);
+            }
         } catch (Neo4jException n4jEx) {
             throw new ActionNotCompletedException(n4jEx);
         }
