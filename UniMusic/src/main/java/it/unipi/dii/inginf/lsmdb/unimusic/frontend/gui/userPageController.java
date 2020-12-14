@@ -179,7 +179,6 @@ public class userPageController implements Initializable {
     }
 
     private void displayListToShow() {
-
         switch (listToShow) {
             case PLAYLISTS:
                 playlistsButton.setTextFill(Color.WHITE);
