@@ -95,7 +95,10 @@ public class UserDAOImpl implements UserDAO{
             createUserDocument(user);
             createUserNode(user);
 
-            Playlist playlist = new Playlist(user.getUsername(), "Favourites");
+            Playlist playlist = new Playlist(
+                    user.getUsername(), "Favourites of "
+                    + user.getFirstName() + " " + user.getLastName()
+            );
             playlist.setFavourite(true);
             PlaylistDAO playlistDAO = new PlaylistDAOImpl();
             playlistDAO.createPlaylist(playlist);
@@ -406,10 +409,31 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public List<String> getFavouriteGenres(User user, int numGenres) throws ActionNotCompletedException{
+    public List<Playlist> getFollowedPlaylist(User user) throws ActionNotCompletedException {
+        try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
+            List<Playlist> playlists = session.readTransaction((TransactionWork<List<Playlist>>) tx -> {
+                Result result = tx.run(
+                        "MATCH (:User {username: $username})-[:FOLLOWS_PLAYLIST]->(playlist:Playlist) RETURN playlist ",
+                        parameters("username", user.getUsername())
+                );
+                List<Playlist> tmpList = new ArrayList<>();
+                while ((result.hasNext())) {
+                    Playlist playlist = new Playlist(result.next().get("playlist"));
+                    playlist.setAuthor(user.getUsername());
+                    tmpList.add(playlist);
+                }
+                return tmpList;
+            });
+            return playlists;
+        } catch (Neo4jException n4jEx) {
+            throw new ActionNotCompletedException(n4jEx);
+        }
+    }
+
+    @Override
+    public List<String> getFavouriteGenres(int numGenres) throws ActionNotCompletedException{
         MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
         List<String> result = new ArrayList<String>();
-        Bson match = match(eq("_id", user.getUsername()));
         Bson unwind1 = unwind("$createdPlaylists");
         Bson unwind2 = unwind("$createdPlaylists.songs");
         Bson group = Document.parse("{$group: {" +
@@ -419,7 +443,7 @@ public class UserDAOImpl implements UserDAO{
         Bson sort = sort(descending("totalSongs"));
         Bson limit = limit(numGenres);
         Bson project = project(include("_id"));
-        try (MongoCursor<Document> cursor = usersCollection.aggregate(Arrays.asList(match, unwind1, unwind2, group, sort, limit, project)).iterator()) {
+        try (MongoCursor<Document> cursor = usersCollection.aggregate(Arrays.asList(unwind1, unwind2, group, sort, limit, project)).iterator()) {
             while(cursor.hasNext()) {
                 Document genre = cursor.next();
                 result.add(genre.getString("_id"));

@@ -195,6 +195,7 @@ public class MiddlewareConnector {
         List<Playlist> playlistList = new ArrayList<>();
         try {
             playlistList = userDAO.getAllPlaylist(user);
+            playlistList.addAll(userDAO.getFollowedPlaylist(user));
         } catch (ActionNotCompletedException e) {
             e.printStackTrace();
             return new ArrayList<Playlist>();
