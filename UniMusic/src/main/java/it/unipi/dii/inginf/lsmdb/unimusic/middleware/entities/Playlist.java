@@ -53,6 +53,8 @@ public class Playlist {
         name = jsonObject.getString("name");
         if (jsonObject.has("isFavourite"))
             isFavourite = true;
+        if (jsonObject.has("urlImage"))
+            urlImage = jsonObject.getString("urlImage");
     }
 
     public Playlist(Document mongoDocument,
