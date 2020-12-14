@@ -102,7 +102,11 @@ public class playlistPageController implements Initializable {
 
             @Override
             public void handle(MouseEvent event) {
-                connector.addSongToFavourite(connector.getLoggedUser(), song);
+                try {
+                    connector.addSongToFavourite(connector.getLoggedUser(), song);
+                } catch (ActionNotCompletedException e) {
+                    e.printStackTrace();
+                }
                 event.consume();
             }
         });

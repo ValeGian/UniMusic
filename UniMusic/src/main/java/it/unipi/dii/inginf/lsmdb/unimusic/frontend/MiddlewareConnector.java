@@ -56,22 +56,19 @@ public class MiddlewareConnector {
         return false;
     }
 
-    public User getUser(User user) throws ActionNotCompletedException {
-        return userDAO.getUserByUsername(user.getUsername());
-    }
+    public User getUser(User user) throws ActionNotCompletedException {return userDAO.getUserByUsername(user.getUsername()); }
 
-    public List<User> getUsersByPartialInput(String partialUsername) throws ActionNotCompletedException {
 
-        return userDAO.getUserByPartialUsername(partialUsername);
-    }
+    public List<User> getUsersByPartialInput(String partialUsername) throws ActionNotCompletedException {return userDAO.getUserByPartialUsername(partialUsername);}
+
 
     public void logout() {
         loggedUser = null;
     }
 
-    public void deleteUser(User user) throws ActionNotCompletedException{
-        userDAO.deleteUser(user);
-    }
+
+    public void deleteUser(User user) throws ActionNotCompletedException{userDAO.deleteUser(user);}
+
 
     public List<User> getSuggestedUsers() {
         List<User> suggUsers;
@@ -84,6 +81,7 @@ public class MiddlewareConnector {
         return suggUsers;
     }
 
+
     public List<User> getFollowedUsers(User user) {
         List<User> followedUsers;
         try {
@@ -94,6 +92,7 @@ public class MiddlewareConnector {
         }
         return followedUsers;
     }
+
 
     public List<User> getFollowers(User user) {
         List<User> followingUsers;
@@ -106,21 +105,23 @@ public class MiddlewareConnector {
         return followingUsers;
     }
 
+
     public boolean follows(User followed) {
         return userDAO.isFollowedBy(followed, loggedUser);
     }
+
 
     public boolean isFollowedBy(User following) {
         return userDAO.isFollowedBy(loggedUser, following);
     }
 
+
     public void follow(User userToBeFollowed) throws ActionNotCompletedException {
         userDAO.followUser(loggedUser, userToBeFollowed);
     }
 
-    public void unfollow(User userToBeUnfollowed) throws ActionNotCompletedException {
-        userDAO.unfollowUser(loggedUser, userToBeUnfollowed);
-    }
+
+    public void unfollow(User userToBeUnfollowed) throws ActionNotCompletedException {userDAO.unfollowUser(loggedUser, userToBeUnfollowed);}
 
 
     //--------------------------SONG-------------------------------------------------------------------
@@ -136,35 +137,30 @@ public class MiddlewareConnector {
         return hotSongs;
     }
 
-    public boolean isLikedSong(Song song){
-       return userDAO.userLikesSong(loggedUser, song);
+    public boolean isLikedSong(Song song){return userDAO.userLikesSong(loggedUser, song);}
 
-    }
 
     public boolean isFavouriteSong(Song song){
-        //return userDAO.userFavouriteSong(loggedUser, song);
-        return true;
+        return playlistDAO.isSongFavourite(loggedUser, song);
     }
 
-    public void addSongToFavourites(Song song) throws ActionNotCompletedException {
-        playlistDAO.addSongToFavourite(loggedUser, song);
-    }
 
-    public void removeSongFromFavourites(Song song) throws ActionNotCompletedException {
-        playlistDAO.deleteSongFromFavourite(loggedUser, song);
-    }
+    public void addSongToFavourites(Song song) throws ActionNotCompletedException {playlistDAO.addSongToFavourite(loggedUser, song);}
+
+
+    public void removeSongFromFavourites(Song song) throws ActionNotCompletedException {playlistDAO.deleteSongFromFavourite(loggedUser, song);}
+
 
     public Song getSongById(Song song){
         return songDAO.getSongById(song.getID());
     }
 
 
-    public void likeSong(Song song) throws ActionNotCompletedException {
-        userDAO.likeSong(loggedUser, song);
-    }
-    public void deleteLike(Song song) throws ActionNotCompletedException {
-        userDAO.deleteLike(loggedUser, song);
-    }
+    public void likeSong(Song song) throws ActionNotCompletedException {userDAO.likeSong(loggedUser, song);}
+
+
+    public void deleteLike(Song song) throws ActionNotCompletedException {userDAO.deleteLike(loggedUser, song);}
+
 
     public List<Song> filterSong(String partialInput, String attributeField) throws ActionNotCompletedException {
 
@@ -178,21 +174,12 @@ public class MiddlewareConnector {
 
     //-----------------PLAYLIST-------------------------------------------------------------------
 
-    public void addSong(Playlist playlist, Song song) throws ActionNotCompletedException {
-        playlistDAO.addSong(playlist, song);
-    }
+    public void addSong(Playlist playlist, Song song) throws ActionNotCompletedException { playlistDAO.addSong(playlist, song);}
 
-    public void addSongToFavourite(User user, Song song){
-        try {
-            playlistDAO.addSongToFavourite(user, song);
-        } catch (ActionNotCompletedException e) {
-            e.printStackTrace();
-        }
-    }
 
-    public void createPlaylist(Playlist playlist) throws ActionNotCompletedException {
-        playlistDAO.createPlaylist(playlist);
-    }
+    public void addSongToFavourite(User user, Song song) throws ActionNotCompletedException {playlistDAO.addSongToFavourite(user, song);}
+
+    public void createPlaylist(Playlist playlist) throws ActionNotCompletedException {playlistDAO.createPlaylist(playlist);}
 
     public List<Playlist> getSuggestedPlaylists() {
         List<Playlist> suggestedPlaylists = new ArrayList<>();
@@ -204,9 +191,7 @@ public class MiddlewareConnector {
         return suggestedPlaylists;
     }
 
-    public Playlist getPlaylistById(String ID) throws ActionNotCompletedException{
-        return playlistDAO.getPlaylist(ID);
-    }
+    public Playlist getPlaylistById(String ID) throws ActionNotCompletedException{return playlistDAO.getPlaylist(ID);}
 
     public List<Song> getPlaylistSongs(Playlist playlist){
         List<Song> result = null;
@@ -218,6 +203,9 @@ public class MiddlewareConnector {
         }
         return result;
     }
+
+
+    public List<Playlist> getUserPlaylists() {return getUserPlaylists(loggedUser);}
 
     public List<Playlist> getUserPlaylists(User user) {
         List<Playlist> playlistList = new ArrayList<>();
@@ -231,15 +219,12 @@ public class MiddlewareConnector {
         return playlistList;
     }
 
-    public boolean isFollowingPlaylist(Playlist playlist) {
-        return userDAO.isFollowingPlaylist(loggedUser, playlist);
-    }
 
-    public void followPlaylist(Playlist playlist) throws ActionNotCompletedException {
-        userDAO.followPlaylist(loggedUser, playlist);
-    }
+    public boolean isFollowingPlaylist(Playlist playlist) {return userDAO.isFollowingPlaylist(loggedUser, playlist);}
 
-    public void unfollowPlaylist(Playlist playlist) throws ActionNotCompletedException {
-        userDAO.unfollowPlaylist(loggedUser, playlist);
-    }
+
+    public void followPlaylist(Playlist playlist) throws ActionNotCompletedException {userDAO.followPlaylist(loggedUser, playlist);}
+
+
+    public void unfollowPlaylist(Playlist playlist) throws ActionNotCompletedException {userDAO.unfollowPlaylist(loggedUser, playlist);}
 }
