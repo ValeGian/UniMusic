@@ -5,7 +5,7 @@
 
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-<AnchorPane fx:controller="it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui.sideBarController"
+<AnchorPane fx:id="parentPane" fx:controller="it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui.sideBarController"
             AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <Button fx:id="home" contentDisplay="RIGHT" minWidth="160" prefHeight="37.0" styleClass="menu_button" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="50.0">
         <graphic>
@@ -40,6 +40,18 @@
                 <Pane prefWidth="10.0" HBox.hgrow="ALWAYS" />
                 <Label text="Add Playlist" />
                 <Pane prefWidth="23.0" />
+            </HBox>
+        </graphic>
+    </Button>
+    <Button fx:id="statistics" contentDisplay="RIGHT" minWidth="160" prefHeight="37.0" styleClass="menu_button" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="161.0">
+        <graphic>
+            <HBox alignment="CENTER" mouseTransparent="true">
+                <ImageView>
+                    <Image url="@../img/statistic.png" />
+                </ImageView>
+                <Pane prefWidth="10.0" HBox.hgrow="ALWAYS" />
+                <Label text="Statistics" />
+                <Pane prefWidth="41.0" />
             </HBox>
         </graphic>
     </Button>
