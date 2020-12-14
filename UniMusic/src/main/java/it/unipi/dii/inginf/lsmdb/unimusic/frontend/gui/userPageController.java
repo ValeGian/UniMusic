@@ -2,6 +2,7 @@ package it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui;
 
 import it.unipi.dii.inginf.lsmdb.unimusic.frontend.MiddlewareConnector;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Playlist;
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.PrivilegeLevel;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Song;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.User;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
@@ -40,6 +41,7 @@ public class userPageController implements Initializable {
     @FXML private TextField userCompleteName;
 
     @FXML private Button followButton;
+    @FXML private Button deleteButton;
 
     @FXML private Button playlistsButton;
     @FXML private Button followingButton;
@@ -81,6 +83,13 @@ public class userPageController implements Initializable {
         if(userToDisplay.getUsername().equals(connector.getLoggedUser().getUsername()))
             parentPane.getChildren().remove(followButton);
         else {
+
+            if ( connector.getLoggedUser().getPrivilegeLevel() == null
+                    || connector.getLoggedUser().getPrivilegeLevel() != PrivilegeLevel.ADMIN
+            ) {
+                parentPane.getChildren().remove(deleteButton);
+            }
+
             if(connector.follows(userToDisplay)) {
                 followButton.setText("Unfollow");
                 followButton.setStyle("-fx-background-color: red; -fx-font-weight: bold");
@@ -104,6 +113,23 @@ public class userPageController implements Initializable {
                         followButton.setStyle("-fx-background-color: red; -fx-font-weight: bold");
                     }
                 } catch (ActionNotCompletedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        deleteButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    connector.deleteUser(userToDisplay);
+                    if(userToDisplay.getUsername().equals(connector.getLoggedUser().getUsername())) {
+                        connector.logout();
+                        App.setRoot("welcome");
+                    } else {
+                        App.setRoot("homepage");
+                    }
+                } catch (ActionNotCompletedException | IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -183,11 +209,25 @@ public class userPageController implements Initializable {
     }
 
     private void displayFollowingList() {
-
+        List<User> followingUsers = connector.getFollowers(userToDisplay);
+        if(followingUsers.size() == 0)
+            displayEmpty(listPane);
+        else {
+            for(User user: followingUsers) {
+                listPane.getChildren().add(createUserPreview(user));
+            }
+        }
     }
 
     private void displayFollowedList() {
-
+        List<User> followedUsers = connector.getFollowedUsers(userToDisplay);
+        if(followedUsers.size() == 0)
+            displayEmpty(listPane);
+        else {
+            for(User user: followedUsers) {
+                listPane.getChildren().add(createUserPreview(user));
+            }
+        }
     }
 
     //------------------------------------------------------------------------------------------------------------
@@ -209,13 +249,16 @@ public class userPageController implements Initializable {
         playlistInformations.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                System.out.println("OPEN PLAYLIST <" + playlist.getID() + "> " + playlist.getName());
+                try {
+                    playlistPageController.getPlaylistPage(playlist);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         Image playlistImage;
         HBox playlistGraphic = new HBox(30);
-        System.out.println(playlist.getUrlImage());
         try {
             if(playlist.getUrlImage() == null || playlist.getUrlImage().equals(""))
                 throw new Exception();
@@ -286,6 +329,79 @@ public class userPageController implements Initializable {
         }
 
         return playlistPreview;
+    }
+
+    private AnchorPane createUserPreview(User user) {
+        AnchorPane userPreview = new AnchorPane();
+        Separator horizontalSeparator = getHorizontalSeparator();
+        Button userInformations = new Button(); userInformations.setStyle("-fx-background-color: transparent");
+        userInformations.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    userPageController.getUserPage(user);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        HBox userGraphic = new HBox(30);
+        Image userImage = new Image(
+                "file:src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/user.png",
+                0,
+                previewImageHeight,
+                true,
+                true,
+                true
+        );
+        ImageView userImageView = new ImageView(userImage);
+
+        VBox nameBox = new VBox(10);
+        Text username = new Text(user.getUsername());
+        username.setFill(Color.WHITE); username.setStyle("-fx-font-weight: bold; -fx-font-size: 18px");
+        Text followersCount = new Text("(" +String.valueOf(connector.getFollowers(user).size())+ ") FOLLOWERS");
+        followersCount.setFill(Color.GRAY); username.setStyle("-fx-font-weight: bold; -fx-font-size: 16px");
+        nameBox.getChildren().addAll(username, followersCount);
+
+        userGraphic.getChildren().addAll(userImageView, nameBox);
+        userInformations.setGraphic(userGraphic);
+        userPreview.getChildren().addAll(horizontalSeparator, userInformations);
+
+        // add buttons to follow/unfollow users
+        Button followButton = new Button();
+        AnchorPane.setTopAnchor(followButton, 53.0); AnchorPane.setRightAnchor(followButton, 100.0);
+
+        if ( connector.follows(user)) {
+            followButton.setText("Unfollow");
+            followButton.setStyle("-fx-background-color: red; -fx-font-weight: bold; -fx-text-fill: white");
+        } else {
+            followButton.setText("Follow");
+            followButton.setStyle("-fx-background-color: green; -fx-font-weight: bold; -fx-text-fill: white");
+        }
+
+        followButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    if ( connector.follows(user)) {
+                        connector.unfollow(user);
+                        followButton.setText("Follow");
+                        followButton.setStyle("-fx-background-color: green; -fx-font-weight: bold; -fx-text-fill: white");
+                    } else {
+                        connector.follow(user);
+                        followButton.setText("Unfollow");
+                        followButton.setStyle("-fx-background-color: red; -fx-font-weight: bold; -fx-text-fill: white");
+                    }
+                } catch (ActionNotCompletedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        userPreview.getChildren().add(followButton);
+
+        return userPreview;
     }
 
     private Separator getHorizontalSeparator() {
