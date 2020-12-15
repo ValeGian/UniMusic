@@ -3,7 +3,6 @@ package it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui;
 import it.unipi.dii.inginf.lsmdb.unimusic.frontend.MiddlewareConnector;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Playlist;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.PrivilegeLevel;
-import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Song;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.User;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
 import javafx.event.ActionEvent;
@@ -24,7 +23,6 @@ import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -42,6 +40,7 @@ public class userPageController implements Initializable {
 
     @FXML private Button followButton;
     @FXML private Button deleteButton;
+    @FXML private Button upgradeLevelButton;
 
     @FXML private Button playlistsButton;
     @FXML private Button followingButton;
@@ -81,13 +80,15 @@ public class userPageController implements Initializable {
 
     private void initializeButtons() {
         if(userToDisplay.getUsername().equals(connector.getLoggedUser().getUsername()))
-            parentPane.getChildren().remove(followButton);
+            parentPane.getChildren().removeAll(followButton, upgradeLevelButton);
         else {
+            if(userToDisplay.getPrivilegeLevel() == PrivilegeLevel.ADMIN)
+                parentPane.getChildren().remove(upgradeLevelButton);
 
             if ( connector.getLoggedUser().getPrivilegeLevel() == null
                     || connector.getLoggedUser().getPrivilegeLevel() != PrivilegeLevel.ADMIN
             ) {
-                parentPane.getChildren().remove(deleteButton);
+                parentPane.getChildren().removeAll(deleteButton, upgradeLevelButton);
             }
 
             if(connector.follows(userToDisplay)) {
@@ -130,6 +131,18 @@ public class userPageController implements Initializable {
                         App.setRoot("homepage");
                     }
                 } catch (ActionNotCompletedException | IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        upgradeLevelButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                connector.updatePrivilegeLevel(userToDisplay, PrivilegeLevel.ADMIN);
+                try {
+                    userPageController.getUserPage(userToDisplay);
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
