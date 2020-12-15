@@ -1,5 +1,6 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.middleware.dao;
 
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Album;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Song;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
 import javafx.util.Pair;
@@ -30,7 +31,7 @@ public interface SongDAO {
 
     List<Song> getSongsByPartialArtist(String partialArtist) throws ActionNotCompletedException;
 
-    List<Document> findTopRatedAlbumPerDecade() throws ActionNotCompletedException;
+    List<Pair<Integer, Pair<Album, Double>>> findTopRatedAlbumPerDecade() throws ActionNotCompletedException;
 
     List<Pair<String, Integer>> findArtistsWithMostNumberOfHit(int hitLimit, int maxNumber) throws ActionNotCompletedException;
 

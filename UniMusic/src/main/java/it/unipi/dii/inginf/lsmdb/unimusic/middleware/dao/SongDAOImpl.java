@@ -5,8 +5,9 @@ import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Album;
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.PrivilegeLevel;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Song;
-import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.User;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.log.UMLogger;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.Collections;
@@ -16,14 +17,12 @@ import javafx.util.Pair;
 import org.apache.log4j.Logger;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.neo4j.driver.Record;
 import org.neo4j.driver.Result;
 import org.neo4j.driver.Session;
 import org.neo4j.driver.TransactionWork;
 import org.neo4j.driver.exceptions.Neo4jException;
 
 import java.time.LocalDate;
-import java.time.Year;
 import java.util.*;
 
 import static com.mongodb.client.model.Accumulators.sum;
@@ -43,8 +42,14 @@ public class SongDAOImpl implements SongDAO{
     public static void main(String[] args) throws ActionNotCompletedException {
 
         SongDAOImpl song = new SongDAOImpl();
-        //song.populateWithUser();
 
+
+        UserDAOImpl user = new UserDAOImpl();
+        user.updateUserPrivilegeLevel(user.getUserByUsername("ale98"), PrivilegeLevel.ADMIN);
+
+        //System.out.println(song.findTopRatedAlbumPerDecade().get(0));
+        //song.populateWithUser();
+/*
         User alessio = new User("ale98", "root", "Alessio", "Serra", 22);
         UserDAOImpl userDAO = new UserDAOImpl();
         //userDAO.createUser(alessio);
@@ -69,7 +74,11 @@ public class SongDAOImpl implements SongDAO{
             }
             song.incrementLikeCount(songExample);
             song.incrementLikeCount(songExample);
+
             System.out.format("%s\t%s\t%s\t%d\n", songExample.getID(), songExample.getLikeCount(), songExample.getAlbum().getTitle(), songExample.getReleaseYear());
+
+
+
         }
 
         PlaylistDAOImpl playlist = new PlaylistDAOImpl();
@@ -90,6 +99,7 @@ public class SongDAOImpl implements SongDAO{
             logger.info(doc.toString());
         }
         logger.info("FINISH");
+        */
     }
 
     //-----------------------------------------------  CREATE  -----------------------------------------------
@@ -255,37 +265,46 @@ public class SongDAOImpl implements SongDAO{
      * @throws ActionNotCompletedException
      */
     @Override
-    public List<Document> findTopRatedAlbumPerDecade() throws ActionNotCompletedException {
+    public List<Pair<Integer, Pair<Album, Double>>> findTopRatedAlbumPerDecade() throws ActionNotCompletedException {
 
         MongoCollection<Document> songCollection = MongoDriver.getInstance().getCollection(Collections.SONGS);
-        List<Document> topAlbum = new ArrayList<>();
+        List<Pair<Integer, Pair<Album, Double>>> topAlbums = new ArrayList<>();
 
         Document computeExpression = Document.parse("{$multiply: [{ $floor:{ $divide: [ \"$releaseYear\", 10 ] }}, 10]}");
 
         Bson match = match(exists("releaseYear"));
         Bson project = project(fields(excludeId(), include("releaseYear"), include("album"), include("rating"), computed("decade", computeExpression)));
 
-        Bson group = Document.parse("{$group: {_id: {album: \"$album.title\", decade: \"$decade\"}, avgRating: {$avg: \"$rating\"}}}");
+        Bson group = Document.parse("{$group: {_id: {title: \"$album.title\", url:\"$album.image\",  decade: \"$decade\"}, avgRating: {$avg: \"$rating\"}}}");
         Bson sortRate = sort(ascending("avgRating"));
 
         Bson group2 = Document.parse("{$group:{" +
                 "_id: \"$_id.decade\"," +
-                "topAlbum: {$last: \"$_id.album\"}," +
+                "topAlbumTitle: {$last: \"$_id.title\"}," +
+                "topAlbumUrl: {$last: \"$_id.url\"}," +
                 "avgRating:{$last: \"$avgRating\"}" +
                 "}}");
         Bson sortId = sort(ascending("_id"));
-        Bson project2 = project(fields(excludeId(), computed("decade", "$_id"), include("topAlbum"),  include("avgRating")));
+        Bson project2 = project(fields(excludeId(), computed("decade", "$_id"), include("topAlbumTitle"),  include("avgRating"), include("topAlbumUrl")));
 
         try (MongoCursor<Document> cursor = songCollection.aggregate(Arrays.asList(match, project,group, sortRate, group2, sortId, project2)).iterator()){
             while(cursor.hasNext()) {
                 Document record = cursor.next();
-                topAlbum.add(record);
+
+                Album albumToAdd = new Album(); albumToAdd.setTitle(record.getString("topAlbumTitle")); albumToAdd.setImage(record.getString("topAlbumUrl"));
+
+                int decade = record.getDouble("decade").intValue();
+
+                double avgRating = record.getDouble("avgRating");
+
+                Pair<Integer, Pair<Album, Double>> resultToAdd= new Pair<>(decade, new Pair<>(albumToAdd, avgRating));
+                topAlbums.add(resultToAdd);
             }
         } catch (MongoException mongoEx) {
             logger.error(mongoEx.getMessage());
             throw new ActionNotCompletedException(mongoEx);
         }
-        return topAlbum;
+        return topAlbums;
     }
 
     /**
@@ -338,16 +357,17 @@ public class SongDAOImpl implements SongDAO{
             session.writeTransaction((TransactionWork<List<Song>>) tx -> {
 
                 LocalDate lastMonth = LocalDate.now().minusDays(30);
+
                 String query = "MATCH (s:Song)<-[l:LIKES]-(u:User) " +
-                        "WHERE l.day IN [date(), date($lastMonth)] " +
+                        "WHERE l.day > date($lastMonth) " +
                         "WITH s, COUNT(*) as num ORDER BY num DESC " +
                         "RETURN s.songId as songId, s.title as title, s.artist as artist, s.imageUrl as imageUrl " +
                         "LIMIT $limit";
 
                 Result result = tx.run(query, parameters("lastMonth", lastMonth.toString(), "limit", limit));
-                while(result.hasNext())
+                while(result.hasNext()) {
                     hotSongs.add(new Song(result.next()));
-
+                }
                 return hotSongs;
             });
         } catch (Neo4jException neoEx) {

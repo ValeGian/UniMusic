@@ -38,8 +38,9 @@ public class UserAndPlaylistPopulation {
         instance.completelyRandomLikes(3000);
         instance.completelyRandomUserFollows(2000);
          */
-        instance.createRandomPlaylist(350, 10, 20);
-        instance.completelyRandomPlaylistFollow(600);
+        Playlist p = instance.getRandomPlaylist();
+        System.out.println(p.getID() + "       " + p.getAuthor());
+        instance.completelyRandomPlaylistFollow(3);
     }
 
     private void populateWithUser(int howManyUsers){
