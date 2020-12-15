@@ -53,6 +53,25 @@
                                  </HBox>
                               </graphic>
                            </Button>
+                           <Button fx:id="upgradeLevelButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="160.0" style="-fx-background-color: transparent;" text="Button" AnchorPane.leftAnchor="385.0" AnchorPane.topAnchor="105.0">
+                              <graphic>
+                                 <HBox maxWidth="-Infinity" minWidth="-Infinity">
+                                    <children>
+                                       <ImageView pickOnBounds="true" preserveRatio="true">
+                                          <image>
+                                             <Image url="@img/arrow-up.png" />
+                                          </image>
+                                       </ImageView>
+                                       <Pane prefWidth="10.0" />
+                                       <Label style="-fx-text-fill: lime;" text="Upgrade Privilege Level to Admin" textFill="LIME">
+                                          <font>
+                                             <Font name="System Bold" size="18.0" />
+                                          </font>
+                                       </Label>
+                                    </children>
+                                 </HBox>
+                              </graphic>
+                           </Button>
                            <HBox spacing="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="170.0">
                               <children>
                                  <Button fx:id="playlistsButton" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Playlists" textFill="GRAY">

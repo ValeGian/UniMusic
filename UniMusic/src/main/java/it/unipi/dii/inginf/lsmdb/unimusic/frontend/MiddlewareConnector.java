@@ -20,7 +20,7 @@ public class MiddlewareConnector {
     private User loggedUser = new User("AleLew1996", "43", "Alex", "Lewis", 24);
     //private User loggedUser = new User("valegiann", "root", "Valerio", "Giannini", 22);
     private MiddlewareConnector() {
-        loggedUser.setPrivilegeLevel(PrivilegeLevel.ADMIN);
+        //loggedUser.setPrivilegeLevel(PrivilegeLevel.ADMIN);
     }
 
     public static MiddlewareConnector getInstance() { return instance; }
@@ -69,6 +69,13 @@ public class MiddlewareConnector {
 
     public void deleteUser(User user) throws ActionNotCompletedException{userDAO.deleteUser(user);}
 
+    public void updatePrivilegeLevel(User user, PrivilegeLevel newPrivLevel) {
+        try {
+            userDAO.updateUserPrivilegeLevel(user, newPrivLevel);
+        } catch (ActionNotCompletedException e) {
+            e.printStackTrace();
+        }
+    }
 
     public List<User> getSuggestedUsers() {
         List<User> suggUsers;
@@ -237,7 +244,6 @@ public class MiddlewareConnector {
         }
         return result;
     }
-
 
     public List<Playlist> getUserPlaylists() {return getUserPlaylists(loggedUser);}
 
