@@ -38,8 +38,11 @@ public class welcomeController implements Initializable {
             @Override
             public void handle(KeyEvent keyEvent) {
                 String text = regAge.getText();
-                if(!text.matches("\\d")) {
+                if(!text.matches("[0-9]{1,2}?")) {
                     regAge.setText(text.replaceAll("[^\\d]", ""));
+                    text = regAge.getText();
+                    int substring = text.length() > 2 ? 2 : text.length();
+                    regAge.setText(text.substring(0, substring));
                 }
             }
         });
