@@ -431,9 +431,9 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public List<String> getFavouriteGenres(int numGenres) throws ActionNotCompletedException{
+    public List<Pair<String, Integer>> getFavouriteGenres(int numGenres) throws ActionNotCompletedException{
         MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
-        List<String> result = new ArrayList<String>();
+        List<Pair<String, Integer>> result = new ArrayList<>();
         Bson unwind1 = unwind("$createdPlaylists");
         Bson unwind2 = unwind("$createdPlaylists.songs");
         Bson group = Document.parse("{$group: {" +
@@ -442,11 +442,10 @@ public class UserDAOImpl implements UserDAO{
                                              "}}");
         Bson sort = sort(descending("totalSongs"));
         Bson limit = limit(numGenres);
-        Bson project = project(include("_id"));
-        try (MongoCursor<Document> cursor = usersCollection.aggregate(Arrays.asList(unwind1, unwind2, group, sort, limit, project)).iterator()) {
+        try (MongoCursor<Document> cursor = usersCollection.aggregate(Arrays.asList(unwind1, unwind2, group, sort, limit)).iterator()) {
             while(cursor.hasNext()) {
                 Document genre = cursor.next();
-                result.add(genre.getString("_id"));
+                result.add(new Pair<>(genre.getString("_id"), genre.getInteger("totalSongs")));
             }
         }
         return result;

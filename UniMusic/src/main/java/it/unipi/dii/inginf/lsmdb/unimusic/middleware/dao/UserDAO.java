@@ -2,6 +2,7 @@ package it.unipi.dii.inginf.lsmdb.unimusic.middleware.dao;
 
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.*;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
+import javafx.util.Pair;
 
 import java.util.List;
 
@@ -46,5 +47,5 @@ public interface UserDAO {
 
     public List<Playlist> getFollowedPlaylist(User user) throws ActionNotCompletedException;
 
-    public List<String> getFavouriteGenres(int numGenres) throws ActionNotCompletedException;
+    public List<Pair<String, Integer>> getFavouriteGenres(int numGenres) throws ActionNotCompletedException;
 }
