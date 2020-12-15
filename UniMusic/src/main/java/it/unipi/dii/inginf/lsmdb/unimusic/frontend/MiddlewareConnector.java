@@ -1,6 +1,5 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.frontend;
 
-import it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui.App;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.dao.*;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.*;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
@@ -9,6 +8,7 @@ import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.neo4jconnection
 
 import java.util.ArrayList;
 import java.util.List;
+import javafx.util.Pair;
 
 public class MiddlewareConnector {
     private static final MiddlewareConnector instance = new MiddlewareConnector();
@@ -20,7 +20,7 @@ public class MiddlewareConnector {
     private User loggedUser = new User("AleLew1996", "43", "Alex", "Lewis", 24);
     //private User loggedUser = new User("valegiann", "root", "Valerio", "Giannini", 22);
     private MiddlewareConnector() {
-        //loggedUser.setPrivilegeLevel(PrivilegeLevel.ADMIN);
+        loggedUser.setPrivilegeLevel(PrivilegeLevel.ADMIN);
     }
 
     public static MiddlewareConnector getInstance() { return instance; }
@@ -120,9 +120,18 @@ public class MiddlewareConnector {
         userDAO.followUser(loggedUser, userToBeFollowed);
     }
 
-
     public void unfollow(User userToBeUnfollowed) throws ActionNotCompletedException {userDAO.unfollowUser(loggedUser, userToBeUnfollowed);}
 
+    public List<String> getTopFavouriteGenres(int limit) {
+        List<String> favouriteGenres;
+        try {
+            favouriteGenres = userDAO.getFavouriteGenres(limit);
+        } catch (ActionNotCompletedException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+        return favouriteGenres;
+    }
 
     //--------------------------SONG-------------------------------------------------------------------
 
@@ -172,17 +181,27 @@ public class MiddlewareConnector {
             return songDAO.getSongsByPartialAlbum(partialInput);
     }
 
+    public List<Pair<String, Integer>> getTopArtists(int hitThreshold, int limit) {
+        List<Pair<String, Integer>> topArtists;
+        try {
+            topArtists = songDAO.findArtistsWithMostNumberOfHit(hitThreshold, limit);
+        } catch (ActionNotCompletedException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+        return topArtists;
+    }
+
     //-----------------PLAYLIST-------------------------------------------------------------------
 
     public void addSong(Playlist playlist, Song song) throws ActionNotCompletedException { playlistDAO.addSong(playlist, song);}
-
 
     public void addSongToFavourite(User user, Song song) throws ActionNotCompletedException {playlistDAO.addSongToFavourite(user, song);}
 
     public void createPlaylist(Playlist playlist) throws ActionNotCompletedException {playlistDAO.createPlaylist(playlist);}
 
     public List<Playlist> getSuggestedPlaylists() {
-        List<Playlist> suggestedPlaylists = new ArrayList<>();
+        List<Playlist> suggestedPlaylists;
         try {
             suggestedPlaylists = playlistDAO.getSuggestedPlaylists(loggedUser);
         } catch (ActionNotCompletedException e) {
