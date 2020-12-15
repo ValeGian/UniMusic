@@ -192,6 +192,21 @@ public class MiddlewareConnector {
         return topArtists;
     }
 
+    public List<Pair<Integer, Pair<Album, Double>>> getTopAlbumForDecade() {
+        //List<Pair<Integer, Pair<Album, Integer>>> topAlbums;
+        //try {
+            //topAlbums = songDAO.findTopRatedAlbumPerDecade();
+        //} catch (ActionNotCompletedException e) {
+            //e.printStackTrace();
+            //return new ArrayList<>();
+        //}
+        //return topAlbums;
+        Pair<Integer, Pair<Album, Double>> elem = new Pair<Integer, Pair<Album, Double>>(1990, new Pair<Album, Double>(new Album("Album di prova", null), 85.6));
+        List<Pair<Integer, Pair<Album, Double>>> list = new ArrayList();
+        list.add(elem);
+        return list;
+    }
+
     //-----------------PLAYLIST-------------------------------------------------------------------
 
     public void addSong(Playlist playlist, Song song) throws ActionNotCompletedException { playlistDAO.addSong(playlist, song);}

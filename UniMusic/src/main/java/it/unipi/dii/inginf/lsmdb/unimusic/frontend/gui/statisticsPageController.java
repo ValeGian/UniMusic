@@ -1,13 +1,18 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui;
 
 import it.unipi.dii.inginf.lsmdb.unimusic.frontend.MiddlewareConnector;
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Album;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Playlist;
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -26,7 +31,7 @@ public class statisticsPageController implements Initializable {
     private static MiddlewareConnector connector = MiddlewareConnector.getInstance();
     private static final StatisticToShow defaultStatistic = StatisticToShow.POPULAR_ARTISTS;
     private static StatisticToShow statisticToShow = defaultStatistic;
-    private static final int previewImageHeight = 100;
+    private static final int previewImageHeight = 150;
 
     @FXML private AnchorPane parentPane;
 
@@ -162,7 +167,9 @@ public class statisticsPageController implements Initializable {
     }
 
     private void displayTopAlbumForDecade() {
-
+        loadPane = new VBox(10);
+        statisticPane.getChildren().addAll(loadPane);
+        loadTopAlbumForDecade();
     }
 
     private void displayTopFavouriteGenres() {
@@ -214,7 +221,19 @@ public class statisticsPageController implements Initializable {
     }
 
     private void loadTopAlbumForDecade() {
-
+        loadPane.getChildren().clear();
+        List<Pair<Integer, Pair<Album, Double>>> albumForDecade = connector.getTopAlbumForDecade();
+        if(albumForDecade.size() == 0)
+            displayEmpty(loadPane);
+        else {
+            for (Pair<Integer, Pair<Album, Double>> albumInfo: albumForDecade) {
+                loadPane.getChildren().add(createTopAlbumView(
+                        albumInfo.getKey(),
+                        albumInfo.getValue().getKey(),
+                        albumInfo.getValue().getValue()
+                ));
+            }
+        }
     }
 
     private void loadTopFavouriteGenres(int limit) {
@@ -240,8 +259,45 @@ public class statisticsPageController implements Initializable {
         return artistNode;
     }
 
-    private Text createTopAlbumView() {
-        return new Text();
+    private HBox createTopAlbumView(int decade, Album album, double avgRating) {
+        Image albumImage;
+        try {
+            if(album.getImage() == null || album.getImage().equals(""))
+                throw new Exception();
+
+            albumImage = new Image(
+                    album.getImage(),
+                    0,
+                    previewImageHeight,
+                    true,
+                    true,
+                    true
+            );
+
+            if(albumImage.isError()) {
+                throw new Exception();
+            }
+
+        }catch(Exception ex){
+            albumImage = new Image(
+                    "file:src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/empty.jpg",
+                    0,
+                    previewImageHeight,
+                    true,
+                    true,
+                    true
+            );
+        }
+
+        ImageView albumImageView = new ImageView(albumImage);
+
+        Text decadeText = new Text(String.valueOf(decade)+ "s"); decadeText.setFill(Color.WHITE); decadeText.setStyle("-fx-font-weight: bold; -fx-font-size: 24px");
+        Text title = new Text(album.getTitle()); title.setFill(Color.WHITE); title.setStyle("-fx-font-weight: bold; -fx-font-size: 20px");
+        Text rating = new Text("Average Rating: " + String.valueOf(avgRating)); rating.setFill(Color.GRAY); title.setStyle("-fx-font-weight: bold; -fx-font-size: 18px");
+
+        VBox albumInfo = new VBox(5, decadeText, title, rating);
+        HBox albumGraphic = new HBox(10, albumImageView, albumInfo);
+        return albumGraphic;
     }
 
     private Text createTopGenresView(int order, String genre) {
