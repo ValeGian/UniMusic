@@ -39,6 +39,10 @@ public class statisticsPageController implements Initializable {
     @FXML private Button topAlbumForDecadeButton;
     @FXML private Button topFavouriteGenresButton;
 
+    @FXML private TextField totalSongsLabel;
+    @FXML private TextField totalUsersLabel;
+    @FXML private TextField totalPlaylistsLabel;
+
     @FXML private VBox statisticPane;
 
     private HBox firstFilter;
@@ -114,11 +118,21 @@ public class statisticsPageController implements Initializable {
                 displayTopFavouriteGenres();
         }
 
+        displayNumberStatistics();
+
         statisticToShow = defaultStatistic;
     }
 
 
     //--------------------------------------------------------------------------------------------------------
+
+
+    private void displayNumberStatistics() {
+        totalSongsLabel.setText("Total songs: " + ((connector.getTotalSongs() == -1)?"Error counting": connector.getTotalSongs()));
+        totalUsersLabel.setText("Total users: " + ((connector.getTotalSongs() == -1)?"Error counting": connector.getTotalUsers()));
+        totalPlaylistsLabel.setText("Total playlists: " + ((connector.getTotalSongs() == -1)?"Error counting": connector.getTotalPlaylists()));
+    }
+
 
     private void displayPopularArtists() {
         Text hitThreshold = new Text("Hit Threshold: "); hitThreshold.setFill(Color.WHITE); hitThreshold.setStyle("-fx-font-weight: bold; -fx-font-size: 20px");

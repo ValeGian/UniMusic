@@ -300,6 +300,20 @@ public class PlaylistDAOImpl implements PlaylistDAO{
         return firstList;
     }
 
+    @Override
+    public int getTotalPlaylists() {
+        try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
+            Result result = session.run("MATCH (:Playlist) RETURN COUNT(*) AS NUM");
+            if(result.hasNext())
+                return result.next().get("NUM").asInt();
+            else
+                return -1;
+        }catch (Neo4jException neo4){
+            neo4.printStackTrace();
+            return -1;
+        }
+    }
+
     private void createPlaylistDocument(Playlist playlist) {
         UserDAOImpl userDAO = new UserDAOImpl();
         userDAO.addPlaylistToUserDocument(new User(playlist.getAuthor()), playlist);

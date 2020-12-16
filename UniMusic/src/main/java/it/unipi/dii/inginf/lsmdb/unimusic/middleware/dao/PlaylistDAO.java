@@ -36,4 +36,6 @@ public interface PlaylistDAO {
     public List<Playlist> getSuggestedPlaylists(User user) throws ActionNotCompletedException;
 
     public List<Playlist> getSuggestedPlaylists(User user, int limit) throws ActionNotCompletedException;
+
+    int getTotalPlaylists();
 }

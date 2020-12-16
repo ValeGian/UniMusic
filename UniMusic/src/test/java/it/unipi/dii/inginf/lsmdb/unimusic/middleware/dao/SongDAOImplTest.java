@@ -25,36 +25,43 @@ public class SongDAOImplTest {
     }
 
     @Test
-    public void WHEN_filterSong_has_partialInput_null_THEN_return_list_is_empty() throws ActionNotCompletedException {
-        List<Song> listTest = song.filterSong(null, 3, "title");
-        Assertions.assertTrue(listTest.size() == 0);
+    public void WHEN_filterSong_has_partialInput_null_THEN_return_empty_list() throws ActionNotCompletedException {
+        Assertions.assertTrue(song.filterSong(null, 3, "title").size() == 0);
     }
 
     @Test
-    public void WHEN_filterSong_has_maxNumber_negative_THEN_throws_IllegalArgumentException() {
+    public void WHEN_filterSong_has_maxNumber_non_positive_THEN_throws_IllegalArgumentException() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            song.filterSong("as", -1, "title");
+            song.filterSong("test", 0, "title");
         });
     }
 
     @Test
     public void WHEN_filterSong_has_attributeField_null_THEN_throws_IllegalArgumentException() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            song.filterSong("as", 3, null);
+            song.filterSong("test", 3, null);
         });
     }
 
     @Test
-    public void WHEN_findArtistsWithMostNumberOfHit_has_maxNumber_negative_THEN_throws_IllegalArgumentException() {
+    public void WHEN_filterSong_has_attributeField_that_does_not_exist_THEN_return_empty_list() {
+        try {
+            Assertions.assertTrue(song.filterSong("test", 3, "test").size() == 0);
+        } catch (ActionNotCompletedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void WHEN_findArtistsWithMostNumberOfHit_has_maxNumber_non_positive_THEN_throws_IllegalArgumentException() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            song.findArtistsWithMostNumberOfHit(2, -1);
+            song.findArtistsWithMostNumberOfHit(2, 0);
         });
     }
 
     @Test
-    public void WHEN_getSongByID_has_songId_Null_THEN_return_NULL() throws ActionNotCompletedException {
-        Song songTest = song.getSongById(null);
-        Assertions.assertNull(songTest);
+    public void WHEN_getSongByID_has_songId_Null_THEN_return_NULL() {
+        Assertions.assertNull(song.getSongById(null));
     }
 
     @Test

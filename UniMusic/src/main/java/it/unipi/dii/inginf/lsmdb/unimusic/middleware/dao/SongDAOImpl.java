@@ -209,7 +209,7 @@ public class SongDAOImpl implements SongDAO{
     @VisibleForTesting
     public List<Song> filterSong(String partialInput, int maxNumber, String attributeField) throws ActionNotCompletedException {
 
-        if(attributeField == null || maxNumber < 0)
+        if(attributeField == null || maxNumber <= 0)
             throw new IllegalArgumentException();
 
         MongoCollection<Document> songCollection = MongoDriver.getInstance().getCollection(Collections.SONGS);
@@ -317,7 +317,7 @@ public class SongDAOImpl implements SongDAO{
     @Override
     public List<Pair<String, Integer>> findArtistsWithMostNumberOfHit(int hitLimit, int maxNumber) throws ActionNotCompletedException {
 
-        if(maxNumber < 0)
+        if(maxNumber <= 0)
             throw new IllegalArgumentException();
 
         MongoCollection<Document> songCollection = MongoDriver.getInstance().getCollection(Collections.SONGS);
@@ -419,6 +419,20 @@ public class SongDAOImpl implements SongDAO{
         } catch (MongoException mongoEx) {
             logger.error(mongoEx.getMessage());
             throw new ActionNotCompletedException(mongoEx);
+        }
+    }
+
+    @Override
+    public int getTotalSongs() {
+        try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
+            Result result = session.run("MATCH (:Song) RETURN COUNT(*) AS NUM");
+            if(result.hasNext())
+                return result.next().get("NUM").asInt();
+            else
+                return -1;
+        }catch (Neo4jException neo4){
+            neo4.printStackTrace();
+            return -1;
         }
     }
 

@@ -140,6 +140,8 @@ public class MiddlewareConnector {
         return favouriteGenres;
     }
 
+    public int getTotalUsers() { return userDAO.getTotalUsers();}
+
     //--------------------------SONG-------------------------------------------------------------------
 
     public List<Song> getHotSongs() {
@@ -209,6 +211,9 @@ public class MiddlewareConnector {
         }
         return topAlbums;
     }
+
+    public int getTotalSongs() { return songDAO.getTotalSongs();}
+
 
     //-----------------PLAYLIST-------------------------------------------------------------------
 
@@ -282,4 +287,6 @@ public class MiddlewareConnector {
     public Playlist getFavourite() throws ActionNotCompletedException {
         return playlistDAO.getFavourite(loggedUser);
     }
+
+    public int getTotalPlaylists() { return playlistDAO.getTotalPlaylists();}
 }

@@ -1,5 +1,6 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.middleware.dao;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
@@ -145,9 +146,9 @@ public class UserDAOImpl implements UserDAO{
         return getUserByPartialUsername(partialUsername, 40);
     }
 
-    private List<User> getUserByPartialUsername(String partialUsername, int limitResult) throws ActionNotCompletedException {
-        if(limitResult < 0)
-            throw new IllegalArgumentException();
+    @VisibleForTesting
+    List<User> getUserByPartialUsername(String partialUsername, int limitResult) throws ActionNotCompletedException {
+        if(limitResult <= 0) throw new IllegalArgumentException();
 
         MongoCollection<Document> userCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
         List<User> usersToReturn = new ArrayList<>();
@@ -173,6 +174,8 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public List<User> getSuggestedUsers(User user, int limit) throws ActionNotCompletedException {
+        if(limit <= 0 || user == null) throw new IllegalArgumentException();
+
         List<User> list = new ArrayList<>();
         try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
             //First layer Suggestion
@@ -233,6 +236,8 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public void followUser(User userFollowing, User userFollowed) throws ActionNotCompletedException {
+        if(userFollowing == null || userFollowed == null) throw new IllegalArgumentException();
+
         try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
             session.run("MATCH (following:User { username: $following }) "
                             + "MATCH (followed:User { username: $followed }) "
@@ -250,6 +255,8 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public void unfollowUser(User userFollowing, User userFollowed) throws ActionNotCompletedException {
+        if(userFollowing == null || userFollowed == null) throw new IllegalArgumentException();
+
         try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
             session.run(
                     "MATCH (:User { username: $username1 })-[f:FOLLOWS_USER]->(:User { username: $username2 }) "
@@ -265,6 +272,8 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public void followPlaylist(User user, Playlist playlist) throws ActionNotCompletedException {
+        if(user == null || playlist == null) throw new IllegalArgumentException();
+
         try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
             session.run(
                     "MATCH (following:User { username: $following }) "
@@ -281,6 +290,8 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public boolean isFollowingPlaylist(User user, Playlist playlist) {
+        if(user == null || playlist == null) throw new IllegalArgumentException();
+
         try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
             Boolean follows = session.readTransaction((TransactionWork<Boolean>) tx -> {
                 Result result = tx.run(
@@ -304,6 +315,8 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public boolean isFollowedBy(User followed, User following) {
+        if(followed == null || following == null) throw new IllegalArgumentException();
+
         try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
             Boolean follows = session.readTransaction((TransactionWork<Boolean>) tx -> {
                 Result result = tx.run(
@@ -327,6 +340,8 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public void unfollowPlaylist(User user, Playlist playlist) throws ActionNotCompletedException {
+        if(user == null || playlist == null) throw new IllegalArgumentException();
+
         try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
             session.run(
                     "MATCH (:User { username: $username })-[f:FOLLOWS_PLAYLIST]->(:Playlist { playlistId: $playlistId }) "
@@ -342,6 +357,8 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public void likeSong(User user, Song song) throws ActionNotCompletedException {
+        if(user == null || song == null) throw new IllegalArgumentException();
+
         try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
             session.run(
                     "MATCH (u:User { username: $username }) "
@@ -362,6 +379,8 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public boolean userLikesSong(User user, Song song) {
+        if(user == null || song == null) throw new IllegalArgumentException();
+
         try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
             Boolean likes = session.readTransaction((TransactionWork<Boolean>) tx -> {
                 Result result = tx.run(
@@ -385,6 +404,8 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public void deleteLike(User user, Song song) throws ActionNotCompletedException {
+        if(user == null || song == null) throw new IllegalArgumentException();
+
         try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
             session.run(
                     "MATCH (:User { username: $username })-[l:LIKES]->(:Song { songId: $songId }) "
@@ -404,6 +425,9 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public void updateUserPrivilegeLevel(User user, PrivilegeLevel newPrivLevel)  throws ActionNotCompletedException{
+        if(user == null || newPrivLevel == null)
+            throw new IllegalArgumentException();
+
         user.setPrivilegeLevel(newPrivLevel);
         try {
             updateUserDocument(user);
@@ -416,6 +440,8 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public List<Playlist> getAllPlaylist(User user) throws ActionNotCompletedException{
+        if(user == null) throw new IllegalArgumentException();
+
         MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
         List<Playlist> playlists = new ArrayList<Playlist>();
 
@@ -436,6 +462,8 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public List<Playlist> getFollowedPlaylist(User user) throws ActionNotCompletedException {
+        if(user == null) throw new IllegalArgumentException();
+
         try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
             List<Playlist> playlists = session.readTransaction((TransactionWork<List<Playlist>>) tx -> {
                 Result result = tx.run(
@@ -458,6 +486,8 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public List<User> getFollowedUsers(User user) throws ActionNotCompletedException {
+        if(user == null) throw new IllegalArgumentException();
+
         try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
             List<User> followedUsers = session.readTransaction((TransactionWork<List<User>>) tx -> {
                 Result result = tx.run(
@@ -479,6 +509,8 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public List<User> getFollowers(User user) throws ActionNotCompletedException {
+        if(user == null) throw new IllegalArgumentException();
+
         try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
             List<User> followingUsers = session.readTransaction((TransactionWork<List<User>>) tx -> {
                 Result result = tx.run(
@@ -500,6 +532,8 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public List<Pair<String, Integer>> getFavouriteGenres(int numGenres) throws ActionNotCompletedException{
+        if(numGenres <= 0) throw new IllegalArgumentException();
+
         MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
         List<Pair<String, Integer>> result = new ArrayList<>();
         Bson unwind1 = unwind("$createdPlaylists");
@@ -521,6 +555,8 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public void deleteUser(User user) throws ActionNotCompletedException {
+        if(user == null) throw new IllegalArgumentException();
+
         List<Playlist> userPlaylists = getAllPlaylist(user);
 
         PlaylistDAO playlistDAO = new PlaylistDAOImpl();
@@ -540,9 +576,26 @@ public class UserDAOImpl implements UserDAO{
         }
     }
 
+    @Override
+    public int getTotalUsers() {
+        try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
+            Result result = session.run("MATCH (:User) RETURN COUNT(*) AS NUM");
+            if(result.hasNext())
+                return result.next().get("NUM").asInt();
+            else
+                return -1;
+        }catch (Neo4jException neo4){
+            neo4.printStackTrace();
+            return -1;
+        }
+    }
+
     //--------------------------PACKAGE-----------------------------------------------------------
 
     void addPlaylistToUserDocument(User user, Playlist playlist)  throws MongoException{
+
+        if(user == null || playlist == null) throw new IllegalArgumentException();
+
         Document playlistDoc = playlist.toBsonDocument();
 
         MongoCollection<Document> userColl = MongoDriver.getInstance().getCollection(Collections.USERS);

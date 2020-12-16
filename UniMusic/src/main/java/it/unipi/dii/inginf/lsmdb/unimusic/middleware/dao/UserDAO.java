@@ -166,4 +166,6 @@ public interface UserDAO {
      * @throws ActionNotCompletedException when the operation fails
      */
     public void deleteUser(User user) throws ActionNotCompletedException;
+
+    int getTotalUsers();
 }

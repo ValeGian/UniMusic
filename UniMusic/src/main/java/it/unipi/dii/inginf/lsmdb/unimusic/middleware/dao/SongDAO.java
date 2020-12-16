@@ -40,4 +40,6 @@ public interface SongDAO {
     void incrementLikeCount(Song song) throws ActionNotCompletedException;
 
     void decrementLikeCount(Song song) throws ActionNotCompletedException;
+
+    int getTotalSongs();
 }

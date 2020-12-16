@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -13,53 +19,67 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
 <?import javafx.scene.text.Text?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="root" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui.statisticsPageController">
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="536.0" prefWidth="794.0" styleClass="root" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui.statisticsPageController">
     <stylesheets>
         <URL value="@default.css" />
     </stylesheets>
-    <AnchorPane layoutX="238.0" layoutY="83.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
-        <children>
-            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" vbarPolicy="NEVER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0">
-                <content>
-                    <VBox prefHeight="200.0" prefWidth="100.0">
-                        <children>
-                            <AnchorPane fx:id="parentPane" prefHeight="200.0" prefWidth="200.0">
-                                <children>
-                                    <Text layoutX="76.0" layoutY="48.0" strokeType="OUTSIDE" styleClass="text-id" text="Statistics" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="5.0">
-                                    <font>
-                                        <Font name="System Bold" size="64.0" />
-                                    </font></Text>
-                                    <HBox spacing="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="170.0">
-                                        <children>
-                                            <Button fx:id="popularArtistsButton" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Popular Artists" textFill="GRAY">
-                                                <font>
-                                                    <Font name="System Bold" size="26.0" />
-                                                </font>
-                                            </Button>
-                                            <Separator maxHeight="-Infinity" minHeight="-Infinity" orientation="VERTICAL" prefHeight="56.0" />
-                                            <Button fx:id="topAlbumForDecadeButton" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Top Album For Decade" textFill="GRAY">
-                                                <font>
-                                                    <Font name="System Bold" size="26.0" />
-                                                </font>
-                                            </Button>
-                                            <Separator maxHeight="-Infinity" minHeight="-Infinity" orientation="VERTICAL" prefHeight="56.0" />
-                                            <Button fx:id="topFavouriteGenresButton" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Top Favourite Genres" textFill="GRAY">
-                                                <font>
-                                                    <Font name="System Bold" size="26.0" />
-                                                </font>
-                                            </Button>
-                                        </children>
-                                    </HBox>
-                                    <VBox fx:id="statisticPane" prefHeight="200.0" prefWidth="100.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="230.0" />
-                                </children>
-                            </AnchorPane>
-                        </children>
-                    </VBox>
-                </content>
-            </ScrollPane>
-        </children></AnchorPane>
-    <fx:include source="FXML_utility/search_bar.fxml" />
-    <fx:include source="FXML_utility/side_menu.fxml" />
+   <children>
+       <AnchorPane layoutX="238.0" layoutY="83.0" prefHeight="476.0" prefWidth="963.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="-329.0" AnchorPane.topAnchor="60.0">
+           <children>
+               <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="476.0" prefWidth="981.0" vbarPolicy="NEVER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="-352.0" AnchorPane.topAnchor="0.0">
+                   <content>
+                       <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                               <AnchorPane fx:id="parentPane" prefHeight="200.0" prefWidth="200.0">
+                                   <children>
+                                       <Text layoutX="76.0" layoutY="48.0" strokeType="OUTSIDE" styleClass="text-id" text="Statistics" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="5.0">
+                                       <font>
+                                           <Font name="System Bold" size="64.0" />
+                                       </font>
+                              </Text>
+                              <HBox prefHeight="100.0" prefWidth="1000.0" spacing="130.0" AnchorPane.topAnchor="80.0">
+                                 <children>
+                                    <TextField fx:id="totalSongsLabel" alignment="CENTER" maxWidth="234.0" prefHeight="25.0" prefWidth="234.0" text="Total songs: 100000" />
+                                    <TextField fx:id="totalUsersLabel" alignment="CENTER" text="Total users: 10000" />
+                                    <TextField fx:id="totalPlaylistsLabel" alignment="CENTER" text="Total playlists: 100000" />
+                                 </children>
+                                 <padding>
+                                    <Insets left="10.0" top="30.0" />
+                                 </padding>
+                              </HBox>
+                                       <HBox spacing="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="170.0">
+                                           <children>
+                                               <Button fx:id="popularArtistsButton" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Popular Artists" textFill="GRAY">
+                                                   <font>
+                                                       <Font name="System Bold" size="26.0" />
+                                                   </font>
+                                               </Button>
+                                               <Separator maxHeight="-Infinity" minHeight="-Infinity" orientation="VERTICAL" prefHeight="56.0" />
+                                               <Button fx:id="topAlbumForDecadeButton" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Top Album For Decade" textFill="GRAY">
+                                                   <font>
+                                                       <Font name="System Bold" size="26.0" />
+                                                   </font>
+                                               </Button>
+                                               <Separator maxHeight="-Infinity" minHeight="-Infinity" orientation="VERTICAL" prefHeight="56.0" />
+                                               <Button fx:id="topFavouriteGenresButton" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Top Favourite Genres" textFill="GRAY">
+                                                   <font>
+                                                       <Font name="System Bold" size="26.0" />
+                                                   </font>
+                                               </Button>
+                                           </children>
+                                       </HBox>
+                                       <VBox fx:id="statisticPane" prefHeight="200.0" prefWidth="100.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="230.0" />
+                                   </children>
+                               </AnchorPane>
+                           </children>
+                       </VBox>
+                   </content>
+               </ScrollPane>
+           </children>
+      </AnchorPane>
+       <fx:include source="FXML_utility/search_bar.fxml" />
+       <fx:include source="FXML_utility/side_menu.fxml" />
+   </children>
 </AnchorPane>
