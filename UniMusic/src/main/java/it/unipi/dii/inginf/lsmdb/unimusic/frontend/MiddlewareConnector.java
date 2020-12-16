@@ -20,7 +20,7 @@ public class MiddlewareConnector {
     private User loggedUser = new User("AleLew1996", "43", "Alex", "Lewis", 24);
     //private User loggedUser = new User("valegiann", "root", "Valerio", "Giannini", 22);
     private MiddlewareConnector() {
-        //loggedUser.setPrivilegeLevel(PrivilegeLevel.ADMIN);
+        loggedUser.setPrivilegeLevel(PrivilegeLevel.ADMIN);
     }
 
     public static MiddlewareConnector getInstance() { return instance; }
@@ -129,8 +129,8 @@ public class MiddlewareConnector {
 
     public void unfollow(User userToBeUnfollowed) throws ActionNotCompletedException {userDAO.unfollowUser(loggedUser, userToBeUnfollowed);}
 
-    public List<String> getTopFavouriteGenres(int limit) {
-        List<String> favouriteGenres;
+    public List<Pair<String, Integer>> getTopFavouriteGenres(int limit) {
+        List<Pair<String, Integer>> favouriteGenres;
         try {
             favouriteGenres = userDAO.getFavouriteGenres(limit);
         } catch (ActionNotCompletedException e) {
@@ -271,7 +271,6 @@ public class MiddlewareConnector {
         return playlistList;
     }
 
-
     public boolean isFollowingPlaylist(Playlist playlist) {return userDAO.isFollowingPlaylist(loggedUser, playlist);}
 
 
@@ -279,4 +278,8 @@ public class MiddlewareConnector {
 
 
     public void unfollowPlaylist(Playlist playlist) throws ActionNotCompletedException {userDAO.unfollowPlaylist(loggedUser, playlist);}
+
+    public Playlist getFavourite() throws ActionNotCompletedException {
+        return playlistDAO.getFavourite(loggedUser);
+    }
 }

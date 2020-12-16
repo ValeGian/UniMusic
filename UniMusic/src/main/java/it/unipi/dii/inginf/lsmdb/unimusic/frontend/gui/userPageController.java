@@ -83,7 +83,7 @@ public class userPageController implements Initializable {
             parentPane.getChildren().removeAll(followButton, upgradeLevelButton);
         else {
             if(userToDisplay.getPrivilegeLevel() == PrivilegeLevel.ADMIN)
-                parentPane.getChildren().remove(upgradeLevelButton);
+                parentPane.getChildren().removeAll(deleteButton, upgradeLevelButton);
 
             if ( connector.getLoggedUser().getPrivilegeLevel() == null
                     || connector.getLoggedUser().getPrivilegeLevel() != PrivilegeLevel.ADMIN

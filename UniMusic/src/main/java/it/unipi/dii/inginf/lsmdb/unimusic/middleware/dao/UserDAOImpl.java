@@ -103,6 +103,7 @@ public class UserDAOImpl implements UserDAO{
                     + user.getFirstName() + " " + user.getLastName()
             );
             playlist.setFavourite(true);
+            playlist.setUrlImage("file:src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/default_playlist.jpg");
             PlaylistDAO playlistDAO = new PlaylistDAOImpl();
             playlistDAO.createPlaylist(playlist);
 

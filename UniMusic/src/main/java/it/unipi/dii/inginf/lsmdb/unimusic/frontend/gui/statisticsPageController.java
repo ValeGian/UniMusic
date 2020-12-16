@@ -238,12 +238,12 @@ public class statisticsPageController implements Initializable {
 
     private void loadTopFavouriteGenres(int limit) {
         loadPane.getChildren().clear();
-        List<String> favouriteGenres = connector.getTopFavouriteGenres(limit);
+        List<Pair<String, Integer>> favouriteGenres = connector.getTopFavouriteGenres(limit);
         if(favouriteGenres.size() == 0)
             displayEmpty(loadPane);
         else {
             int order = 1;
-            for(String genre: favouriteGenres) {
+            for(Pair<String, Integer> genre: favouriteGenres) {
                 loadPane.getChildren().add(createTopGenresView(order++, genre));
             }
         }
@@ -300,8 +300,11 @@ public class statisticsPageController implements Initializable {
         return albumGraphic;
     }
 
-    private Text createTopGenresView(int order, String genre) {
-        Text genreNode = new Text(String.valueOf(order)+ "]  " +genre);
+    private Text createTopGenresView(int order, Pair<String, Integer> genre) {
+        Text genreNode = new Text(
+                String.valueOf(order)+ "]  " +genre.getKey()+ " "
+                + "(Contained in " +genre.getValue()+ " Playlists)"
+        );
         genreNode.setFill(Color.WHITE); genreNode.setStyle("-fx-font-weight: bold; -fx-font-size: 20px");
         return genreNode;
     }
