@@ -50,7 +50,7 @@ public class playlistPageController implements Initializable {
         songListBox.setSpacing(5);
         songListBox.setAlignment(Pos.CENTER); songListBox.setFillWidth(true);
         //if the author of the playlist is the logged user, it has the possibility to delete the playlist
-        if (playlistToDisplay.getAuthor().equals(connector.getLoggedUser().getUsername())) {
+        if (playlistToDisplay.getAuthor().equals(connector.getLoggedUser().getUsername()) && !playlistToDisplay.isFavourite()) {
             binImage.setVisible(true);
             binImage.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 
@@ -182,7 +182,7 @@ public class playlistPageController implements Initializable {
         });
 
         //if the user is the owner of the playlist he can remove songs from the playlist
-        if (playlistToDisplay.getAuthor().equals(connector.getLoggedUser().getUsername())) {
+        if (playlistToDisplay.getAuthor().equals(connector.getLoggedUser().getUsername()) && !playlistToDisplay.isFavourite()) {
             ImageView removeSongImageView = new ImageView(); removeSongImageView.setStyle("-fx-cursor: hand;");
             removeSongImageView.setImage(new Image("file:src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/delete.png"));
 
