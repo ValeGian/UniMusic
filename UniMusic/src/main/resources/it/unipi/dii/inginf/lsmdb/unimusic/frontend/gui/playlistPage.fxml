@@ -63,22 +63,22 @@
             </AnchorPane>
             <AnchorPane layoutY="352.0" prefHeight="462.0" prefWidth="1218.0" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="400.0">
             <children>
-               <VBox layoutY="-101.0" prefHeight="552.0" prefWidth="1211.0" style="-fx-background-color: transparent;">
+               <VBox layoutY="-101.0" prefHeight="552.0" prefWidth="1128.0" style="-fx-background-color: transparent;">
                   <children>
                      <HBox prefHeight="31.0" prefWidth="1211.0" style="-fx-background-color: transparent;">
                         <VBox.margin>
                            <Insets top="30.0" />
                         </VBox.margin>
                         <children>
-                           <Label alignment="CENTER" prefHeight="26.0" prefWidth="614.0" text="Title">
+                           <Label alignment="CENTER" prefHeight="26.0" prefWidth="390.0" text="Title">
                               <HBox.margin>
                                  <Insets left="120.0" />
                               </HBox.margin>
                            </Label>
-                           <Label alignment="CENTER" prefHeight="26.0" prefWidth="361.0" text="Artist" />
+                           <Label alignment="CENTER" prefHeight="26.0" prefWidth="495.0" text="Artist" />
                         </children>
                      </HBox>
-                     <ScrollPane prefHeight="312.0" prefWidth="1211.0" style="-fx-background-color: transparent;">
+                     <ScrollPane prefHeight="312.0" prefWidth="1150.0" style="-fx-background-color: transparent;">
                         <content>
                            <VBox fx:id="songListBox" alignment="CENTER" prefHeight="426.0" prefWidth="943.0" style="-fx-background-color: transparent;" />
                         </content>
