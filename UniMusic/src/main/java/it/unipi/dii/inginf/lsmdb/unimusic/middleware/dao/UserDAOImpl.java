@@ -147,7 +147,7 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @VisibleForTesting
-    List<User> getUserByPartialUsername(String partialUsername, int limitResult) throws ActionNotCompletedException {
+    List<User> getUserByPartialUsername(String partialUsername, int limitResult) throws ActionNotCompletedException, IllegalArgumentException {
         if(limitResult <= 0) throw new IllegalArgumentException();
 
         MongoCollection<Document> userCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
@@ -173,7 +173,7 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public List<User> getSuggestedUsers(User user, int limit) throws ActionNotCompletedException {
+    public List<User> getSuggestedUsers(User user, int limit) throws ActionNotCompletedException, IllegalArgumentException {
         if(limit <= 0 || user == null) throw new IllegalArgumentException();
 
         List<User> list = new ArrayList<>();
@@ -235,7 +235,7 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public void followUser(User userFollowing, User userFollowed) throws ActionNotCompletedException {
+    public void followUser(User userFollowing, User userFollowed) throws ActionNotCompletedException, IllegalArgumentException {
         if(userFollowing == null || userFollowed == null) throw new IllegalArgumentException();
 
         try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
@@ -254,7 +254,7 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public void unfollowUser(User userFollowing, User userFollowed) throws ActionNotCompletedException {
+    public void unfollowUser(User userFollowing, User userFollowed) throws ActionNotCompletedException, IllegalArgumentException {
         if(userFollowing == null || userFollowed == null) throw new IllegalArgumentException();
 
         try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
@@ -271,7 +271,7 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public void followPlaylist(User user, Playlist playlist) throws ActionNotCompletedException {
+    public void followPlaylist(User user, Playlist playlist) throws ActionNotCompletedException, IllegalArgumentException {
         if(user == null || playlist == null) throw new IllegalArgumentException();
 
         try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
@@ -289,7 +289,7 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public boolean isFollowingPlaylist(User user, Playlist playlist) {
+    public boolean isFollowingPlaylist(User user, Playlist playlist) throws IllegalArgumentException {
         if(user == null || playlist == null) throw new IllegalArgumentException();
 
         try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
@@ -314,7 +314,7 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public boolean isFollowedBy(User followed, User following) {
+    public boolean isFollowedBy(User followed, User following) throws IllegalArgumentException {
         if(followed == null || following == null) throw new IllegalArgumentException();
 
         try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
@@ -339,7 +339,7 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public void unfollowPlaylist(User user, Playlist playlist) throws ActionNotCompletedException {
+    public void unfollowPlaylist(User user, Playlist playlist) throws ActionNotCompletedException, IllegalArgumentException {
         if(user == null || playlist == null) throw new IllegalArgumentException();
 
         try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
@@ -356,7 +356,7 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public void likeSong(User user, Song song) throws ActionNotCompletedException {
+    public void likeSong(User user, Song song) throws ActionNotCompletedException, IllegalArgumentException {
         if(user == null || song == null) throw new IllegalArgumentException();
 
         try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
@@ -378,7 +378,7 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public boolean userLikesSong(User user, Song song) {
+    public boolean userLikesSong(User user, Song song) throws IllegalArgumentException {
         if(user == null || song == null) throw new IllegalArgumentException();
 
         try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
@@ -403,7 +403,7 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public void deleteLike(User user, Song song) throws ActionNotCompletedException {
+    public void deleteLike(User user, Song song) throws ActionNotCompletedException, IllegalArgumentException {
         if(user == null || song == null) throw new IllegalArgumentException();
 
         try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
@@ -424,7 +424,7 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public void updateUserPrivilegeLevel(User user, PrivilegeLevel newPrivLevel)  throws ActionNotCompletedException{
+    public void updateUserPrivilegeLevel(User user, PrivilegeLevel newPrivLevel) throws ActionNotCompletedException, IllegalArgumentException {
         if(user == null || newPrivLevel == null)
             throw new IllegalArgumentException();
 
@@ -439,7 +439,7 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public List<Playlist> getAllPlaylist(User user) throws ActionNotCompletedException{
+    public List<Playlist> getAllPlaylist(User user) throws ActionNotCompletedException, IllegalArgumentException {
         if(user == null) throw new IllegalArgumentException();
 
         MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
@@ -461,7 +461,7 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public List<Playlist> getFollowedPlaylist(User user) throws ActionNotCompletedException {
+    public List<Playlist> getFollowedPlaylist(User user) throws ActionNotCompletedException, IllegalArgumentException {
         if(user == null) throw new IllegalArgumentException();
 
         try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
@@ -485,7 +485,7 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public List<User> getFollowedUsers(User user) throws ActionNotCompletedException {
+    public List<User> getFollowedUsers(User user) throws ActionNotCompletedException, IllegalArgumentException {
         if(user == null) throw new IllegalArgumentException();
 
         try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
@@ -508,7 +508,7 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public List<User> getFollowers(User user) throws ActionNotCompletedException {
+    public List<User> getFollowers(User user) throws ActionNotCompletedException, IllegalArgumentException {
         if(user == null) throw new IllegalArgumentException();
 
         try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
@@ -531,7 +531,7 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public List<Pair<String, Integer>> getFavouriteGenres(int numGenres) throws ActionNotCompletedException{
+    public List<Pair<String, Integer>> getFavouriteGenres(int numGenres) throws ActionNotCompletedException, IllegalArgumentException{
         if(numGenres <= 0) throw new IllegalArgumentException();
 
         MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
@@ -549,12 +549,14 @@ public class UserDAOImpl implements UserDAO{
                 Document genre = cursor.next();
                 result.add(new Pair<>(genre.getString("_id"), genre.getInteger("totalSongs")));
             }
+        } catch (MongoException mEx) {
+            throw new ActionNotCompletedException(mEx);
         }
         return result;
     }
 
     @Override
-    public void deleteUser(User user) throws ActionNotCompletedException {
+    public void deleteUser(User user) throws ActionNotCompletedException, IllegalArgumentException {
         if(user == null) throw new IllegalArgumentException();
 
         List<Playlist> userPlaylists = getAllPlaylist(user);
@@ -592,7 +594,7 @@ public class UserDAOImpl implements UserDAO{
 
     //--------------------------PACKAGE-----------------------------------------------------------
 
-    void addPlaylistToUserDocument(User user, Playlist playlist)  throws MongoException{
+    void addPlaylistToUserDocument(User user, Playlist playlist) throws MongoException, IllegalArgumentException{
 
         if(user == null || playlist == null) throw new IllegalArgumentException();
 
