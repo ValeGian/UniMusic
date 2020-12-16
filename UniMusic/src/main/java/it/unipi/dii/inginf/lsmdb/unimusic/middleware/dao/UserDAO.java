@@ -2,6 +2,7 @@ package it.unipi.dii.inginf.lsmdb.unimusic.middleware.dao;
 
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.*;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
+import javafx.util.Pair;
 
 import java.util.List;
 
@@ -136,6 +137,15 @@ public interface UserDAO {
      */
     public List<Playlist> getFollowedPlaylist(User user) throws ActionNotCompletedException;
 
+  
+    /** Gets favourite genres of all the users, ordered by popularity
+     * @param numGenres how many genres we want to retrieve
+     * @return ordered favourite genres, number of times the genre is inserted in the playlist
+     * @throws ActionNotCompletedException when the operation fails
+     */
+
+    public List<Pair<String, Integer>> getFavouriteGenres(int numGenres) throws ActionNotCompletedException;
+
     /** Gets all the users followed by a specific user
      * @param user user which followed users we want to return
      * @return followed users of the user
@@ -150,12 +160,6 @@ public interface UserDAO {
      */
     public List<User> getFollowers(User user) throws ActionNotCompletedException;
 
-    /** Gets favourite genres of all the users, ordered by popularity
-     * @param numGenres how many genres we want to retrieve
-     * @return ordered favourite genres
-     * @throws ActionNotCompletedException when the operation fails
-     */
-    public List<String> getFavouriteGenres(int numGenres) throws ActionNotCompletedException;
 
     /** Deletes a user and all his created playlists
      * @param user user we want to delete

@@ -2,8 +2,9 @@
 
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -18,7 +19,7 @@
     </stylesheets>
     <AnchorPane layoutX="147.0" layoutY="69.0" prefHeight="800.0" prefWidth="1300.0" AnchorPane.leftAnchor="160.0" AnchorPane.topAnchor="70.0">
         <children>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="20.0">
+            <AnchorPane prefHeight="244.0" prefWidth="946.0" AnchorPane.leftAnchor="20.0">
                 <children>
                     <HBox AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="10.0">
                         <children>
@@ -27,18 +28,30 @@
                                     <Image url="@../../../../../../../../../../../../../../Users/mrlor/Downloads/TheOffice.jpg" />
                                 </image>
                             </ImageView>
-                            <VBox layoutX="517.0" layoutY="24.0" prefHeight="200.0" prefWidth="150.0" spacing="20.0" AnchorPane.leftAnchor="517.0">
+                            <VBox alignment="BASELINE_CENTER" layoutX="517.0" layoutY="24.0" prefHeight="200.0" prefWidth="570.0" spacing="20.0" AnchorPane.leftAnchor="517.0">
                                 <children>
-                                    <TextField fx:id="titleText" alignment="CENTER" editable="false" minWidth="480.0" promptText="Playlist di Marco" style="-fx-font-size: 2em; -fx-background-color: transparent;">
-                                        <font>
-                                            <Font name="Arial" size="16.0" />
-                                        </font>
-                                    </TextField>
-                                    <TextField fx:id="authorText" editable="false" minWidth="480.0" promptText="Created by marco1998" style="-fx-background-color: transparent; -fx-font-size: 18px;">
-                                        <font>
-                                            <Font size="7.0" />
-                                        </font>
-                                    </TextField>
+                           <HBox alignment="CENTER" prefHeight="57.0" prefWidth="480.0">
+                              <children>
+                                 <Label fx:id="titleText" text="Playlist di Marco">
+                                    <font>
+                                       <Font name="System Bold" size="38.0" />
+                                    </font>
+                                 </Label>
+                                 <ImageView fx:id="binImage" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;" visible="false">
+                                    <image>
+                                       <Image url="@./img/delete.png" />
+                                    </image>
+                                    <HBox.margin>
+                                       <Insets left="20.0" />
+                                    </HBox.margin>
+                                 </ImageView>
+                              </children>
+                           </HBox>
+                           <Label fx:id="authorText" text="Created by marco1998">
+                              <cursor>
+                                 <Cursor fx:constant="HAND" />
+                              </cursor>
+                           </Label>
                                 </children>
                                 <HBox.margin>
                                     <Insets left="50.0" top="20.0" />
@@ -48,32 +61,26 @@
                     </HBox>
                 </children>
             </AnchorPane>
-            <AnchorPane prefHeight="462.0" prefWidth="980.0" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="330.0">
+            <AnchorPane layoutY="352.0" prefHeight="462.0" prefWidth="1218.0" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="400.0">
             <children>
-               <VBox layoutY="-101.0" prefHeight="552.0" prefWidth="980.0" style="-fx-background-color: transparent;">
+               <VBox layoutY="-101.0" prefHeight="552.0" prefWidth="1211.0" style="-fx-background-color: transparent;">
                   <children>
-                     <HBox prefHeight="100.0" prefWidth="526.0" style="-fx-background-color: transparent;">
-                        <children>
-                           <TextField alignment="CENTER" editable="false" maxWidth="254.0" prefHeight="38.0" prefWidth="254.0" style="-fx-background-color: transparent;" text="Title">
-                              <font>
-                                 <Font size="20.0" />
-                              </font>
-                              <HBox.margin>
-                                 <Insets left="250.0" />
-                              </HBox.margin>
-                           </TextField>
-                           <TextField alignment="CENTER" editable="false" maxWidth="362.0" prefHeight="38.0" prefWidth="362.0" promptText="Artist" style="-fx-background-color: transparent;">
-                              <HBox.margin>
-                                 <Insets left="100.0" />
-                              </HBox.margin></TextField>
-                        </children>
+                     <HBox prefHeight="31.0" prefWidth="1211.0" style="-fx-background-color: transparent;">
                         <VBox.margin>
                            <Insets top="30.0" />
                         </VBox.margin>
+                        <children>
+                           <Label alignment="CENTER" prefHeight="26.0" prefWidth="614.0" text="Title">
+                              <HBox.margin>
+                                 <Insets left="120.0" />
+                              </HBox.margin>
+                           </Label>
+                           <Label alignment="CENTER" prefHeight="26.0" prefWidth="361.0" text="Artist" />
+                        </children>
                      </HBox>
-                     <ScrollPane prefHeight="437.0" prefWidth="980.0" style="-fx-background-color: transparent;">
+                     <ScrollPane prefHeight="312.0" prefWidth="1211.0" style="-fx-background-color: transparent;">
                         <content>
-                           <VBox fx:id="songListBox" prefHeight="426.0" prefWidth="943.0" style="-fx-background-color: transparent;" />
+                           <VBox fx:id="songListBox" alignment="CENTER" prefHeight="426.0" prefWidth="943.0" style="-fx-background-color: transparent;" />
                         </content>
                      </ScrollPane>
                   </children>
@@ -82,6 +89,6 @@
             </AnchorPane>
         </children>
     </AnchorPane>
-    <fx:include source="FXML_utility/side_menu.fxml" />
     <fx:include source="FXML_utility/search_bar.fxml" />
+    <fx:include source="FXML_utility/side_menu.fxml" />
 </AnchorPane>

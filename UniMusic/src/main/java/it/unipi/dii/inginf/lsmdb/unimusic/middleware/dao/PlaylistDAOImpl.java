@@ -14,6 +14,7 @@ import it.unipi.dii.inginf.lsmdb.unimusic.middleware.log.UMLogger;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.Collections;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.MongoDriver;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.neo4jconnection.Neo4jDriver;
+import javafx.util.Pair;
 import org.apache.log4j.Logger;
 import org.bson.conversions.Bson;
 import org.bson.json.JsonWriterSettings;
@@ -55,20 +56,8 @@ public class PlaylistDAOImpl implements PlaylistDAO{
         User user4 = new User("PauCha1990");
         User user5 = new User("FraBon1983");
         try {
-            //p.createPlaylist(playlist3);
-            //u.followUser(user2, user5);
-            u.followPlaylist(user2, playlist2);
-            //List<Song> list = p.getAllSongs(playlist);
-            Song song = new Song();
-            song.setID("rock1");
-            //p.deleteSongFromFavourite(user1, song);
-
-            List<Playlist> list = u.getAllPlaylist(user2);
-            for (int i = 0;i < list.size(); i++)
-                System.out.println(list.get(i).getID() + "   " + list.get(i).getName() + "  " + list.get(i).getAuthor() + "    " + list.get(i).getUrlImage());
-
-            List<String> generi = u.getFavouriteGenres(3);
-                for (String genere: generi)
+            List<Pair<String, Integer>> generi = u.getFavouriteGenres(3);
+                for (Pair<String, Integer> genere: generi)
                     System.out.println(genere);
         } catch (ActionNotCompletedException e) {
             e.printStackTrace();

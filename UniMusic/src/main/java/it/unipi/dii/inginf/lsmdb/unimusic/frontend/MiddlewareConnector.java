@@ -218,6 +218,22 @@ public class MiddlewareConnector {
 
     public void createPlaylist(Playlist playlist) throws ActionNotCompletedException {playlistDAO.createPlaylist(playlist);}
 
+    public void deletePlaylist(Playlist playlist) {
+        try {
+            playlistDAO.deletePlaylist(playlist);
+        } catch (ActionNotCompletedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteSongFromPlaylist(Song song, Playlist playlist){
+        try {
+            playlistDAO.deleteSong(playlist, song);
+        } catch (ActionNotCompletedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public List<Playlist> getSuggestedPlaylists() {
         List<Playlist> suggestedPlaylists;
         try {
