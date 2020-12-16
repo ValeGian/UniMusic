@@ -3,6 +3,7 @@ package it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities;
 import org.bson.BsonArray;
 import org.bson.Document;
 import org.neo4j.driver.Record;
+import org.neo4j.driver.Value;
 
 public class User {
     private String username;
@@ -32,6 +33,10 @@ public class User {
 
     public User(Record userNeo4jRecord) {
         username = userNeo4jRecord.get("username").asString();
+    }
+
+    public User(Value userNeo4jValue) {
+        username = userNeo4jValue.get("username").asString();
     }
 
     public User(Document userDocument) {

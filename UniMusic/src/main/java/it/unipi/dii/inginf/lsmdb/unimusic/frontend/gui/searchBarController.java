@@ -31,6 +31,8 @@ import java.util.ResourceBundle;
 public class searchBarController implements Initializable {
     private static MiddlewareConnector connector = MiddlewareConnector.getInstance();
 
+    private static CheckBoxEnum checkBoxSelected;
+
     @FXML private Button searchButton;
     @FXML private Button closeSearchButton;
     @FXML private TextField searchInput;
@@ -84,7 +86,7 @@ public class searchBarController implements Initializable {
             displayNoInputInserted();
             return;
         }
-        String attributeField = findSelected();
+        String attributeField = checkBoxSelected.toString();
         if(attributeField == null)
             return;
         try {
@@ -106,42 +108,62 @@ public class searchBarController implements Initializable {
      */
     private void initializeCheckBox() {
 
+        if(checkBoxSelected == null)
+            checkBoxSelected = CheckBoxEnum.Title;
+
+        switch (checkBoxSelected) {
+            case Title:
+                titleCheck.setSelected(true);break;
+            case Album:
+                albumCheck.setSelected(true);
+                break;
+            case Username:
+                userCheck.setSelected(true);
+                break;
+            default:
+                artistCheck.setSelected(true);
+
+        }
+
         titleCheck.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                artistCheck.setSelected(false);
-                albumCheck.setSelected(false);
-                userCheck.setSelected(false);
+                handleChechBox(CheckBoxEnum.Title, actionEvent);
             }
         });
 
         artistCheck.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                titleCheck.setSelected(false);
-                albumCheck.setSelected(false);
-                userCheck.setSelected(false);
+                handleChechBox(CheckBoxEnum.Artist, actionEvent);
             }
         });
 
         albumCheck.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                titleCheck.setSelected(false);
-                artistCheck.setSelected(false);
-                userCheck.setSelected(false);
+                handleChechBox(CheckBoxEnum.Album, actionEvent);
             }
         });
 
         userCheck.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                titleCheck.setSelected(false);
-                artistCheck.setSelected(false);
-                albumCheck.setSelected(false);
+                handleChechBox(CheckBoxEnum.Username, actionEvent);
             }
         });
 
+    }
+
+    private void handleChechBox(CheckBoxEnum checkBoxSel, ActionEvent actionEvent) {
+        checkBoxSelected = checkBoxSel;
+        titleCheck.setSelected(false);
+        artistCheck.setSelected(false);
+        albumCheck.setSelected(false);
+        userCheck.setSelected(false);
+
+        CheckBox checkBox = (CheckBox) actionEvent.getSource();
+        checkBox.setSelected(true);
     }
 
 
@@ -209,11 +231,6 @@ public class searchBarController implements Initializable {
 
     public void displayNoInputInserted(){
         displayText("Insert something...");
-    }
-
-
-    public void displayNoFilterSelected(){
-        displayText("No filter selected");
     }
 
 
@@ -300,24 +317,12 @@ public class searchBarController implements Initializable {
     }
 
 
-    /**
-     * @return The String that identify the checkbox selected by the user or display
-     * a warning message if the user has not selected any box.
-     */
-    private String findSelected() {
-
-        if (titleCheck.isSelected())
-            return titleCheck.getText();
-        else if(artistCheck.isSelected())
-            return artistCheck.getText();
-        else if(albumCheck.isSelected())
-            return albumCheck.getText();
-        else if(userCheck.isSelected())
-            return userCheck.getText();
-        else {
-            displayNoFilterSelected();
-            return null;
-        }
+    private enum CheckBoxEnum{
+        Title,
+        Artist,
+        Album,
+        Username
     }
+
 
 }

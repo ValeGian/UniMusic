@@ -3,17 +3,23 @@ package it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui;
 import it.unipi.dii.inginf.lsmdb.unimusic.frontend.MiddlewareConnector;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Playlist;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
+
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.PrivilegeLevel;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
+import javafx.scene.layout.AnchorPane;
+
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,13 +28,14 @@ import java.util.ResourceBundle;
 public class sideBarController implements Initializable {
     private MiddlewareConnector connector;
 
-    @FXML private AnchorPane sidePanel;
+    @FXML private AnchorPane parentPane;
 
+    @FXML private Button home;
     @FXML private Button favourites;
     @FXML private Button addPlaylist;
     @FXML private Button personalProfile;
+    @FXML private Button statistics;
     @FXML private Button logout;
-    @FXML private Button home;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -44,6 +51,23 @@ public class sideBarController implements Initializable {
                 }
             }
         });
+
+        if ( connector.getLoggedUser().getPrivilegeLevel() == null
+                || connector.getLoggedUser().getPrivilegeLevel() != PrivilegeLevel.ADMIN
+        ) {
+            parentPane.getChildren().remove(statistics);
+        } else {
+            statistics.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    try {
+                        App.setRoot("statistics");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
 
         personalProfile.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -100,13 +124,13 @@ public class sideBarController implements Initializable {
                 background = new AnchorPane();
                 background.setStyle("-fx-background-color: #494949; -fx-opacity: 0.7;");
                 background.setPrefSize(1300, 750); background.toFront();
-                sidePanel.getChildren().addAll(background, addPlaylistPane);
+                parentPane.getChildren().addAll(background, addPlaylistPane);
 
                 cancelButton.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent actionEvent) {
-                        sidePanel.getChildren().remove(background);
-                        sidePanel.getChildren().remove(addPlaylistPane);
+                        parentPane.getChildren().remove(background);
+                        parentPane.getChildren().remove(addPlaylistPane);
                     }
                 });
 
@@ -122,8 +146,8 @@ public class sideBarController implements Initializable {
                         } catch (ActionNotCompletedException e) {
                             e.printStackTrace();
                         }
-                        sidePanel.getChildren().remove(background);
-                        sidePanel.getChildren().remove(addPlaylistPane);
+                        parentPane.getChildren().remove(background);
+                        parentPane.getChildren().remove(addPlaylistPane);
                     }
                 });
             }

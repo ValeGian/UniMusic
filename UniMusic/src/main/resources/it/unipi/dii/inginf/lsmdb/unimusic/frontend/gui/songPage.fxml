@@ -30,7 +30,7 @@
                         </ImageView>
                         <VBox layoutX="517.0" layoutY="24.0" prefHeight="200.0" prefWidth="150.0" spacing="20.0" AnchorPane.leftAnchor="517.0">
                            <children>
-                              <TextField fx:id="titleText" alignment="CENTER" editable="false" minWidth="480.0" maxWidth="600.0" promptText="C.R.E.A.M. by Wu-Tang Clan" style="-fx-font-size: 2em;">
+                              <TextField fx:id="titleText" alignment="CENTER" editable="false" maxWidth="600.0" minWidth="480.0" promptText="C.R.E.A.M. by Wu-Tang Clan" style="-fx-font-size: 2em;">
                                  <font>
                                     <Font name="Arial" size="16.0" />
                                  </font>
@@ -68,6 +68,20 @@
                <children>
                   <VBox prefHeight="169.0" prefWidth="200.0">
                      <children>
+                        <VBox spacing="20.0">
+                           <children>
+                              <TextField fx:id="youtubeUrlText" editable="false" minWidth="600.0" text="asdssads">
+                                 <font>
+                                    <Font size="58.0" />
+                                 </font>
+                              </TextField>
+                              <TextField fx:id="spotifyUrlText" editable="false" minWidth="600.0" text="sds" />
+                              <TextField fx:id="geniusUrlText" editable="false" minWidth="600.0" text="sdsds" />
+                           </children>
+                           <VBox.margin>
+                              <Insets left="10.0" top="100.0" />
+                           </VBox.margin>
+                        </VBox>
                         <HBox prefHeight="24.0" prefWidth="180.0" spacing="100.0">
                            <children>
                               <Button fx:id="favouriteButton" minWidth="158.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="234.0" styleClass="song_button">
@@ -86,19 +100,29 @@
                                     </Label>
                                  </graphic>
                               </Button>
-                              <Button fx:id="playlistButton" minWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="212.0" styleClass="song_button">
-                                 <graphic>
-                                    <Label minWidth="160.0" text="Add to a playlist">
+                              <AnchorPane prefHeight="0" prefWidth="0">
+                                 <children>
+                                    <Button fx:id="playlistButton" minWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="212.0" styleClass="song_button">
                                        <graphic>
-                                          <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@img/plus.png" />
-                                             </image>
-                                          </ImageView>
+                                          <Label minWidth="160.0" text="Add to a playlist">
+                                             <graphic>
+                                                <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@img/plus.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </graphic>
+                                          </Label>
                                        </graphic>
-                                    </Label>
-                                 </graphic>
-                              </Button>
+                                    </Button>
+                                    <ScrollPane fx:id="scrollList" vbarPolicy="NEVER" hbarPolicy="NEVER" layoutY="30.0" prefViewportHeight="140.0" prefViewportWidth="350.0"  visible="false">
+                                       <content>
+                                          <ListView fx:id="playlistList" prefHeight="140.0" prefWidth="350.0" AnchorPane.topAnchor="30.0" />
+                                       </content>
+                                    </ScrollPane>
+                                    <Button fx:id="closeListButton" mnemonicParsing="false" text="CLOSE" visible="false" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="172.0" />
+                                 </children>
+                              </AnchorPane>
                               <Button fx:id="likeButton" mnemonicParsing="false" prefHeight="35.0" prefWidth="87.0" styleClass="song_button">
                                  <graphic>
                                     <Label fx:id="likeLabel" minWidth="-Infinity" prefHeight="25.0" prefWidth="120.0" text="Like">
@@ -111,6 +135,9 @@
                                        </graphic>
                                     </Label>
                                  </graphic>
+                                 <HBox.margin>
+                                    <Insets left="-180.0" />
+                                 </HBox.margin>
                               </Button>
                               <Label fx:id="ratingLabel" minWidth="-Infinity" prefWidth="200.0" text="Rating">
                                  <graphic>
@@ -123,26 +150,12 @@
                               </Label>
                            </children>
                            <VBox.margin>
-                              <Insets top="20.0" />
+                              <Insets top="-240.0" />
                            </VBox.margin>
                            <padding>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding>
                         </HBox>
-                        <VBox spacing="20.0">
-                           <children>
-                              <TextField fx:id="youtubeUrlText" editable="false" minWidth="600.0">
-                                 <font>
-                                    <Font size="58.0" />
-                                 </font>
-                              </TextField>
-                              <TextField fx:id="spotifyUrlText" editable="false" minWidth="600.0" />
-                              <TextField fx:id="geniusUrlText" editable="false" minWidth="600.0" />
-                           </children>
-                           <VBox.margin>
-                              <Insets left="10.0" top="50.0" />
-                           </VBox.margin>
-                        </VBox>
                      </children>
                   </VBox>
                </children>
@@ -150,6 +163,6 @@
          </children>
       </AnchorPane>
    </children>
-   <fx:include source="FXML_utility/side_menu.fxml" />
    <fx:include source="FXML_utility/search_bar.fxml" />
+   <fx:include source="FXML_utility/side_menu.fxml" />
 </AnchorPane>

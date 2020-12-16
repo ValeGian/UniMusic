@@ -37,6 +37,9 @@ public class UserDAOImpl implements UserDAO{
         UserDAO userDAO = new UserDAOImpl();
         SongDAO songDAO = new SongDAOImpl();
 
+        User admin = new User("valegiann", "root", "Valerio", "Giannini", 22);
+        admin.setPrivilegeLevel(PrivilegeLevel.ADMIN);
+        userDAO.createUser(admin);
 
         /*
         User user1 = new User("valegiann", "root", "Valerio", "Giannini", 22);
@@ -171,6 +174,7 @@ public class UserDAOImpl implements UserDAO{
     public List<User> getSuggestedUsers(User user, int limit) throws ActionNotCompletedException {
         List<User> list = new ArrayList<>();
         try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
+            //First layer Suggestion
             list = session.readTransaction((TransactionWork<List<User>>) tx -> {
                 Result result = tx.run(
                         "MATCH (me:User {username: $me})-[:FOLLOWS_USER]->(followed:User)"
@@ -179,13 +183,34 @@ public class UserDAOImpl implements UserDAO{
                         + "ORDER BY Strength DESC LIMIT $limit",
                         parameters("me", user.getUsername(), "limit", limit)
                 );
-                ArrayList<User> users = new ArrayList<>();
+                ArrayList<User> firstLayerUsers = new ArrayList<>();
                 while ((result.hasNext())){
                     Record r = result.next();
-                    users.add(new User(r.get("suggested").get("username").asString()));
+                    firstLayerUsers.add(new User(r.get("suggested").get("username").asString()));
                 }
-                return users;
+                return firstLayerUsers;
             });
+
+            final int firstSuggestionSize = list.size();
+            if(firstSuggestionSize < limit) {
+                //Second layer suggestion
+                List<User> secondLayerSuggestion = session.readTransaction((TransactionWork<List<User>>) tx -> {
+                    Result result = tx.run(
+                            "MATCH (me:User {username: $username})-[:LIKES]->()<-[:LIKES]-(suggested:User) "
+                                    + "WHERE NOT (me)-[:FOLLOWS_USER]->(suggested) "
+                                    + "AND NOT (me)-[:FOLLOWS_USER]->()-[:FOLLOWS_USER]->(suggested) AND me <> suggested "
+                                    + "RETURN suggested, count(*) AS Strength ORDER BY Strength DESC LIMIT $limit",
+                            parameters("username", user.getUsername(), "limit", limit - firstSuggestionSize)
+                    );
+                    ArrayList<User> secondLayerUsers = new ArrayList<>();
+                    while ((result.hasNext())){
+                        Record r = result.next();
+                        secondLayerUsers.add(new User(r.get("suggested").get("username").asString()));
+                    }
+                    return secondLayerUsers;
+                });
+                list.addAll(secondLayerSuggestion);
+            }
         } catch (Neo4jException n4jEx) {
             throw new ActionNotCompletedException(n4jEx);
         }
@@ -431,6 +456,48 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
+    public List<User> getFollowedUsers(User user) throws ActionNotCompletedException {
+        try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
+            List<User> followedUsers = session.readTransaction((TransactionWork<List<User>>) tx -> {
+                Result result = tx.run(
+                        "MATCH (:User {username: $username})-[:FOLLOWS_USER]->(followedUser:User) RETURN followedUser ",
+                        parameters("username", user.getUsername())
+                );
+                List<User> tmpList = new ArrayList<>();
+                while ((result.hasNext())) {
+                    User followedUser = new User(result.next().get("followedUser"));
+                    tmpList.add(followedUser);
+                }
+                return tmpList;
+            });
+            return followedUsers;
+        } catch (Neo4jException n4jEx) {
+            throw new ActionNotCompletedException(n4jEx);
+        }
+    }
+
+    @Override
+    public List<User> getFollowers(User user) throws ActionNotCompletedException {
+        try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
+            List<User> followingUsers = session.readTransaction((TransactionWork<List<User>>) tx -> {
+                Result result = tx.run(
+                        "MATCH (followingUser:User)-[:FOLLOWS_USER]->(:User {username: $username}) RETURN followingUser ",
+                        parameters("username", user.getUsername())
+                );
+                List<User> tmpList = new ArrayList<>();
+                while ((result.hasNext())) {
+                    User followingUser = new User(result.next().get("followingUser"));
+                    tmpList.add(followingUser);
+                }
+                return tmpList;
+            });
+            return followingUsers;
+        } catch (Neo4jException n4jEx) {
+            throw new ActionNotCompletedException(n4jEx);
+        }
+    }
+
+    @Override
     public List<Pair<String, Integer>> getFavouriteGenres(int numGenres) throws ActionNotCompletedException{
         MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
         List<Pair<String, Integer>> result = new ArrayList<>();
@@ -449,6 +516,27 @@ public class UserDAOImpl implements UserDAO{
             }
         }
         return result;
+    }
+
+    @Override
+    public void deleteUser(User user) throws ActionNotCompletedException {
+        List<Playlist> userPlaylists = getAllPlaylist(user);
+
+        PlaylistDAO playlistDAO = new PlaylistDAOImpl();
+        for(Playlist playlist: userPlaylists)
+            playlistDAO.deletePlaylist(playlist);
+
+        try {
+            deleteUserDocument(user);
+            deleteUserNode(user);
+            logger.info("DELETED User " + user.getUsername());
+        } catch (MongoException mEx) {
+            logger.error(mEx.getMessage());
+            throw new ActionNotCompletedException(mEx);
+        } catch (Neo4jException n4jEx) {
+            logger.error(n4jEx.getMessage());
+            throw new ActionNotCompletedException(n4jEx);
+        }
     }
 
     //--------------------------PACKAGE-----------------------------------------------------------
@@ -495,5 +583,14 @@ public class UserDAOImpl implements UserDAO{
     private void deleteUserDocument(User user) throws MongoException {
         MongoCollection<Document> userColl = MongoDriver.getInstance().getCollection(Collections.USERS);
         userColl.deleteOne(eq("_id", user.getUsername()));
+    }
+
+    private void deleteUserNode(User user) throws Neo4jException {
+        try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
+            session.run(
+                    "MATCH (a:User {username: $username})"
+                    + "DETACH DELETE a",
+                    parameters("username", user.getUsername()));
+        }
     }
 }

@@ -1,20 +1,29 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui;
 
 import it.unipi.dii.inginf.lsmdb.unimusic.frontend.MiddlewareConnector;
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Playlist;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Song;
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class songPageController implements Initializable {
@@ -24,6 +33,8 @@ public class songPageController implements Initializable {
     @FXML private Button favouriteButton;
     @FXML private Button playlistButton;
     @FXML private Button likeButton;
+    @FXML private Button closeListButton;
+
 
     @FXML private TextField titleText;
     @FXML private TextField artistText;
@@ -41,6 +52,9 @@ public class songPageController implements Initializable {
     @FXML private ImageView imageAlbum;
     @FXML private ImageView favouriteImg;
     @FXML private ImageView likeImg;
+
+    @FXML private ScrollPane scrollList;
+    @FXML private ListView playlistList;
 
 
     /**
@@ -90,12 +104,16 @@ public class songPageController implements Initializable {
     private void displaySongInformation(){
 
         titleText.setText(songToDisplay.getTitle());
-        String artists = songToDisplay.getArtist() + " feat ";
-        for(String artist: songToDisplay.getFeaturedArtists())
-            artists += artist + ", ";
 
+        String artists = songToDisplay.getArtist();
+        if(songToDisplay.getFeaturedArtists().size() != 0) {
+            artists +=" (feat ";
+            for (String artist : songToDisplay.getFeaturedArtists())
+                artists += artist + ", ";
+        }
+        String artistComplete = artists.substring(0, artists.length()-2) + ")";
+        artistText.setText(artistComplete);
 
-        artistText.setText(artists.substring(0, artists.length()-2));
         albumText.setText(songToDisplay.getAlbum().getTitle());
 
         String releasedYear = (songToDisplay.getReleaseYear() == 0)?"Release year unknown":("" + songToDisplay.getReleaseYear());
@@ -113,37 +131,34 @@ public class songPageController implements Initializable {
         likeButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                try {
-                    int numLike = Integer.parseInt(likeLabel.getText().split(": ")[1]);
-                    if (likeImg.getImage().getUrl().endsWith("nonLike.png")) {
-                        connector.likeSong(songToDisplay);
-                        likeImg.setImage(new Image("file:src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/like.png"));
-                        likeLabel.setText("Like: " + (numLike + 1));
-                    }else{
-                        connector.deleteLike(songToDisplay);
-                        likeImg.setImage(new Image("file:src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/nonLike.png"));
-                        likeLabel.setText("Like: " + (numLike - 1));
-                    }
-                }catch(Exception ex){
-
-                }
+                handleLike();
             }
         });
 
         favouriteButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                try {
-                    if (favouriteImg.getImage().getUrl().endsWith("nonHeart.png")) {
-                        connector.addSongToFavourites(songToDisplay);
-                        favouriteImg.setImage(new Image("file:src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/heart.png"));
-                    }else{
-                        connector.removeSongFromFavourites(songToDisplay);
-                        favouriteImg.setImage(new Image("file:src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/nonHeart.png"));
-                    }
-                }catch(Exception ex){
+                handleFavourite();
+            }
+        });
 
-                }
+        playlistButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                handlePlaylist();
+            }
+        });
+
+        List<Playlist> allUserPlaylist = connector.getUserPlaylists();
+
+        for(Playlist plToAdd: allUserPlaylist)
+            playlistList.getItems().add(getPlaylistButton(plToAdd));
+
+        closeListButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                closeListButton.setVisible(false);
+                scrollList.setVisible(false);
             }
         });
 
@@ -164,6 +179,64 @@ public class songPageController implements Initializable {
 
         likeLabel.setText("Like: " + songToDisplay.getLikeCount());
         ratingLabel.setText("Rating: " + formatter.format(songToDisplay.getRating()));
+    }
+
+    private void handlePlaylist() {
+        closeListButton.setVisible(true);
+        scrollList.setVisible(true);
+    }
+
+    private Node getPlaylistButton(Playlist plToAdd) {
+
+        Button buttonPlaylist = new Button(plToAdd.getName());buttonPlaylist.setStyle("-fx-background-color: transparent");buttonPlaylist.setTextAlignment(TextAlignment.LEFT);
+
+        buttonPlaylist.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    connector.addSong(plToAdd, songToDisplay);
+                    Button thisButton = (Button) actionEvent.getSource();
+                    thisButton.setText("Successfully added to " + thisButton.getText());
+                    thisButton.setDisable(true);
+                } catch (ActionNotCompletedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        return buttonPlaylist;
+    }
+
+    private void handleLike() {
+        try {
+            int numLike = Integer.parseInt(likeLabel.getText().split(": ")[1]);
+            if (likeImg.getImage().getUrl().endsWith("nonLike.png")) {
+                connector.likeSong(songToDisplay);
+                likeImg.setImage(new Image("file:src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/like.png"));
+                likeLabel.setText("Like: " + (numLike + 1));
+            }else{
+                connector.deleteLike(songToDisplay);
+                likeImg.setImage(new Image("file:src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/nonLike.png"));
+                likeLabel.setText("Like: " + (numLike - 1));
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+    }
+
+    private void handleFavourite() {
+        try {
+            if (favouriteImg.getImage().getUrl().endsWith("nonHeart.png")) {
+                favouriteImg.setImage(new Image("file:src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/heart.png"));
+                connector.addSongToFavourites(songToDisplay);
+            }else{
+                System.out.println("OK2!");
+                favouriteImg.setImage(new Image("file:src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/nonHeart.png"));
+                connector.removeSongFromFavourites(songToDisplay);
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
     }
 
 
