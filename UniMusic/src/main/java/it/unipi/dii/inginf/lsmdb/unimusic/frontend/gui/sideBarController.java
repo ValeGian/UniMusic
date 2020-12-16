@@ -52,6 +52,17 @@ public class sideBarController implements Initializable {
             }
         });
 
+        favourites.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    playlistPageController.getPlaylistPage(connector.getFavourite());
+                } catch (ActionNotCompletedException | IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         if ( connector.getLoggedUser().getPrivilegeLevel() == null
                 || connector.getLoggedUser().getPrivilegeLevel() != PrivilegeLevel.ADMIN
         ) {
@@ -84,7 +95,6 @@ public class sideBarController implements Initializable {
             @Override
             public void handle(ActionEvent actionEvent) {
                 connector.logout();
-
                 try {
                     App.setRoot("welcome");
                 } catch (IOException e) {

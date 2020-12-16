@@ -25,7 +25,7 @@
                      <children>
                         <ImageView fx:id="imageAlbum" fitHeight="328.0" fitWidth="310.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../../../../../../../../../../../../Users/Alessio/Downloads/test.jpg" />
+                              <Image url="@./img/empty.jpg" />
                            </image>
                         </ImageView>
                         <VBox layoutX="517.0" layoutY="24.0" prefHeight="200.0" prefWidth="150.0" spacing="20.0" AnchorPane.leftAnchor="517.0">

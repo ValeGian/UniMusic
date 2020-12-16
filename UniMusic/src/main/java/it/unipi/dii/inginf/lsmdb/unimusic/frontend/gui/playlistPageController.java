@@ -154,7 +154,11 @@ public class playlistPageController implements Initializable {
                         heartImageView.setImage(new Image("file:src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/nonHeart.png"));
                     }
                 }catch(Exception ex){
-                  connector.addSongToFavourite(connector.getLoggedUser(), song);
+                    try {
+                        connector.addSongToFavourite(connector.getLoggedUser(), song);
+                    } catch (ActionNotCompletedException e) {
+                        e.printStackTrace();
+                    }
                 } 
                 event.consume();
             }

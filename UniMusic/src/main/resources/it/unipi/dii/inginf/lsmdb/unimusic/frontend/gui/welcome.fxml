@@ -138,7 +138,7 @@
                         <Font name="Arial Black" size="14.0" />
                     </font>
                 </Button>
-            <TextField fx:id="registerMessage" maxWidth="410.0" minWidth="400.0" prefHeight="38.0" prefWidth="410.0" style="-fx-background-color: transparent;" styleClass="inputTextField">
+            <TextField fx:id="registerMessage" maxWidth="500.0" minWidth="500.0" prefHeight="38.0" prefWidth="410.0" style="-fx-background-color: transparent;" styleClass="inputTextField">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>

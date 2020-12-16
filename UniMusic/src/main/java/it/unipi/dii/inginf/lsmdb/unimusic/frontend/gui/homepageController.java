@@ -165,7 +165,11 @@ public class homepageController implements Initializable {
         playlistPreview.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                System.out.println(playlist.getUrlImage());
+                try {
+                    playlistPageController.getPlaylistPage(playlist);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

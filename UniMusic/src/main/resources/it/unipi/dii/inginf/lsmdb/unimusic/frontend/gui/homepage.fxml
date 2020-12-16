@@ -77,6 +77,6 @@
             </content>
          </ScrollPane>
       </children></AnchorPane>
-    <fx:include source="FXML_utility/side_menu.fxml" />
     <fx:include source="FXML_utility/search_bar.fxml" />
+    <fx:include source="FXML_utility/side_menu.fxml" />
 </AnchorPane>
