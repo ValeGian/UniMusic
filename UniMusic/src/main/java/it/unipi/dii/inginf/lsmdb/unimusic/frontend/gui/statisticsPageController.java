@@ -317,7 +317,7 @@ public class statisticsPageController implements Initializable {
     private Text createTopGenresView(int order, Pair<String, Integer> genre) {
         Text genreNode = new Text(
                 String.valueOf(order)+ "]  " +genre.getKey()+ " "
-                + "(Contained in " +genre.getValue()+ " Playlists)"
+                + "(Contained " +genre.getValue()+ " times in Playlists)"
         );
         genreNode.setFill(Color.WHITE); genreNode.setStyle("-fx-font-weight: bold; -fx-font-size: 20px");
         return genreNode;
