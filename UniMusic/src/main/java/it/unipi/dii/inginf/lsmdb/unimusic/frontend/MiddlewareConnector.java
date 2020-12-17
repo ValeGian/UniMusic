@@ -140,6 +140,17 @@ public class MiddlewareConnector {
         return favouriteGenres;
     }
 
+    public List<Pair<Integer, Pair<String, Double>>> getFavouriteArtistPerAgeRange() {
+        List<Pair<Integer, Pair<String, Double>>> topArtists;
+        try {
+            topArtists = userDAO.getFavouriteArtistPerAgeRange();
+        } catch (ActionNotCompletedException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+        return topArtists;
+    }
+
     public int getTotalUsers() { return userDAO.getTotalUsers();}
 
     //--------------------------SONG-------------------------------------------------------------------

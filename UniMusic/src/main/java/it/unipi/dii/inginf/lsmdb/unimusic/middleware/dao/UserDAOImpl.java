@@ -17,6 +17,7 @@ import org.bson.conversions.Bson;
 import org.neo4j.driver.*;
 import org.neo4j.driver.exceptions.Neo4jException;
 
+import javax.print.Doc;
 import javax.swing.plaf.synth.SynthScrollBarUI;
 import java.util.ArrayList;
 
@@ -553,6 +554,65 @@ public class UserDAOImpl implements UserDAO{
             throw new ActionNotCompletedException(mEx);
         }
         return result;
+    }
+
+    @Override
+    public List<Pair<Integer, Pair<String, Double>>> getFavouriteArtistPerAgeRange() throws ActionNotCompletedException {
+        MongoCollection<Document> userCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
+        List<Pair<Integer, Pair<String, Double>>> topArtists = new ArrayList<>();
+
+        Document computeDecade = Document.parse("{$multiply: [{ $floor:{ $divide: [ \"$age\", 10 ] }}, 10]}");
+        Document computePopularity = Document.parse("{$divide: [ \"$overallPresences\", \"$artistPresences\" ]}");
+
+        Bson match = match(exists("age"));
+        Bson projectDecade = project(fields(
+                excludeId(),
+                include("age"),
+                include("createdPlaylists"),
+                computed("decade", computeDecade)
+        ));
+        Bson unwind1 = unwind("$createdPlaylists");
+        Bson unwind2 = unwind("$createdPlaylists.songs");
+        Bson groupArtists = Document.parse(
+            "{ $group:" +
+            "    {" +
+            "        _id: { decade: \"$decade\", artist: \"$createdPlaylists.songs.artist\" }," +
+            "        presences: { $sum: 1}" +
+            "    }" +
+            "}"
+        );
+        Bson sortPresences = sort(descending("presences"));
+        Bson groupDecades = Document.parse(
+            "{ $group:" +
+            "    {" +
+            "        _id: \"$_id.decade\"," +
+            "        favouriteArtist: { $first: \"$_id.artist\" }," +
+            "        artistPresences: { $first: \"$presences\" }," +
+            "        overallPresences: { $sum: \"$presences\" }" +
+            "    }" +
+            "}"
+        );
+        Bson finalProject = project(fields(
+                excludeId(),
+                include("favouriteArtist"),
+                computed("decade", "$_id"),
+                computed("popularity", computePopularity)
+        ));
+        Bson sortDecades = sort(ascending("decade"));
+
+        try (MongoCursor<Document> cursor = userCollection.aggregate(Arrays.asList(match, projectDecade, unwind1, unwind2, groupArtists, sortPresences, groupDecades, finalProject, sortDecades)).iterator()) {
+            while (cursor.hasNext()) {
+                Document record = cursor.next();
+                int decade = record.getDouble("decade").intValue();
+                String artist = record.getString("favouriteArtist");
+                double popularity = record.getDouble("popularity");
+                topArtists.add(new Pair<>(decade, new Pair<>(artist, popularity)));
+            }
+        } catch (MongoException mongoEx) {
+            logger.error(mongoEx.getMessage());
+            throw new ActionNotCompletedException(mongoEx);
+        }
+        return topArtists;
     }
 
     @Override
