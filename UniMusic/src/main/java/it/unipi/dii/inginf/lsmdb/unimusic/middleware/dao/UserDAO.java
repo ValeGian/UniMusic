@@ -157,8 +157,13 @@ public interface UserDAO {
      * @throws ActionNotCompletedException when the operation fails
      * @throws IllegalArgumentException when numGenres <= 0
      */
-
     public List<Pair<String, Integer>> getFavouriteGenres(int numGenres) throws ActionNotCompletedException, IllegalArgumentException;
+
+    /** It's an Analytic function.
+     * @return the artist with the highest popularity for each age range
+     * @throws ActionNotCompletedException when the operation fails
+     */
+    public List<Pair<Integer, Pair<String, Double>>> getFavouriteArtistPerAgeRange() throws ActionNotCompletedException;
 
     /** Gets all the users followed by a specific user
      * @param user user which followed users we want to return

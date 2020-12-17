@@ -2,14 +2,11 @@ package it.unipi.dii.inginf.lsmdb.unimusic.frontend.gui;
 
 import it.unipi.dii.inginf.lsmdb.unimusic.frontend.MiddlewareConnector;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Album;
-import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Playlist;
-import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -24,6 +21,7 @@ import javafx.util.Pair;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -33,11 +31,10 @@ public class statisticsPageController implements Initializable {
     private static StatisticToShow statisticToShow = defaultStatistic;
     private static final int previewImageHeight = 150;
 
-    @FXML private AnchorPane parentPane;
-
     @FXML private Button popularArtistsButton;
     @FXML private Button topAlbumForDecadeButton;
     @FXML private Button topFavouriteGenresButton;
+    @FXML private Button topArtistsPerAgeRangeButton;
 
     @FXML private TextField totalSongsLabel;
     @FXML private TextField totalUsersLabel;
@@ -101,6 +98,20 @@ public class statisticsPageController implements Initializable {
             }
         });
 
+        topArtistsPerAgeRangeButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                StatisticToShow oldStatistic = statisticToShow;
+                statisticToShow = StatisticToShow.TOP_ARTIST_FOR_AGE_RANGE;
+                try {
+                    App.setRoot("statistics");
+                } catch (IOException e) {
+                    statisticToShow = oldStatistic;
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 
     private void displayStatisticToShow() {
@@ -116,6 +127,10 @@ public class statisticsPageController implements Initializable {
             case TOP_FAVOURITE_GENRES:
                 topFavouriteGenresButton.setTextFill(Color.WHITE);
                 displayTopFavouriteGenres();
+                break;
+            case TOP_ARTIST_FOR_AGE_RANGE:
+                topArtistsPerAgeRangeButton.setTextFill(Color.WHITE);
+                displayTopArtistForAgeRange();
         }
 
         displayNumberStatistics();
@@ -219,6 +234,12 @@ public class statisticsPageController implements Initializable {
         loadTopFavouriteGenres(Integer.parseInt(limitInput.getText()));
     }
 
+    private void displayTopArtistForAgeRange() {
+        loadPane = new VBox(10);
+        statisticPane.getChildren().addAll(loadPane);
+        loadTopArtistForAgeRange();
+    }
+
     //--------------------------------------------------------------------------------------------------------
 
     private void loadTopArtists(int hitThreshold, int limit) {
@@ -263,9 +284,25 @@ public class statisticsPageController implements Initializable {
         }
     }
 
+    private void loadTopArtistForAgeRange() {
+        loadPane.getChildren().clear();
+        List<Pair<Integer, Pair<String, Double>>> artistsForAgeRange = connector.getFavouriteArtistPerAgeRange();
+        if(artistsForAgeRange.size() == 0)
+            displayEmpty(loadPane);
+        else {
+            for (Pair<Integer, Pair<String, Double>> artistInfo: artistsForAgeRange) {
+                loadPane.getChildren().add(createTopArtistForAgeRangeView(
+                        artistInfo.getKey(),
+                        artistInfo.getValue().getKey(),
+                        artistInfo.getValue().getValue()
+                ));
+            }
+        }
+    }
+
     private Text createTopArtistView(int order, Pair<String, Integer> artistStatistic) {
         Text artistNode = new Text(
-                String.valueOf(order)+ "]  "
+                order+ "]  "
                 +artistStatistic.getKey()+ "  "
                 + "(" +artistStatistic.getValue()+ " HITS)"
         );
@@ -305,9 +342,9 @@ public class statisticsPageController implements Initializable {
 
         ImageView albumImageView = new ImageView(albumImage);
 
-        Text decadeText = new Text(String.valueOf(decade)+ "s"); decadeText.setFill(Color.WHITE); decadeText.setStyle("-fx-font-weight: bold; -fx-font-size: 24px");
+        Text decadeText = new Text(decade+ "s"); decadeText.setFill(Color.WHITE); decadeText.setStyle("-fx-font-weight: bold; -fx-font-size: 24px");
         Text title = new Text(album.getTitle()); title.setFill(Color.WHITE); title.setStyle("-fx-font-weight: bold; -fx-font-size: 20px");
-        Text rating = new Text("Average Rating: " + String.valueOf(avgRating)); rating.setFill(Color.GRAY); title.setStyle("-fx-font-weight: bold; -fx-font-size: 18px");
+        Text rating = new Text("Average Rating: " +new DecimalFormat("0.00").format(avgRating)+ "%"); rating.setFill(Color.GRAY); title.setStyle("-fx-font-weight: bold; -fx-font-size: 18px");
 
         VBox albumInfo = new VBox(5, decadeText, title, rating);
         HBox albumGraphic = new HBox(10, albumImageView, albumInfo);
@@ -316,11 +353,20 @@ public class statisticsPageController implements Initializable {
 
     private Text createTopGenresView(int order, Pair<String, Integer> genre) {
         Text genreNode = new Text(
-                String.valueOf(order)+ "]  " +genre.getKey()+ " "
+                order+ "]  " +genre.getKey()+ " "
                 + "(Contained " +genre.getValue()+ " times in Playlists)"
         );
         genreNode.setFill(Color.WHITE); genreNode.setStyle("-fx-font-weight: bold; -fx-font-size: 20px");
         return genreNode;
+    }
+
+    private HBox createTopArtistForAgeRangeView(int decade, String artist, double popularity) {
+        Text artistNode = new Text(decade + " - " +(decade + 9)+ "]  " + artist + "  ");
+        artistNode.setFill(Color.WHITE); artistNode.setStyle("-fx-font-weight: bold; -fx-font-size: 20px");
+
+        Text popularityNode = new Text("(With a popularity of " + new DecimalFormat("0.00").format(popularity) + "%)");
+        popularityNode.setFill(Color.GRAY); popularityNode.setStyle("-fx-font-weight: bold; -fx-font-size: 18px");
+        return new HBox(0, artistNode, popularityNode);
     }
 
     private void displayEmpty(Pane pane) {
@@ -336,6 +382,7 @@ public class statisticsPageController implements Initializable {
     private enum StatisticToShow {
         POPULAR_ARTISTS,
         TOP_ALBUM_FOR_DECADE,
-        TOP_FAVOURITE_GENRES
+        TOP_FAVOURITE_GENRES,
+        TOP_ARTIST_FOR_AGE_RANGE
     }
 }
