@@ -33,15 +33,11 @@ public class UserAndPlaylistPopulation {
     public static void main(String[] args) throws ActionNotCompletedException {
         UserAndPlaylistPopulation instance = new UserAndPlaylistPopulation();
 
-        /*
-        instance.populateWithUser(400);
+        instance.populateWithUser(1000);
+        instance.createRandomPlaylist(1390, 5, 20);
         instance.completelyRandomLikes(3000);
         instance.completelyRandomUserFollows(2000);
-         */
         instance.completelyRandomPlaylistFollow(1000);
-        Playlist p = instance.getRandomPlaylist();
-        System.out.println(p.getID() + "       " + p.getAuthor());
-        instance.completelyRandomPlaylistFollow(3);
     }
 
     private void populateWithUser(int howManyUsers){
@@ -54,7 +50,7 @@ public class UserAndPlaylistPopulation {
         for(int i = 0; i < howManyUsers; i++){
             String fName = firstName[generator.nextInt(firstName.length)];
             String lName = lastName[generator.nextInt(lastName.length)];
-            int age = generator.nextInt(30) + 20;
+            int age = generator.nextInt(57) + 18;
             String username;
             String password = "";
             for(int j = 0; j < 6; j++){
