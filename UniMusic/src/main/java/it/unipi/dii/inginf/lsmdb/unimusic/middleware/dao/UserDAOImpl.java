@@ -39,7 +39,7 @@ public class UserDAOImpl implements UserDAO{
         UserDAO userDAO = new UserDAOImpl();
         SongDAO songDAO = new SongDAOImpl();
 
-        User admin = new User("valegiann", "root", "Valerio", "Giannini", 22);
+        User admin = new User("valegiann", "root", "Valerio", "Giannini", 22, "Italy");
         admin.setPrivilegeLevel(PrivilegeLevel.ADMIN);
         userDAO.createUser(admin);
 

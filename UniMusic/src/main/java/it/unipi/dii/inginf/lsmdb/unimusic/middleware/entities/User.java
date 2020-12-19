@@ -12,6 +12,7 @@ public class User {
     private String lastName;
     private int age;
     private PrivilegeLevel privilegeLevel;
+    private String country;
 
     public User(String username) {
         this.username = username;
@@ -22,13 +23,15 @@ public class User {
                 String password,
                 String firstName,
                 String lastName,
-                int age) {
+                int age,
+                String country) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
         this.privilegeLevel = PrivilegeLevel.STANDARD_USER;
+        this.country = country;
     }
 
     public User(Record userNeo4jRecord) {
@@ -46,6 +49,7 @@ public class User {
         lastName = userDocument.get("lastName").toString();
         age = Integer.parseInt(userDocument.get("age").toString());
         privilegeLevel = PrivilegeLevel.getPrivilegeLevel(userDocument.getString("privilegeLevel"));
+        country = userDocument.get("country").toString();
     }
 
     public Document toBsonDocument() {
@@ -56,6 +60,7 @@ public class User {
         document.append("lastName", lastName);
         document.append("age", age);
         document.append("privilegeLevel", privilegeLevel.toString());
+        document.append("country", country);
         document.append("createdPlaylists", new BsonArray());
 
         return document;
@@ -100,4 +105,8 @@ public class User {
     public PrivilegeLevel getPrivilegeLevel() { return privilegeLevel; }
 
     public void setPrivilegeLevel(PrivilegeLevel privilegeLevel) { this.privilegeLevel = privilegeLevel; }
+
+    public String getCountry() {return country; }
+
+    public void setCountry(String country) { this.country = country; }
 }
