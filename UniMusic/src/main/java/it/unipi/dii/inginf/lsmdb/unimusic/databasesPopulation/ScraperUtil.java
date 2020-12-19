@@ -1,6 +1,7 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.databasesPopulation;
 
 import java.io.IOException;
+import java.util.Random;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,7 +9,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 public class ScraperUtil {
-
+    public static void main(String[] args){
+        System.out.println(getGenre("https://genius.com/Aretha-franklin-respect-lyrics"));
+    }
     public static String getGenre(String url){
         Document doc = null;
         String genre = null;
@@ -40,6 +43,40 @@ public class ScraperUtil {
             e.printStackTrace();
         }
 
+        //********************************************************************************************
+        //********************************************************************************************
+        //ROBA ILLEGALE DA ELIMINARE
+        //********************************************************************************************
+        String[] rapGenres = {"rap", "underground hip-hop", "trap", "alternative hip-hop"};
+        String[] rockGenres = {"rock", "soft-rock", "hard-rock", "alternative-rock"};
+        String[] popGenres = {"pop", "indie-pop", "pop-rock", "dance"};
+        Random random = new Random();
+        int n = random.nextInt(10);
+        int index = 0;
+
+        if (n < 4)
+            index = 0;
+        if (n >= 4 && n < 6)
+            index = 1;
+        if (n >= 6 && n < 8)
+            index = 2;
+        if (n >= 8)
+            index = 3;
+
+        switch (genre) {
+            case "rap":
+                genre = rapGenres[index];
+                break;
+            case "rock":
+                genre = rockGenres[index];
+                break;
+            case "pop":
+                genre = popGenres[index];
+                break;
+            default:
+                break;
+        }
+        //***************************************************************************
         return genre;
     }
 
