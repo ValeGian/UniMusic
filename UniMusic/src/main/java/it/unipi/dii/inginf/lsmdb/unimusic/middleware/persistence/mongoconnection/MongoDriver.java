@@ -8,10 +8,8 @@ public class MongoDriver {
     private final MongoClient client;
     private final MongoDatabase mongoDB;
 
-    /*private final String connectionString = "mongodb://localhost:27018,localhost:27019,localhost:27020/" +
-                                        "?retryWrites=true&w=majority&wtimeout=10000";
-     */
-    private final String connectionString = "mongodb://localhost:27017";
+    private final String connectionString = "mongodb://172.16.3.115:27020,172.16.3.114:27020,172.16.3.161:27020/?w=1";
+    //private final String connectionString = "mongodb://localhost:27017";
     private final String databaseName = "UniMusic";
 
     private MongoDriver() {
