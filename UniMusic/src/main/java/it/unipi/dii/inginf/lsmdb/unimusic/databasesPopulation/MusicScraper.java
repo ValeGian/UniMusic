@@ -74,6 +74,8 @@ public class MusicScraper {
                 continue;
             }
 
+            songToInsert.setID(new ObjectId().toString());
+
             /*
             StringBuffer responseSpotify = getResponse("https://api.spotify.com/v1/tracks/" + uriSpotify, spotifyBearer);
 
@@ -82,8 +84,6 @@ public class MusicScraper {
                 miss++;
                 continue;
             }
-
-            songToInsert.setID(new ObjectId().toString());
 
             double spotifyRating = new JSONObject(responseSpotify.toString()).getInt("popularity");
 
