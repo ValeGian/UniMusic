@@ -10,6 +10,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Class that takes care of performing all actions related to scraping.
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 public class MusicScraper {
 
     public static void main(String[] args) throws ActionNotCompletedException {
-        populateWithSong(500, 1000, "BQBAdzoql0K9SxXMvmATIaEPdXWmMLL4o35BgbSzs7AGlFJwSZ-nv1aYe4wSqtC-hbVgLwLWJPrJ_oEhMPnzxpaxPNe_NP-Z_48AVgkGle8eHbIYkcOMlJ79m6EZeEqJEOaPwAalCI4IsCkGsircI52TRol4VR6mpsRISWcMNA");
+        populateWithSong(1, 5000, "BQBAdzoql0K9SxXMvmATIaEPdXWmMLL4o35BgbSzs7AGlFJwSZ-nv1aYe4wSqtC-hbVgLwLWJPrJ_oEhMPnzxpaxPNe_NP-Z_48AVgkGle8eHbIYkcOMlJ79m6EZeEqJEOaPwAalCI4IsCkGsircI52TRol4VR6mpsRISWcMNA");
     }
 
 
@@ -46,7 +47,7 @@ public class MusicScraper {
             try {
                 song = new JSONObject(responseGenius.toString()).getJSONObject("response").getJSONObject("song");
 
-                songToInsert.setTitle(song.getString("full_title"));
+                songToInsert.setTitle(song.getString("title"));
                 songToInsert.setGeniusMediaURL(song.getString("url"));
                 songToInsert.setArtist(song.getJSONObject("primary_artist").getString("name"));
 
@@ -73,6 +74,7 @@ public class MusicScraper {
                 continue;
             }
 
+            /*
             StringBuffer responseSpotify = getResponse("https://api.spotify.com/v1/tracks/" + uriSpotify, spotifyBearer);
 
             if(responseSpotify == null) {
@@ -84,9 +86,13 @@ public class MusicScraper {
             songToInsert.setID(new ObjectId().toString());
 
             double spotifyRating = new JSONObject(responseSpotify.toString()).getInt("popularity");
-            double youtubeRating = ScraperUtil.getPopularity(songToInsert.getYoutubeMediaURL());
-            double rating = spotifyRating * 0.7 + youtubeRating * 0.3;
 
+
+            double youtubeRating = ScraperUtil.getPopularity(songToInsert.getYoutubeMediaURL());
+
+            double rating = spotifyRating * 0.7 + youtubeRating * 0.3;
+*/
+            double rating = new Random().nextInt(50) + 50;
             songToInsert.setRating(rating);
 
             try{
@@ -96,8 +102,11 @@ public class MusicScraper {
             }
 
             try{
-                songAlbum.setTitle(song.getJSONObject("album").getString("full_title"));
+                songAlbum.setTitle(song.getJSONObject("album").getString("name"));
             } catch (JSONException e) {
+                try {
+                    songAlbum.setTitle(song.getJSONObject("album").getString("full_title"));
+                }catch(JSONException ex){}
             }
 
             System.out.format("Response:-\tAlbum: %s\tTitle: %s\tindex: %s\n\n", songAlbum.getImage(), songToInsert.getTitle(), i);
