@@ -6,6 +6,7 @@ public class Neo4jDriver {
     private static final Neo4jDriver instance = new Neo4jDriver();
     private final Driver driver;
 
+    //private final String uri = "neo4j://localhost:7687";
     private final String uri = "neo4j://172.16.3.161:7687";
     private final String user = "neo4j";
     private final String password = "root";
