@@ -102,7 +102,7 @@ public class Song {
         if(album.getTitle() != null)
             albumDocument = new Document("title", album.getTitle());
 
-        if(!album.getImage().equals("")){
+        if(album.getImage() != null){
             if(albumDocument == null)
                 albumDocument = new Document("image", album.getImage());
             else
