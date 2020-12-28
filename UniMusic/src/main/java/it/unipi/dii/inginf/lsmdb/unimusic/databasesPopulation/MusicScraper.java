@@ -1,9 +1,12 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.databasesPopulation;
 
+import com.mongodb.ConnectionString;
+import com.mongodb.client.*;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.dao.SongDAOImpl;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Album;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Song;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
+import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.json.*;
 import java.io.*;
@@ -19,7 +22,39 @@ import java.util.Random;
 public class MusicScraper {
 
     public static void main(String[] args) throws ActionNotCompletedException {
-        populateWithSong(1, 5000, "BQBAdzoql0K9SxXMvmATIaEPdXWmMLL4o35BgbSzs7AGlFJwSZ-nv1aYe4wSqtC-hbVgLwLWJPrJ_oEhMPnzxpaxPNe_NP-Z_48AVgkGle8eHbIYkcOMlJ79m6EZeEqJEOaPwAalCI4IsCkGsircI52TRol4VR6mpsRISWcMNA");
+
+        /*
+        MongoClient client = MongoClients.create(new ConnectionString("mongodb://localhost:27017"));
+        // connect with the database
+        MongoDatabase mongoDB = client.getDatabase("UniMusic");
+        MongoCollection songs = mongoDB.getCollection("songs");
+
+        int i = 0;
+        try (MongoCursor<Document> cursor = songs.find().iterator()){
+            while(cursor.hasNext()) {
+                String jsonSong = cursor.next().toJson();
+                Song song = new Song(jsonSong);
+                try {
+                    new SongDAOImpl().createSong(song);
+                }catch (ActionNotCompletedException ex){
+                    ex.printStackTrace();
+                    continue;
+                }catch(NullPointerException ex){
+                    System.out.println(jsonSong);
+                    break;
+                }
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+        }
+        DA FAR PARTIRE COSI COME E'*/
+
+        populateWithSong(500001, 510000, "BQBAdzoql0K9SxXMvmATIaEPdXWmMLL4o35BgbSzs7AGlFJwSZ-nv1aYe4wSqtC-hbVgLwLWJPrJ_oEhMPnzxpaxPNe_NP-Z_48AVgkGle8eHbIYkcOMlJ79m6EZeEqJEOaPwAalCI4IsCkGsircI52TRol4VR6mpsRISWcMNA");
     }
 
 
@@ -63,10 +98,19 @@ public class MusicScraper {
                         uriSpotify = media.getJSONObject(iter).getString("native_uri").split(":")[2];
                     }
                 }
-
+                /* VERSIONE BUONA
                 if (songToInsert.getYoutubeMediaURL() == null || songToInsert.getSpotifyMediaURL() == null){
                     miss++;
                     continue;
+                }
+                 */
+
+                //VERSION DA CANCELLARE
+                if (songToInsert.getYoutubeMediaURL() == null){
+                    songToInsert.setYoutubeMediaURL(getYoutubeUrl());
+                }
+                if(songToInsert.getSpotifyMediaURL() == null){
+                    songToInsert.setSpotifyMediaURL(getSpotifyUrl());
                 }
 
             }catch (JSONException ex){
@@ -135,6 +179,34 @@ public class MusicScraper {
 
         }
         System.out.format("Missed mandatory field: %d\tMissed Url: %s\tIndex: %d", miss, noResponse, i);
+    }
+
+    private static String getYoutubeUrl() {
+        String fakeUrl = "http://www.youtube.com/watch?v=";
+        Random generator = new Random();
+        for(int j = 0; j < 11; j++){
+            int type = generator.nextInt(2);
+            if(type == 0)
+                fakeUrl += (char) (generator.nextInt(26) + 'a');
+            else
+                fakeUrl += (char) (generator.nextInt(26) + 'A');
+        }
+        return fakeUrl;
+    }
+
+    private static String getSpotifyUrl() {
+        String fakeUrl = "https://open.spotify.com/track/";
+        Random generator = new Random();
+        for(int j = 0; j < 22; j++){
+            int type = generator.nextInt(3);
+            if(type == 0)
+                fakeUrl += (char) (generator.nextInt(26) + 'a');
+            else if(type == 1)
+                fakeUrl += (char) (generator.nextInt(26) + 'A');
+            else
+                fakeUrl +=  (generator.nextInt(10));
+        }
+        return fakeUrl;
     }
 
 
