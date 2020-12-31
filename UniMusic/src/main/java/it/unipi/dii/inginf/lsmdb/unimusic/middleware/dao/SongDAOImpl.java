@@ -5,9 +5,7 @@ import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 
-import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Album;
-import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.PrivilegeLevel;
-import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Song;
+import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.*;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.log.UMLogger;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.Collections;
@@ -42,10 +40,13 @@ public class SongDAOImpl implements SongDAO{
     public static void main(String[] args) throws ActionNotCompletedException {
 
         SongDAOImpl song = new SongDAOImpl();
-
-
+        System.out.println(song.getTotalSongs());
+        System.out.println("OK");
+        song.deleteSongByYear();
         UserDAOImpl user = new UserDAOImpl();
-        user.updateUserPrivilegeLevel(user.getUserByUsername("ale98"), PrivilegeLevel.ADMIN);
+
+
+        return;
 
         //System.out.println(song.findTopRatedAlbumPerDecade().get(0));
         //song.populateWithUser();
@@ -175,6 +176,7 @@ public class SongDAOImpl implements SongDAO{
 
     //----------------------------------------------  RETRIEVE  ----------------------------------------------
 
+
     /**
      * @param songID the id of the song you wanto to return.
      * @return the song with the specified id.
@@ -196,6 +198,23 @@ public class SongDAOImpl implements SongDAO{
             logger.error(mongoEx.getMessage());
         }
         return songToReturn;
+    }
+
+    private void deleteSongByYear() {
+
+        MongoCollection<Document> songCollection = MongoDriver.getInstance().getCollection(Collections.SONGS);
+
+        try (MongoCursor<Document> cursor = songCollection.find(lt("releaseYear", 1900)).iterator())
+        {
+            while(cursor.hasNext())
+            {
+                Song songToReturn =  new Song(cursor.next().toJson());
+                deleteSong(songToReturn);
+            }
+        } catch (MongoException | ActionNotCompletedException mongoEx) {
+            logger.error(mongoEx.getMessage());
+        }
+
     }
 
 
@@ -377,6 +396,7 @@ public class SongDAOImpl implements SongDAO{
         return hotSongs;
     }
 
+
     //-----------------------------------------------  UPDATE  -----------------------------------------------
 
     /**
@@ -441,13 +461,36 @@ public class SongDAOImpl implements SongDAO{
     /**
      * @param song the song you want to delete.
      */
-    private void deleteSongDocument(Song song) {
+    @Override
+    public void deleteSong(Song song) throws ActionNotCompletedException, IllegalArgumentException {
+        if(song == null) throw new IllegalArgumentException();
 
-        if(song == null || song.getID() == null)
-            throw new IllegalArgumentException();
+        try {
+            deleteSongDocument(song);
+            deleteSongNode(song);
+            logger.info("DELETED Song " + song.getID());
+        } catch (MongoException mEx) {
+            logger.error(mEx.getMessage());
+            throw new ActionNotCompletedException(mEx);
+        } catch (Neo4jException n4jEx) {
+            logger.error(n4jEx.getMessage());
+            throw new ActionNotCompletedException(n4jEx);
+        }
+    }
 
-        MongoCollection<Document> songCollection = MongoDriver.getInstance().getCollection(Collections.SONGS);
-        songCollection.deleteOne(eq("_id", song.getID()));
+    @Override
+    public void deleteSongDocument(Song song) throws MongoException {
+        MongoCollection<Document> songColl = MongoDriver.getInstance().getCollection(Collections.SONGS);
+        songColl.deleteOne(eq("_id", song.getID()));
+    }
+
+    private void deleteSongNode(Song song) throws Neo4jException {
+        try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
+            session.run(
+                    "MATCH (s:Song {songId: $songId})"
+                            + "DETACH DELETE s",
+                    parameters("songId", song.getID()));
+        }
     }
 
 

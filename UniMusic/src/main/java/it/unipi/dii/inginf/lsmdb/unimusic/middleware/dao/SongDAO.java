@@ -42,4 +42,8 @@ public interface SongDAO {
     void decrementLikeCount(Song song) throws ActionNotCompletedException;
 
     int getTotalSongs();
+
+    void deleteSong(Song song) throws ActionNotCompletedException, IllegalArgumentException;
+
+    void deleteSongDocument(Song mongoSong);
 }

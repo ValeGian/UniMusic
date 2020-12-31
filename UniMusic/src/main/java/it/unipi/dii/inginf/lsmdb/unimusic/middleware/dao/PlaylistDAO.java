@@ -13,29 +13,33 @@ import java.util.List;
  */
 public interface PlaylistDAO {
 
-    public void createPlaylist(Playlist playlist) throws ActionNotCompletedException;
+    void createPlaylist(Playlist playlist) throws ActionNotCompletedException;
 
-    public Playlist getPlaylist(String playlistID) throws ActionNotCompletedException;
+    Playlist getPlaylist(String playlistID) throws ActionNotCompletedException;
 
-    public Playlist getFavourite(User user) throws ActionNotCompletedException;
+    Playlist getFavourite(User user) throws ActionNotCompletedException;
 
-    public void addSong(Playlist playlist, Song song) throws ActionNotCompletedException;
+    void addSong(Playlist playlist, Song song) throws ActionNotCompletedException;
 
-    public void deleteSong(Playlist playlist, Song song) throws ActionNotCompletedException;
+    void deleteSong(Playlist playlist, Song song) throws ActionNotCompletedException;
 
-    public void addSongToFavourite(User user, Song song) throws ActionNotCompletedException;
+    void addSongToFavourite(User user, Song song) throws ActionNotCompletedException;
 
-    public void deleteSongFromFavourite(User user, Song song) throws ActionNotCompletedException;
+    void deleteSongFromFavourite(User user, Song song) throws ActionNotCompletedException;
 
-    public void deletePlaylist(Playlist playlist) throws ActionNotCompletedException;
+    void deletePlaylist(Playlist playlist) throws ActionNotCompletedException;
 
-    public boolean isSongFavourite(User user, Song song);
+    boolean isSongFavourite(User user, Song song);
 
-    public List<Song> getAllSongs(Playlist playlist) throws ActionNotCompletedException;
+    List<Song> getAllSongs(Playlist playlist) throws ActionNotCompletedException;
 
-    public List<Playlist> getSuggestedPlaylists(User user) throws ActionNotCompletedException;
+    List<Playlist> getSuggestedPlaylists(User user) throws ActionNotCompletedException;
 
-    public List<Playlist> getSuggestedPlaylists(User user, int limit) throws ActionNotCompletedException;
+    List<Playlist> getSuggestedPlaylists(User user, int limit) throws ActionNotCompletedException;
+
+
 
     int getTotalPlaylists();
+
+    void deletePlaylistDocument(Playlist playlist);
 }

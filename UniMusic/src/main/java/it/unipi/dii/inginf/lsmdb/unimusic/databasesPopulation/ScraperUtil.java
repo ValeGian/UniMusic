@@ -63,6 +63,9 @@ public class ScraperUtil {
         if (n >= 8)
             index = 3;
 
+        if(genre == null)
+            genre = "pop";
+
         switch (genre) {
             case "rap":
                 genre = rapGenres[index];

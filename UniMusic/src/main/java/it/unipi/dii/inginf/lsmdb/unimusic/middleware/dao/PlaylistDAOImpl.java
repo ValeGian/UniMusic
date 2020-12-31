@@ -331,7 +331,8 @@ public class PlaylistDAOImpl implements PlaylistDAO{
         }
     }
 
-    private void deletePlaylistDocument(Playlist playlist){
+    @Override
+    public void deletePlaylistDocument(Playlist playlist){
         MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
         usersCollection.updateOne(new Document(), pull("createdPlaylists", eq("playlistId", playlist.getID())));
     }

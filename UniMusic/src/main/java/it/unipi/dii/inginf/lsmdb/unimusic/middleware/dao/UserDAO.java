@@ -1,5 +1,6 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.middleware.dao;
 
+import com.mongodb.MongoException;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.*;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
 import javafx.util.Pair;
@@ -163,7 +164,7 @@ public interface UserDAO {
      * @return the artist with the highest popularity for each age range
      * @throws ActionNotCompletedException when the operation fails
      */
-    public List<Pair<Integer, Pair<String, Double>>> getFavouriteArtistPerAgeRange() throws ActionNotCompletedException;
+    public List<Pair<Integer, Pair<String, String>>> getFavouriteArtistPerAgeRange() throws ActionNotCompletedException;
 
     /** Gets all the users followed by a specific user
      * @param user user which followed users we want to return
@@ -190,4 +191,6 @@ public interface UserDAO {
     public void deleteUser(User user) throws ActionNotCompletedException, IllegalArgumentException;
 
     int getTotalUsers();
+
+    void deleteUserDocument(User user) throws MongoException;
 }

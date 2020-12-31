@@ -141,8 +141,8 @@ public class MiddlewareConnector {
         return favouriteGenres;
     }
 
-    public List<Pair<Integer, Pair<String, Double>>> getFavouriteArtistPerAgeRange() {
-        List<Pair<Integer, Pair<String, Double>>> topArtists;
+    public List<Pair<Integer, Pair<String, String>>> getFavouriteArtistPerAgeRange() {
+        List<Pair<Integer, Pair<String, String>>> topArtists;
         try {
             topArtists = userDAO.getFavouriteArtistPerAgeRange();
         } catch (ActionNotCompletedException e) {

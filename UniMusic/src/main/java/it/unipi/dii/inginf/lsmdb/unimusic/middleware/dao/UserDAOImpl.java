@@ -17,8 +17,6 @@ import org.bson.conversions.Bson;
 import org.neo4j.driver.*;
 import org.neo4j.driver.exceptions.Neo4jException;
 
-import javax.print.Doc;
-import javax.swing.plaf.synth.SynthScrollBarUI;
 import java.util.ArrayList;
 
 import java.util.Arrays;
@@ -201,10 +199,10 @@ public class UserDAOImpl implements UserDAO{
                 //Second layer suggestion
                 List<User> secondLayerSuggestion = session.readTransaction((TransactionWork<List<User>>) tx -> {
                     Result result = tx.run(
-                            "MATCH (me:User {username: $username})-[:LIKES]->()<-[:LIKES]-(suggested:User) "
-                                    + "WHERE NOT (me)-[:FOLLOWS_USER]->(suggested) "
-                                    + "AND NOT (me)-[:FOLLOWS_USER]->()-[:FOLLOWS_USER]->(suggested) AND me <> suggested "
-                                    + "RETURN suggested, count(*) AS Strength ORDER BY Strength DESC LIMIT $limit",
+                                "MATCH (me:User {username: $username})-[:LIKES]->()<-[:LIKES]-(suggested:User) "
+                                        + "WHERE NOT (me)-[:FOLLOWS_USER]->(suggested) "
+                                        + "AND NOT (me)-[:FOLLOWS_USER]->()-[:FOLLOWS_USER]->(suggested) AND me <> suggested "
+                                        + "RETURN suggested, count(*) AS Strength ORDER BY Strength DESC LIMIT $limit",
                             parameters("username", user.getUsername(), "limit", limit - firstSuggestionSize)
                     );
                     ArrayList<User> secondLayerUsers = new ArrayList<>();
@@ -242,8 +240,7 @@ public class UserDAOImpl implements UserDAO{
         try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
             session.run("MATCH (following:User { username: $following }) "
                             + "MATCH (followed:User { username: $followed }) "
-                            + "WHERE following <> followed " +
-                            ""
+                            + "WHERE following <> followed "
                             + "MERGE (following)-[:FOLLOWS_USER]->(followed)",
                     parameters("following", userFollowing.getUsername(), "followed", userFollowed.getUsername())
             );
@@ -557,12 +554,11 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public List<Pair<Integer, Pair<String, Double>>> getFavouriteArtistPerAgeRange() throws ActionNotCompletedException {
+    public List<Pair<Integer, Pair<String, String>>> getFavouriteArtistPerAgeRange() throws ActionNotCompletedException {
         MongoCollection<Document> userCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
-        List<Pair<Integer, Pair<String, Double>>> topArtists = new ArrayList<>();
+        List<Pair<Integer, Pair<String, String>>> topArtists = new ArrayList<>();
 
         Document computeDecade = Document.parse("{$multiply: [{ $floor:{ $divide: [ \"$age\", 10 ] }}, 10]}");
-        Document computePopularity = Document.parse("{$divide: [ \"$overallPresences\", \"$artistPresences\" ]}");
 
         Bson match = match(exists("age"));
         Bson projectDecade = project(fields(
@@ -596,7 +592,8 @@ public class UserDAOImpl implements UserDAO{
                 excludeId(),
                 include("favouriteArtist"),
                 computed("decade", "$_id"),
-                computed("popularity", computePopularity)
+                include("artistPresences"),
+                include("overallPresences")
         ));
         Bson sortDecades = sort(ascending("decade"));
 
@@ -605,8 +602,9 @@ public class UserDAOImpl implements UserDAO{
                 Document record = cursor.next();
                 int decade = record.getDouble("decade").intValue();
                 String artist = record.getString("favouriteArtist");
-                double popularity = record.getDouble("popularity");
-                topArtists.add(new Pair<>(decade, new Pair<>(artist, popularity)));
+                String presences = String.valueOf(record.getInteger("artistPresences"));
+                String overallPresences = String.valueOf(record.getInteger("overallPresences"));
+                topArtists.add(new Pair<>(decade, new Pair<>(artist, presences + ":" + overallPresences)));
             }
         } catch (MongoException mongoEx) {
             logger.error(mongoEx.getMessage());
@@ -696,7 +694,8 @@ public class UserDAOImpl implements UserDAO{
                 ));
     }
 
-    private void deleteUserDocument(User user) throws MongoException {
+    @Override
+    public void deleteUserDocument(User user) throws MongoException {
         MongoCollection<Document> userColl = MongoDriver.getInstance().getCollection(Collections.USERS);
         userColl.deleteOne(eq("_id", user.getUsername()));
     }

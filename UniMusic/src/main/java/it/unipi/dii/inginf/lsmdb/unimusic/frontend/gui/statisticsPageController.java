@@ -286,11 +286,11 @@ public class statisticsPageController implements Initializable {
 
     private void loadTopArtistForAgeRange() {
         loadPane.getChildren().clear();
-        List<Pair<Integer, Pair<String, Double>>> artistsForAgeRange = connector.getFavouriteArtistPerAgeRange();
+        List<Pair<Integer, Pair<String, String>>> artistsForAgeRange = connector.getFavouriteArtistPerAgeRange();
         if(artistsForAgeRange.size() == 0)
             displayEmpty(loadPane);
         else {
-            for (Pair<Integer, Pair<String, Double>> artistInfo: artistsForAgeRange) {
+            for (Pair<Integer, Pair<String, String>> artistInfo: artistsForAgeRange) {
                 loadPane.getChildren().add(createTopArtistForAgeRangeView(
                         artistInfo.getKey(),
                         artistInfo.getValue().getKey(),
@@ -360,11 +360,12 @@ public class statisticsPageController implements Initializable {
         return genreNode;
     }
 
-    private HBox createTopArtistForAgeRangeView(int decade, String artist, double popularity) {
+    private HBox createTopArtistForAgeRangeView(int decade, String artist, String popularity) {
         Text artistNode = new Text(decade + " - " +(decade + 9)+ "]  " + artist + "  ");
         artistNode.setFill(Color.WHITE); artistNode.setStyle("-fx-font-weight: bold; -fx-font-size: 20px");
 
-        Text popularityNode = new Text("(With a popularity of " + new DecimalFormat("0.00").format(popularity) + "%)");
+        String[]presence = popularity.split(":");
+        Text popularityNode = new Text("(Present " + presence[0] + " times on total " + presence[1] + ")");
         popularityNode.setFill(Color.GRAY); popularityNode.setStyle("-fx-font-weight: bold; -fx-font-size: 18px");
         return new HBox(0, artistNode, popularityNode);
     }
