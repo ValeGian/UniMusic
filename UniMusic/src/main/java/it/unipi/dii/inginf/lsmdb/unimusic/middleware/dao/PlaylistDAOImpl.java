@@ -4,6 +4,7 @@ package it.unipi.dii.inginf.lsmdb.unimusic.middleware.dao;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.model.Updates;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Album;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Playlist;
@@ -47,22 +48,7 @@ public class PlaylistDAOImpl implements PlaylistDAO{
         PlaylistDAOImpl p = new PlaylistDAOImpl();
         UserDAOImpl u = new UserDAOImpl();
         SongDAOImpl s = new SongDAOImpl();
-        Playlist playlist1 = new Playlist("", "5fd4b32b3ec622679f961d40", "");
-        Playlist playlist2 = new Playlist("", "5fd4b32b3ec622679f961d3e", "");
-        Playlist playlist3 = new Playlist("gaetano", "", "Playlistina toptop", "urlimmagine.png");
-        User user1 = new User("lorenzo");
-        User user2 = new User("gaetano");
-        User user3 = new User("gesu");
-        User user4 = new User("PauCha1990");
-        User user5 = new User("FraBon1983");
-        try {
-            List<Pair<String, Integer>> generi = u.getFavouriteGenres(3);
-                for (Pair<String, Integer> genere: generi)
-                    System.out.println(genere);
-        } catch (ActionNotCompletedException e) {
-            e.printStackTrace();
-        }
-
+        Playlist playlist1 = new Playlist("", "5fef0affd684f46c1ffd2e0c", "");
     }
 
     @Override
@@ -332,12 +318,18 @@ public class PlaylistDAOImpl implements PlaylistDAO{
     }
 
     @Override
-    public void deletePlaylistDocument(Playlist playlist){
-        MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
-        usersCollection.updateOne(new Document(), pull("createdPlaylists", eq("playlistId", playlist.getID())));
+    public void deletePlaylistDocument(Playlist playlist) throws MongoException{
+        try {
+            Bson find = eq("createdPlaylists.playlistId", playlist.getID());
+            MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
+            usersCollection.updateOne(find, pull("createdPlaylists", eq("playlistId", playlist.getID())));
+        }
+        catch (MongoException mongoEx) {
+            throw mongoEx;
+        }
     }
 
-    private void deletePlaylistNode(Playlist playlist){
+    private void deletePlaylistNode(Playlist playlist) throws Neo4jException{
         try ( Session session = Neo4jDriver.getInstance().getDriver().session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
@@ -345,6 +337,9 @@ public class PlaylistDAOImpl implements PlaylistDAO{
                         parameters("playlistId", playlist.getID()) );
                 return null;
             });
+        }
+        catch (Neo4jException neo4jEx){
+            throw neo4jEx;
         }
     }
 
