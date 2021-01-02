@@ -98,20 +98,12 @@ public class MusicScraper {
                         uriSpotify = media.getJSONObject(iter).getString("native_uri").split(":")[2];
                     }
                 }
-                /* VERSIONE BUONA
+
                 if (songToInsert.getYoutubeMediaURL() == null || songToInsert.getSpotifyMediaURL() == null){
                     miss++;
                     continue;
                 }
-                 */
 
-                //VERSION DA CANCELLARE
-                if (songToInsert.getYoutubeMediaURL() == null){
-                    songToInsert.setYoutubeMediaURL(getYoutubeUrl());
-                }
-                if(songToInsert.getSpotifyMediaURL() == null){
-                    songToInsert.setSpotifyMediaURL(getSpotifyUrl());
-                }
 
             }catch (JSONException ex){
                 miss++;
@@ -120,7 +112,7 @@ public class MusicScraper {
 
             songToInsert.setID(new ObjectId().toString());
 
-            /*
+
             StringBuffer responseSpotify = getResponse("https://api.spotify.com/v1/tracks/" + uriSpotify, spotifyBearer);
 
             if(responseSpotify == null) {
@@ -135,8 +127,7 @@ public class MusicScraper {
             double youtubeRating = ScraperUtil.getPopularity(songToInsert.getYoutubeMediaURL());
 
             double rating = spotifyRating * 0.7 + youtubeRating * 0.3;
-*/
-            double rating = new Random().nextInt(50) + 50;
+
             songToInsert.setRating(rating);
 
             try{
@@ -179,34 +170,6 @@ public class MusicScraper {
 
         }
         System.out.format("Missed mandatory field: %d\tMissed Url: %s\tIndex: %d", miss, noResponse, i);
-    }
-
-    private static String getYoutubeUrl() {
-        String fakeUrl = "http://www.youtube.com/watch?v=";
-        Random generator = new Random();
-        for(int j = 0; j < 11; j++){
-            int type = generator.nextInt(2);
-            if(type == 0)
-                fakeUrl += (char) (generator.nextInt(26) + 'a');
-            else
-                fakeUrl += (char) (generator.nextInt(26) + 'A');
-        }
-        return fakeUrl;
-    }
-
-    private static String getSpotifyUrl() {
-        String fakeUrl = "https://open.spotify.com/track/";
-        Random generator = new Random();
-        for(int j = 0; j < 22; j++){
-            int type = generator.nextInt(3);
-            if(type == 0)
-                fakeUrl += (char) (generator.nextInt(26) + 'a');
-            else if(type == 1)
-                fakeUrl += (char) (generator.nextInt(26) + 'A');
-            else
-                fakeUrl +=  (generator.nextInt(10));
-        }
-        return fakeUrl;
     }
 
 

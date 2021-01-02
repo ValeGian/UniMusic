@@ -234,7 +234,9 @@ public class SongDAOImpl implements SongDAO{
         MongoCollection<Document> songCollection = MongoDriver.getInstance().getCollection(Collections.SONGS);
         List<Song> songsToReturn = new ArrayList<>();
 
-        Bson match = match(regex(attributeField, "(?i)^" + partialInput + ".*"));
+        String capPartialInput = partialInput.substring(0, 1).toUpperCase() + partialInput.substring(1);
+
+        Bson match = match(regex(attributeField, "^" + capPartialInput + ".*"));
         Bson sortLike = sort(descending("likeCount"));
         try (MongoCursor<Document> cursor = songCollection.aggregate(Arrays.asList(match, sortLike, limit(maxNumber))).iterator()) {
             while(cursor.hasNext()) {
