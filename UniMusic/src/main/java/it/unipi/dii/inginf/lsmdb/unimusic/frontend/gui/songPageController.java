@@ -105,21 +105,21 @@ public class songPageController implements Initializable {
 
         titleText.setText(songToDisplay.getTitle());
 
-        String artists = songToDisplay.getArtist();
+        String artists = "Artist: " + songToDisplay.getArtist();
         if(songToDisplay.getFeaturedArtists().size() != 0) {
             artists +=" (feat ";
             for (String artist : songToDisplay.getFeaturedArtists())
                 artists += artist + ", ";
+            artists = artists.substring(0, artists.length()-2) + ")";
         }
-        String artistComplete = artists.substring(0, artists.length()-2) + ")";
-        artistText.setText(artistComplete);
+        artistText.setText(artists);
 
-        albumText.setText(songToDisplay.getAlbum().getTitle());
+        albumText.setText("Album: " + songToDisplay.getAlbum().getTitle());
 
-        String releasedYear = (songToDisplay.getReleaseYear() == 0)?"Release year unknown":("" + songToDisplay.getReleaseYear());
+        String releasedYear = (songToDisplay.getReleaseYear() == 0)?"Release year unknown":("Released year: " + songToDisplay.getReleaseYear());
         releasedYearText.setText(releasedYear);
 
-        genreText.setText(songToDisplay.getGenre());
+        genreText.setText("Genre: " + songToDisplay.getGenre());
     }
 
 
