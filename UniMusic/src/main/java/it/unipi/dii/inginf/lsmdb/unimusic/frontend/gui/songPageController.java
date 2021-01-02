@@ -11,6 +11,10 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -20,7 +24,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
+import java.awt.*;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.List;
@@ -34,7 +41,9 @@ public class songPageController implements Initializable {
     @FXML private Button playlistButton;
     @FXML private Button likeButton;
     @FXML private Button closeListButton;
-
+    @FXML private Button youtubeButton;
+    @FXML private Button spotifyButton;
+    @FXML private Button geniusButton;
 
     @FXML private TextField titleText;
     @FXML private TextField artistText;
@@ -44,10 +53,9 @@ public class songPageController implements Initializable {
 
     @FXML private Label ratingLabel;
     @FXML private Label likeLabel;
-
-    @FXML private TextField youtubeUrlText;
-    @FXML private TextField spotifyUrlText;
-    @FXML private TextField geniusUrlText;
+    @FXML private Label youtubeUrlText;
+    @FXML private Label spotifyUrlText;
+    @FXML private Label geniusUrlText;
 
     @FXML private ImageView imageAlbum;
     @FXML private ImageView favouriteImg;
@@ -130,24 +138,15 @@ public class songPageController implements Initializable {
 
         likeButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(ActionEvent actionEvent) {
-                handleLike();
-            }
-        });
+            public void handle(ActionEvent actionEvent) { handleLike(); }});
 
         favouriteButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(ActionEvent actionEvent) {
-                handleFavourite();
-            }
-        });
+            public void handle(ActionEvent actionEvent) { handleFavourite(); }});
 
         playlistButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(ActionEvent actionEvent) {
-                handlePlaylist();
-            }
-        });
+            public void handle(ActionEvent actionEvent) { handlePlaylist(); }});
 
         List<Playlist> allUserPlaylist = connector.getUserPlaylists();
 
@@ -241,13 +240,31 @@ public class songPageController implements Initializable {
 
 
     /**
-     * Set the urls to other web site to display where is possible to listen to this song.
+     * Set the spots to other web site to display where is possible to listen to this song.
      */
     private void setUrls() {
 
         youtubeUrlText.setText("YOUTUBE URL:   " + songToDisplay.getYoutubeMediaURL());
+        youtubeButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent actionEvent) { openUrl(songToDisplay.getYoutubeMediaURL()); }});
+
         spotifyUrlText.setText("SPOTIFY URL:   " + songToDisplay.getSpotifyMediaURL());
+        spotifyButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent actionEvent) { openUrl(songToDisplay.getSpotifyMediaURL()); }});
+
         geniusUrlText.setText("GENIUS URL:   " + songToDisplay.getGeniusMediaURL());
+        geniusButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent actionEvent) { openUrl(songToDisplay.getGeniusMediaURL()); }});
+
     }
 
+    private void openUrl(String URL) {
+        try {
+            Desktop.getDesktop().browse(new URI(URL));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
 }

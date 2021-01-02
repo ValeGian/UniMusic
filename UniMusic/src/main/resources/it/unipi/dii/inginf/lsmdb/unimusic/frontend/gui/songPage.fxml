@@ -70,92 +70,106 @@
                      <children>
                         <VBox spacing="20.0">
                            <children>
-                              <TextField fx:id="youtubeUrlText" editable="false" minWidth="600.0" text="asdssads">
-                                 <font>
-                                    <Font size="58.0" />
-                                 </font>
-                              </TextField>
-                              <TextField fx:id="spotifyUrlText" editable="false" minWidth="600.0" text="sds" />
-                              <TextField fx:id="geniusUrlText" editable="false" minWidth="600.0" text="sdsds" />
-                           </children>
-                           <VBox.margin>
-                              <Insets left="10.0" top="100.0" />
-                           </VBox.margin>
-                        </VBox>
-                        <HBox prefHeight="24.0" prefWidth="180.0" spacing="100.0">
-                           <children>
-                              <Button fx:id="favouriteButton" minWidth="158.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="234.0" styleClass="song_button">
-                                 <graphic>
-                                    <Label minWidth="-Infinity" prefHeight="29.0" prefWidth="169.0" text="Add to favourite">
-                                       <graphic>
-                                          <ImageView fx:id="favouriteImg" fitHeight="24.0" fitWidth="24.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@img/heart.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                       <padding>
-                                          <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                                       </padding>
-                                    </Label>
-                                 </graphic>
-                              </Button>
-                              <AnchorPane prefHeight="0" prefWidth="0">
+                              <HBox prefHeight="24.0" prefWidth="180.0" spacing="100.0">
                                  <children>
-                                    <Button fx:id="playlistButton" minWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="212.0" styleClass="song_button">
+                                    <Button fx:id="favouriteButton" minWidth="158.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="234.0" styleClass="song_button">
                                        <graphic>
-                                          <Label minWidth="160.0" text="Add to a playlist">
+                                          <Label minWidth="-Infinity" prefHeight="29.0" prefWidth="169.0" text="Add to favourite">
                                              <graphic>
-                                                <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                                <ImageView fx:id="favouriteImg" fitHeight="24.0" fitWidth="24.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
                                                    <image>
-                                                      <Image url="@img/plus.png" />
+                                                      <Image url="@img/heart.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </graphic>
+                                             <padding>
+                                                <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                             </padding>
+                                          </Label>
+                                       </graphic>
+                                       <HBox.margin>
+                                          <Insets top="140.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <AnchorPane prefHeight="0" prefWidth="0">
+                                       <children>
+                                          <Button fx:id="playlistButton" minWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="212.0" styleClass="song_button" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="140.0">
+                                             <graphic>
+                                                <Label minWidth="160.0" text="Add to a playlist">
+                                                   <graphic>
+                                                      <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@img/plus.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                </Label>
+                                             </graphic>
+                                          </Button>
+                                          <ScrollPane fx:id="scrollList" hbarPolicy="NEVER" layoutY="30.0" prefViewportHeight="140.0" prefViewportWidth="350.0" vbarPolicy="NEVER" visible="false">
+                                             <content>
+                                                <ListView fx:id="playlistList" prefHeight="140.0" prefWidth="350.0" AnchorPane.topAnchor="30.0" />
+                                             </content>
+                                          </ScrollPane>
+                                          <Button fx:id="closeListButton" mnemonicParsing="false" text="CLOSE" visible="false" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="172.0" />
+                                       </children>
+                                    </AnchorPane>
+                                    <Button fx:id="likeButton" mnemonicParsing="false" prefHeight="35.0" prefWidth="87.0" styleClass="song_button">
+                                       <graphic>
+                                          <Label fx:id="likeLabel" minWidth="-Infinity" prefHeight="25.0" prefWidth="120.0" text="Like">
+                                             <graphic>
+                                                <ImageView fx:id="likeImg" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@img/like.png" />
                                                    </image>
                                                 </ImageView>
                                              </graphic>
                                           </Label>
                                        </graphic>
+                                       <HBox.margin>
+                                          <Insets left="-180.0" top="140.0" />
+                                       </HBox.margin>
                                     </Button>
-                                    <ScrollPane fx:id="scrollList" vbarPolicy="NEVER" hbarPolicy="NEVER" layoutY="30.0" prefViewportHeight="140.0" prefViewportWidth="350.0"  visible="false">
-                                       <content>
-                                          <ListView fx:id="playlistList" prefHeight="140.0" prefWidth="350.0" AnchorPane.topAnchor="30.0" />
-                                       </content>
-                                    </ScrollPane>
-                                    <Button fx:id="closeListButton" mnemonicParsing="false" text="CLOSE" visible="false" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="172.0" />
-                                 </children>
-                              </AnchorPane>
-                              <Button fx:id="likeButton" mnemonicParsing="false" prefHeight="35.0" prefWidth="87.0" styleClass="song_button">
-                                 <graphic>
-                                    <Label fx:id="likeLabel" minWidth="-Infinity" prefHeight="25.0" prefWidth="120.0" text="Like">
+                                    <Label fx:id="ratingLabel" minWidth="-Infinity" prefWidth="200.0" text="Rating">
                                        <graphic>
-                                          <ImageView fx:id="likeImg" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@img/like.png" />
+                                                <Image url="@img/statistic.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
+                                       <HBox.margin>
+                                          <Insets top="140.0" />
+                                       </HBox.margin>
                                     </Label>
-                                 </graphic>
-                                 <HBox.margin>
-                                    <Insets left="-180.0" />
-                                 </HBox.margin>
-                              </Button>
-                              <Label fx:id="ratingLabel" minWidth="-Infinity" prefWidth="200.0" text="Rating">
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="-240.0" />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </HBox>
+                              <Button fx:id="youtubeButton" mnemonicParsing="false" styleClass="song_button">
                                  <graphic>
-                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@img/statistic.png" />
-                                       </image>
-                                    </ImageView>
+                                    <Label fx:id="youtubeUrlText" minWidth="600.0" text="Youtube" />
                                  </graphic>
-                              </Label>
+                              </Button>
+                              <Button fx:id="geniusButton" mnemonicParsing="false" styleClass="song_button">
+                                 <graphic>
+                                    <Label fx:id="geniusUrlText" minWidth="600.0" text="Genius" />
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="spotifyButton" mnemonicParsing="false" styleClass="song_button">
+                                 <graphic>
+                                    <Label fx:id="spotifyUrlText" minWidth="600.0" text="Spotify" />
+                                 </graphic>
+                              </Button>
                            </children>
                            <VBox.margin>
-                              <Insets top="-240.0" />
+                              <Insets left="10.0" top="100.0" />
                            </VBox.margin>
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding>
-                        </HBox>
+                        </VBox>
                      </children>
                   </VBox>
                </children>
