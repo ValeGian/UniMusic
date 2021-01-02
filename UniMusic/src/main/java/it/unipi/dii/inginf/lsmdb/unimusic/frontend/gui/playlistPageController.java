@@ -98,7 +98,9 @@ public class playlistPageController implements Initializable {
 
     private void setPlaylistImage() {
         Image playlistImage;
-        if (playlistToDisplay.getUrlImage() != null)
+        try {
+            if (playlistToDisplay.getUrlImage() == null || playlistToDisplay.getUrlImage().equals(""))
+                throw new Exception();
             playlistImage = new Image(
                     playlistToDisplay.getUrlImage(),
                     310,
@@ -107,7 +109,8 @@ public class playlistPageController implements Initializable {
                     true,
                     true
             );
-        else
+        }
+        catch(Exception ex) {
             playlistImage = new Image(
                     "file:src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/empty.jpg",
                     310,
@@ -116,6 +119,8 @@ public class playlistPageController implements Initializable {
                     true,
                     true
             );
+        }
+
         imagePlaylist.setImage(playlistImage);
     }
 

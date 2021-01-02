@@ -38,8 +38,7 @@ public interface PlaylistDAO {
     List<Playlist> getSuggestedPlaylists(User user, int limit) throws ActionNotCompletedException;
 
 
-
+    void deletePlaylistDocument(Playlist playlist) throws ActionNotCompletedException;
     int getTotalPlaylists();
 
-    void deletePlaylistDocument(Playlist playlist);
 }
