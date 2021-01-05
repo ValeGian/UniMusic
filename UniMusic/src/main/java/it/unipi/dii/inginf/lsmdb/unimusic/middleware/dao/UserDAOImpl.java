@@ -37,57 +37,7 @@ public class UserDAOImpl implements UserDAO{
         UserDAO userDAO = new UserDAOImpl();
         SongDAO songDAO = new SongDAOImpl();
 
-        User admin = new User("valegiann", "root", "Valerio", "Giannini", 22, "Italy");
-        admin.setPrivilegeLevel(PrivilegeLevel.ADMIN);
-        userDAO.createUser(admin);
 
-        /*
-        User user1 = new User("valegiann", "root", "Valerio", "Giannini", 22);
-        User user2 = new User("aleserra", "root", "Alessio", "Serra", 22);
-        User user3 = new User("loreBianchi", "root", "Lorenzo", "Bianchi", 22);
-        UserDAO userDAO = new UserDAOImpl();
-
-        try {
-            userDAO.createUser(user1);
-        } catch (ActionNotCompletedException e) {
-            e.printStackTrace();
-        }
-         */
-        /*try {
-            userDAO.createUser(user1);
-            userDAO.createUser(user2);
-            userDAO.createUser(user3);
-
-
-        } catch (ActionNotCompletedException e) {
-            if (e.getCode() == 11000) {
-                logger.error("You are trying to insert a document with *duplicate*  _id: " + user1.getUsername());
-                e.printStackTrace();
-            } else {
-                logger.error("Some error while inserting document with  _id: ");
-                e.printStackTrace();
-            }
-        }*/
-
-        /*try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
-            List<String> lista = session.readTransaction((TransactionWork<List<String>>) tx -> {
-               Result result = tx.run("MATCH (a:User) RETURN a.username as username");
-                ArrayList<String> users = new ArrayList<>();
-                while ((result.hasNext())){
-                    Record r = result.next();
-                    users.add(r.get("username").asString());
-                }
-                return users;
-            });
-            logger.info(lista);
-        }*/
-
-        /*try (MongoCursor<Document> cursor = MongoDriver.getInstance().getCollection(Collections.USERS).find().iterator()) {
-            while (cursor.hasNext()) {
-                logger.info("/" + cursor.next().get("boh") + "/");
-            }
-        }
-         */
 
         Neo4jDriver.getInstance().closeDriver();
     }
@@ -638,12 +588,17 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public int getTotalUsers() {
-        try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
-            Result result = session.run("MATCH (:User) RETURN COUNT(*) AS NUM");
-            if(result.hasNext())
-                return result.next().get("NUM").asInt();
-            else
-                return -1;
+        try (Session session = Neo4jDriver.getInstance().getDriver().session())
+        {
+            return session.readTransaction((TransactionWork<Integer>) tx -> {
+
+                Result result = tx.run("MATCH (:User) RETURN COUNT(*) AS NUM");
+                if(result.hasNext())
+                    return result.next().get("NUM").asInt();
+                else
+                    return -1;
+            });
+
         }catch (Neo4jException neo4){
             neo4.printStackTrace();
             return -1;
@@ -700,12 +655,17 @@ public class UserDAOImpl implements UserDAO{
         userColl.deleteOne(eq("_id", user.getUsername()));
     }
 
-    private void deleteUserNode(User user) throws Neo4jException {
-        try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
-            session.run(
-                    "MATCH (a:User {username: $username})"
-                    + "DETACH DELETE a",
-                    parameters("username", user.getUsername()));
+    public void deleteUserNode(User user) throws Neo4jException {
+        try (Session session = Neo4jDriver.getInstance().getDriver().session())
+        {
+            session.writeTransaction((TransactionWork<Void>) tx -> {
+                tx.run(
+                        "MATCH (a:User {username: $username})"
+                                + "DETACH DELETE a",
+                        parameters("username", user.getUsername()));
+                return null;
+            });
         }
     }
+
 }

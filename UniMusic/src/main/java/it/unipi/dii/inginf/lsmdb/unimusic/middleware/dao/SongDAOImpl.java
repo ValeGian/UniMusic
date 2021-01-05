@@ -446,12 +446,17 @@ public class SongDAOImpl implements SongDAO{
 
     @Override
     public int getTotalSongs() {
-        try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
-            Result result = session.run("MATCH (:Song) RETURN COUNT(*) AS NUM");
-            if(result.hasNext())
-                return result.next().get("NUM").asInt();
-            else
-                return -1;
+        try (Session session = Neo4jDriver.getInstance().getDriver().session())
+        {
+            return session.readTransaction((TransactionWork<Integer>) tx -> {
+
+                Result result = tx.run("MATCH (:Song) RETURN COUNT(*) AS NUM");
+                if(result.hasNext())
+                    return result.next().get("NUM").asInt();
+                else
+                    return -1;
+            });
+
         }catch (Neo4jException neo4){
             neo4.printStackTrace();
             return -1;
@@ -487,11 +492,15 @@ public class SongDAOImpl implements SongDAO{
     }
 
     private void deleteSongNode(Song song) throws Neo4jException {
-        try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
-            session.run(
-                    "MATCH (s:Song {songId: $songId})"
-                            + "DETACH DELETE s",
-                    parameters("songId", song.getID()));
+        try (Session session = Neo4jDriver.getInstance().getDriver().session())
+        {
+            session.writeTransaction((TransactionWork<Void>) tx -> {
+
+                tx.run("MATCH (s:Song {songId: $songId})"
+                                + "DETACH DELETE s",
+                        parameters("songId", song.getID()));
+                return null;
+            });
         }
     }
 
