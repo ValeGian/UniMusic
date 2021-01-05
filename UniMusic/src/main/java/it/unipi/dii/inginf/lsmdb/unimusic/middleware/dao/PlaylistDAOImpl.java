@@ -100,6 +100,9 @@ public class PlaylistDAOImpl implements PlaylistDAO{
         MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
         Playlist playlist = null;
 
+        if (user == null)
+            return null;
+
         Bson match1 = match(eq("_id", user.getUsername()));
         Bson unwind = unwind("$createdPlaylists");
         Bson match2 = match(eq("createdPlaylists.isFavourite", true));
@@ -181,8 +184,11 @@ public class PlaylistDAOImpl implements PlaylistDAO{
     }
 
     @Override
-    public boolean isSongFavourite(User user, Song song){
+    public boolean isSongFavourite(User user, Song song) {
         MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
+
+        if (user == null || song == null)
+            return false;
 
         Bson match1 = match(eq("_id", user.getUsername()));
         Bson unwind1 = unwind("$createdPlaylists");
@@ -203,6 +209,9 @@ public class PlaylistDAOImpl implements PlaylistDAO{
     public List<Song> getAllSongs(Playlist playlist) throws ActionNotCompletedException{
         MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
         List<Song> songs = new ArrayList<Song>();
+
+        if (playlist == null)
+            return songs;
 
         Bson match = match(eq("createdPlaylists.playlistId", playlist.getID()));
         Bson unwind1 = unwind("$createdPlaylists");
@@ -233,6 +242,8 @@ public class PlaylistDAOImpl implements PlaylistDAO{
 
     @Override
     public List<Playlist> getSuggestedPlaylists(User user, int limit) throws ActionNotCompletedException{
+        if (user == null || limit <= 0)
+            return new ArrayList<>();
         List<Playlist> firstList = new ArrayList<Playlist>();
         List<Playlist> secondList = new ArrayList<Playlist>();
         try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
