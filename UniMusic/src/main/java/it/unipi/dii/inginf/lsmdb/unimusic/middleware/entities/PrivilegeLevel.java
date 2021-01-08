@@ -4,8 +4,8 @@ public enum PrivilegeLevel {
     STANDARD_USER("standard_user"),
     ADMIN("admin");
 
-    private String privilegeLevelName;
-    private PrivilegeLevel(String privilegeLevelName) {
+    private final String privilegeLevelName;
+    PrivilegeLevel(String privilegeLevelName) {
         this.privilegeLevelName = privilegeLevelName;
     }
 

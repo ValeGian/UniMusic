@@ -32,16 +32,6 @@ import static com.mongodb.client.model.Sorts.*;
 public class UserDAOImpl implements UserDAO{
     private static final Logger logger = UMLogger.getUserLogger();
 
-    public static void main(String[] args) throws ActionNotCompletedException {
-
-        UserDAO userDAO = new UserDAOImpl();
-        SongDAO songDAO = new SongDAOImpl();
-
-
-
-        Neo4jDriver.getInstance().closeDriver();
-    }
-
     @Override
     public void createUser(User user) throws ActionNotCompletedException{
         try {
@@ -125,7 +115,7 @@ public class UserDAOImpl implements UserDAO{
     public List<User> getSuggestedUsers(User user, int limit) throws ActionNotCompletedException, IllegalArgumentException {
         if(limit <= 0 || user == null) throw new IllegalArgumentException();
 
-        List<User> list = new ArrayList<>();
+        List<User> list;
         try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
             //First layer Suggestion
             list = session.readTransaction((TransactionWork<List<User>>) tx -> {
@@ -165,6 +155,7 @@ public class UserDAOImpl implements UserDAO{
                 list.addAll(secondLayerSuggestion);
             }
         } catch (Neo4jException n4jEx) {
+            logger.error(n4jEx.getMessage());
             throw new ActionNotCompletedException(n4jEx);
         }
         return list;
@@ -188,12 +179,15 @@ public class UserDAOImpl implements UserDAO{
         if(userFollowing == null || userFollowed == null) throw new IllegalArgumentException();
 
         try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
-            session.run("MATCH (following:User { username: $following }) "
-                            + "MATCH (followed:User { username: $followed }) "
-                            + "WHERE following <> followed "
-                            + "MERGE (following)-[:FOLLOWS_USER]->(followed)",
-                    parameters("following", userFollowing.getUsername(), "followed", userFollowed.getUsername())
-            );
+            session.writeTransaction((TransactionWork<Void>) tx -> {
+                tx.run("MATCH (following:User { username: $following }) "
+                                + "MATCH (followed:User { username: $followed }) "
+                                + "WHERE following <> followed "
+                                + "MERGE (following)-[:FOLLOWS_USER]->(followed)",
+                        parameters("following", userFollowing.getUsername(), "followed", userFollowed.getUsername())
+                );
+                return null;
+            });
             logger.info("User <" + userFollowing.getUsername() + "> follows user <" + userFollowed.getUsername() + ">");
         } catch (Neo4jException n4jEx) {
             logger.error(n4jEx.getMessage());
@@ -206,11 +200,13 @@ public class UserDAOImpl implements UserDAO{
         if(userFollowing == null || userFollowed == null) throw new IllegalArgumentException();
 
         try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
-            session.run(
-                    "MATCH (:User { username: $username1 })-[f:FOLLOWS_USER]->(:User { username: $username2 }) "
-                            + "DELETE f",
-                    parameters("username1", userFollowing.getUsername(), "username2", userFollowed.getUsername())
-            );
+            session.writeTransaction((TransactionWork<Void>) tx -> {
+                tx.run("MATCH (:User { username: $username1 })-[f:FOLLOWS_USER]->(:User { username: $username2 }) "
+                                + "DELETE f",
+                        parameters("username1", userFollowing.getUsername(), "username2", userFollowed.getUsername())
+                );
+                return null;
+            });
             logger.info("Deleted user <" +userFollowing.getUsername()+ "> follows user <" +userFollowed.getUsername()+ ">");
         } catch (Neo4jException n4jEx) {
             logger.error(n4jEx.getMessage());
@@ -223,12 +219,14 @@ public class UserDAOImpl implements UserDAO{
         if(user == null || playlist == null) throw new IllegalArgumentException();
 
         try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
-            session.run(
-                    "MATCH (following:User { username: $following }) "
-                            + "MATCH (followed:Playlist { playlistId: $followed }) "
-                            + "MERGE (following)-[:FOLLOWS_PLAYLIST]->(followed)",
-                    parameters("following", user.getUsername(), "followed", playlist.getID())
-            );
+            session.writeTransaction((TransactionWork<Void>) tx -> {
+                tx.run("MATCH (following:User { username: $following }) "
+                                + "MATCH (followed:Playlist { playlistId: $followed }) "
+                                + "MERGE (following)-[:FOLLOWS_PLAYLIST]->(followed)",
+                        parameters("following", user.getUsername(), "followed", playlist.getID())
+                );
+                return null;
+            });
             logger.info("User <" +user.getUsername()+ "> follows playlist <" +playlist.getID()+ ">");
         } catch (Neo4jException n4jEx) {
             logger.error(n4jEx.getMessage());
@@ -241,7 +239,7 @@ public class UserDAOImpl implements UserDAO{
         if(user == null || playlist == null) throw new IllegalArgumentException();
 
         try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
-            Boolean follows = session.readTransaction((TransactionWork<Boolean>) tx -> {
+            return session.readTransaction((TransactionWork<Boolean>) tx -> {
                 Result result = tx.run(
                         "MATCH (:User { username: $username })-[f:FOLLOWS_PLAYLIST]->(:Playlist { playlistId: $playlistId }) "
                                 + "RETURN count(*) AS Times",
@@ -249,12 +247,10 @@ public class UserDAOImpl implements UserDAO{
                 );
                 if ((result.hasNext())) {
                     int times = result.next().get("Times").asInt();
-                    if(times > 0)
-                        return true;
+                    return times > 0;
                 }
                 return false;
             });
-            return follows;
         } catch (Exception e) {
             logger.warn(e.getMessage());
             return false;
@@ -266,7 +262,7 @@ public class UserDAOImpl implements UserDAO{
         if(followed == null || following == null) throw new IllegalArgumentException();
 
         try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
-            Boolean follows = session.readTransaction((TransactionWork<Boolean>) tx -> {
+            return session.readTransaction((TransactionWork<Boolean>) tx -> {
                 Result result = tx.run(
                         "MATCH (:User { username: $following })-[f:FOLLOWS_USER]->(:User { username: $followed }) "
                                 + "RETURN count(*) AS Times",
@@ -274,12 +270,10 @@ public class UserDAOImpl implements UserDAO{
                 );
                 if ((result.hasNext())) {
                     int times = result.next().get("Times").asInt();
-                    if(times > 0)
-                        return true;
+                    return times > 0;
                 }
                 return false;
             });
-            return follows;
         } catch (Exception e) {
             logger.warn(e.getMessage());
             return false;
@@ -291,11 +285,13 @@ public class UserDAOImpl implements UserDAO{
         if(user == null || playlist == null) throw new IllegalArgumentException();
 
         try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
-            session.run(
-                    "MATCH (:User { username: $username })-[f:FOLLOWS_PLAYLIST]->(:Playlist { playlistId: $playlistId }) "
-                            + "DELETE f",
-                    parameters("username", user.getUsername(), "playlistId", playlist.getID())
-            );
+            session.writeTransaction((TransactionWork<Void>) tx -> {
+                tx.run("MATCH (:User { username: $username })-[f:FOLLOWS_PLAYLIST]->(:Playlist { playlistId: $playlistId }) "
+                                + "DELETE f",
+                        parameters("username", user.getUsername(), "playlistId", playlist.getID())
+                );
+                return null;
+            });
             logger.info("Deleted user <" +user.getUsername()+ "> follows playlist <" +playlist.getID()+ ">");
         } catch (Neo4jException n4jEx) {
             logger.error(n4jEx.getMessage());
@@ -308,12 +304,14 @@ public class UserDAOImpl implements UserDAO{
         if(user == null || song == null) throw new IllegalArgumentException();
 
         try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
-            session.run(
-                    "MATCH (u:User { username: $username }) "
-                            + "MATCH (s:Song { songId: $songId }) "
-                            + "MERGE (u)-[:LIKES {day: date()}]->(s)",
-                    parameters("username", user.getUsername(), "songId", song.getID())
-            );
+            session.writeTransaction((TransactionWork<Void>) tx -> {
+                tx.run("MATCH (u:User { username: $username }) "
+                                + "MATCH (s:Song { songId: $songId }) "
+                                + "MERGE (u)-[:LIKES {day: date()}]->(s)",
+                        parameters("username", user.getUsername(), "songId", song.getID())
+                );
+                return null;
+            });
             logger.info("User <" + user.getUsername() + "> likes song <" + song.getID() + ">");
 
             // Handle the redundancy $likeCount
@@ -330,7 +328,7 @@ public class UserDAOImpl implements UserDAO{
         if(user == null || song == null) throw new IllegalArgumentException();
 
         try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
-            Boolean likes = session.readTransaction((TransactionWork<Boolean>) tx -> {
+            return session.readTransaction((TransactionWork<Boolean>) tx -> {
                 Result result = tx.run(
                         "MATCH (:User { username: $username })-[l:LIKES]->(:Song { songId: $songId }) "
                         + "RETURN count(*) AS Times",
@@ -338,12 +336,10 @@ public class UserDAOImpl implements UserDAO{
                 );
                 if ((result.hasNext())) {
                     int times = result.next().get("Times").asInt();
-                    if(times > 0)
-                        return true;
+                    return times > 0;
                 }
                 return false;
             });
-            return likes;
         } catch (Exception e) {
             logger.warn(e.getMessage());
             return false;
@@ -355,11 +351,13 @@ public class UserDAOImpl implements UserDAO{
         if(user == null || song == null) throw new IllegalArgumentException();
 
         try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
-            session.run(
-                    "MATCH (:User { username: $username })-[l:LIKES]->(:Song { songId: $songId }) "
-                            + "DELETE l",
-                    parameters("username", user.getUsername(), "songId", song.getID())
-            );
+            session.writeTransaction((TransactionWork<Void>) tx -> {
+                tx.run("MATCH (:User { username: $username })-[l:LIKES]->(:Song { songId: $songId }) "
+                                + "DELETE l",
+                        parameters("username", user.getUsername(), "songId", song.getID())
+                );
+                return null;
+            });
             logger.info("Deleted user <" + user.getUsername() + "> likes song <" + song.getID() + ">");
 
             // Handle the redundancy $likeCount
@@ -391,7 +389,7 @@ public class UserDAOImpl implements UserDAO{
         if(user == null) throw new IllegalArgumentException();
 
         MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
-        List<Playlist> playlists = new ArrayList<Playlist>();
+        List<Playlist> playlists = new ArrayList<>();
 
         Bson match = match(eq("_id", user.getUsername()));
         Bson unwind = unwind("$createdPlaylists");
@@ -413,7 +411,7 @@ public class UserDAOImpl implements UserDAO{
         if(user == null) throw new IllegalArgumentException();
 
         try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
-            List<Playlist> playlists = session.readTransaction((TransactionWork<List<Playlist>>) tx -> {
+            return session.readTransaction((TransactionWork<List<Playlist>>) tx -> {
                 Result result = tx.run(
                         "MATCH (:User {username: $username})-[:FOLLOWS_PLAYLIST]->(playlist:Playlist) RETURN playlist ",
                         parameters("username", user.getUsername())
@@ -426,8 +424,8 @@ public class UserDAOImpl implements UserDAO{
                 }
                 return tmpList;
             });
-            return playlists;
         } catch (Neo4jException n4jEx) {
+            logger.error(n4jEx.getMessage());
             throw new ActionNotCompletedException(n4jEx);
         }
     }
@@ -437,7 +435,7 @@ public class UserDAOImpl implements UserDAO{
         if(user == null) throw new IllegalArgumentException();
 
         try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
-            List<User> followedUsers = session.readTransaction((TransactionWork<List<User>>) tx -> {
+            return session.readTransaction((TransactionWork<List<User>>) tx -> {
                 Result result = tx.run(
                         "MATCH (:User {username: $username})-[:FOLLOWS_USER]->(followedUser:User) RETURN followedUser ",
                         parameters("username", user.getUsername())
@@ -449,8 +447,8 @@ public class UserDAOImpl implements UserDAO{
                 }
                 return tmpList;
             });
-            return followedUsers;
         } catch (Neo4jException n4jEx) {
+            logger.error(n4jEx.getMessage());
             throw new ActionNotCompletedException(n4jEx);
         }
     }
@@ -460,7 +458,7 @@ public class UserDAOImpl implements UserDAO{
         if(user == null) throw new IllegalArgumentException();
 
         try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
-            List<User> followingUsers = session.readTransaction((TransactionWork<List<User>>) tx -> {
+            return session.readTransaction((TransactionWork<List<User>>) tx -> {
                 Result result = tx.run(
                         "MATCH (followingUser:User)-[:FOLLOWS_USER]->(:User {username: $username}) RETURN followingUser ",
                         parameters("username", user.getUsername())
@@ -472,8 +470,8 @@ public class UserDAOImpl implements UserDAO{
                 }
                 return tmpList;
             });
-            return followingUsers;
         } catch (Neo4jException n4jEx) {
+            logger.error(n4jEx.getMessage());
             throw new ActionNotCompletedException(n4jEx);
         }
     }
@@ -498,6 +496,7 @@ public class UserDAOImpl implements UserDAO{
                 result.add(new Pair<>(genre.getString("_id"), genre.getInteger("totalSongs")));
             }
         } catch (MongoException mEx) {
+            logger.error(mEx.getMessage());
             throw new ActionNotCompletedException(mEx);
         }
         return result;
@@ -599,8 +598,8 @@ public class UserDAOImpl implements UserDAO{
                     return -1;
             });
 
-        }catch (Neo4jException neo4){
-            neo4.printStackTrace();
+        }catch (Neo4jException n4jEx){
+            logger.error(n4jEx.getMessage());
             return -1;
         }
     }
@@ -631,9 +630,12 @@ public class UserDAOImpl implements UserDAO{
 
     private void createUserNode(User user) throws Neo4jException {
         try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
-            session.run(
-                    "MERGE (a:User {username: $username})",
-                    parameters("username", user.getUsername()));
+            session.writeTransaction((TransactionWork<Void>) tx -> {
+                tx.run("MERGE (a:User {username: $username})",
+                        parameters("username", user.getUsername())
+                );
+                return null;
+            });
         }
     }
 

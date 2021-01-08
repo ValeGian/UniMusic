@@ -1,6 +1,5 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities;
 
-import org.bson.BsonArray;
 import org.bson.Document;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,31 +61,24 @@ public class Song {
         geniusMediaURL = media.getJSONObject(2).getString("url");
 
         Album songAlbum = new Album();
-        try{
-            songAlbum.setTitle(song.getJSONObject("album").getString("title"));
-        }catch (JSONException jex){}
 
-        try{
-            songAlbum.setImage(song.getJSONObject("album").getString("image"));
-        }catch (JSONException jex){}
-
-        album = songAlbum;
-        featuredArtists = new ArrayList<>();
         try {
+            songAlbum.setTitle(song.getJSONObject("album").getString("title"));
+            songAlbum.setImage(song.getJSONObject("album").getString("image"));
+
+            album = songAlbum;
+            featuredArtists = new ArrayList<>();
             JSONArray jsonFeaturedArtists = song.getJSONArray("featuredArtists");
             if (jsonFeaturedArtists.length() != 0) {
                 for (int i = 0; i < jsonFeaturedArtists.length(); i++)
                     featuredArtists.add(jsonFeaturedArtists.getString(i));
             }
-        }catch (JSONException jex){}
 
-        try {
             releaseYear = song.getInt("releaseYear");
-        }catch (JSONException jex){}
-
-        try{
             genre = song.getString("genre");
-        }catch (JSONException jex){}
+        }catch (JSONException jex){
+            jex.printStackTrace();
+        }
 
     }
 

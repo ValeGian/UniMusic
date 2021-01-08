@@ -4,8 +4,6 @@ package it.unipi.dii.inginf.lsmdb.unimusic.middleware.dao;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
-import com.mongodb.client.model.UpdateOptions;
-import com.mongodb.client.model.Updates;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Album;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Playlist;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Song;
@@ -15,12 +13,9 @@ import it.unipi.dii.inginf.lsmdb.unimusic.middleware.log.UMLogger;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.Collections;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.MongoDriver;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.neo4jconnection.Neo4jDriver;
-import javafx.util.Pair;
 import org.apache.log4j.Logger;
 import org.bson.conversions.Bson;
-import org.bson.json.JsonWriterSettings;
 import org.bson.types.ObjectId;
-import org.json.JSONObject;
 import org.neo4j.driver.Record;
 import org.neo4j.driver.Result;
 import org.neo4j.driver.Session;
@@ -28,12 +23,9 @@ import org.neo4j.driver.TransactionWork;
 import org.neo4j.driver.exceptions.Neo4jException;
 import org.bson.Document;
 
-import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
-import java.util.function.Consumer;
 
 import static com.mongodb.client.model.Aggregates.*;
 import static com.mongodb.client.model.Filters.*;
@@ -43,13 +35,6 @@ import static org.neo4j.driver.Values.parameters;
 
 public class PlaylistDAOImpl implements PlaylistDAO{
     private static final Logger logger = UMLogger.getPlaylistLogger();
-
-    public static void main(String[] args){
-        PlaylistDAOImpl p = new PlaylistDAOImpl();
-        UserDAOImpl u = new UserDAOImpl();
-        SongDAOImpl s = new SongDAOImpl();
-        Playlist playlist1 = new Playlist("", "5fef0affd684f46c1ffd2e0c", "");
-    }
 
     @Override
     public void createPlaylist(Playlist playlist)  throws ActionNotCompletedException{
@@ -208,7 +193,7 @@ public class PlaylistDAOImpl implements PlaylistDAO{
     @Override
     public List<Song> getAllSongs(Playlist playlist) throws ActionNotCompletedException{
         MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
-        List<Song> songs = new ArrayList<Song>();
+        List<Song> songs = new ArrayList<>();
 
         if (playlist == null)
             return songs;
@@ -244,8 +229,8 @@ public class PlaylistDAOImpl implements PlaylistDAO{
     public List<Playlist> getSuggestedPlaylists(User user, int limit) throws ActionNotCompletedException{
         if (user == null || limit <= 0)
             return new ArrayList<>();
-        List<Playlist> firstList = new ArrayList<Playlist>();
-        List<Playlist> secondList = new ArrayList<Playlist>();
+        List<Playlist> firstList;
+        List<Playlist> secondList = new ArrayList<>();
         try( Session session = Neo4jDriver.getInstance().getDriver().session()) {
             firstList = session.readTransaction((TransactionWork<List<Playlist>>) tx -> {
                 //first level suggestions
@@ -256,7 +241,7 @@ public class PlaylistDAOImpl implements PlaylistDAO{
                                 + "ORDER BY Strength DESC LIMIT $limit",
                         parameters("me", user.getUsername(), "limit", limit)
                 );
-                ArrayList<Playlist> playlists = new ArrayList<Playlist>();
+                ArrayList<Playlist> playlists = new ArrayList<>();
                 while ((result.hasNext())){
                     Record r = result.next();
                     playlists.add(new Playlist(r.get("suggested")));
@@ -281,7 +266,7 @@ public class PlaylistDAOImpl implements PlaylistDAO{
                                     "ORDER BY Strength DESC LIMIT $limit",
                             parameters("me", user.getUsername(), "limit", limit - firstSuggestionsSize)
                     );
-                    ArrayList<Playlist> playlists = new ArrayList<Playlist>();
+                    ArrayList<Playlist> playlists = new ArrayList<>();
                     while ((result.hasNext())) {
                         Record r = result.next();
                         playlists.add(new Playlist(r.get("suggestedPlaylist")));
@@ -335,14 +320,9 @@ public class PlaylistDAOImpl implements PlaylistDAO{
 
     @Override
     public void deletePlaylistDocument(Playlist playlist) throws MongoException{
-        try {
-            Bson find = eq("createdPlaylists.playlistId", playlist.getID());
-            MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
-            usersCollection.updateOne(find, pull("createdPlaylists", eq("playlistId", playlist.getID())));
-        }
-        catch (MongoException mongoEx) {
-            throw mongoEx;
-        }
+        Bson find = eq("createdPlaylists.playlistId", playlist.getID());
+        MongoCollection<Document> usersCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
+        usersCollection.updateOne(find, pull("createdPlaylists", eq("playlistId", playlist.getID())));
     }
 
     private void deletePlaylistNode(Playlist playlist) throws Neo4jException{
@@ -353,9 +333,6 @@ public class PlaylistDAOImpl implements PlaylistDAO{
                         parameters("playlistId", playlist.getID()) );
                 return null;
             });
-        }
-        catch (Neo4jException neo4jEx){
-            throw neo4jEx;
         }
     }
 
