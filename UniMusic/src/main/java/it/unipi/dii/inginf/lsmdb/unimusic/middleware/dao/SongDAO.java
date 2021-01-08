@@ -4,7 +4,6 @@ import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Album;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Song;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
 import javafx.util.Pair;
-import org.bson.Document;
 
 import java.util.List;
 

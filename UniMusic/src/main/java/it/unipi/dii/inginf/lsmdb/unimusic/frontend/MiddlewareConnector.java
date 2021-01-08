@@ -17,10 +17,9 @@ public class MiddlewareConnector {
     private final PlaylistDAO playlistDAO = new PlaylistDAOImpl();
     private final SongDAO songDAO = new SongDAOImpl();
 
-    private User loggedUser = new User("AleLew1996", "43", "Alex", "Lewis", 24, "Italy");
-    //private User loggedUser = new User("valegiann", "root", "Valerio", "Giannini", 22);
+    private User loggedUser;
     private MiddlewareConnector() {
-        loggedUser.setPrivilegeLevel(PrivilegeLevel.ADMIN);
+
     }
 
     public static MiddlewareConnector getInstance() { return instance; }

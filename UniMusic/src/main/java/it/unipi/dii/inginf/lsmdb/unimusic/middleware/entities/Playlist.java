@@ -1,9 +1,7 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities;
 
-import org.bson.BsonArray;
 import org.bson.Document;
 import org.json.JSONObject;
-import org.neo4j.driver.Record;
 import org.neo4j.driver.Value;
 
 public class Playlist {
