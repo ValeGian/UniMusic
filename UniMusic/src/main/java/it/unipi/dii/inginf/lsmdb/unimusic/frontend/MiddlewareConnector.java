@@ -273,8 +273,6 @@ public class MiddlewareConnector {
         return result;
     }
 
-    public List<Playlist> getUserPlaylists() {return getUserPlaylists(loggedUser);}
-
     public List<Playlist> getUserPlaylists(User user) {
         List<Playlist> playlistList = new ArrayList<>();
         try {
@@ -300,4 +298,26 @@ public class MiddlewareConnector {
     }
 
     public int getTotalPlaylists() { return playlistDAO.getTotalPlaylists();}
+
+    public List<Playlist> getOwnUserPlaylists() {return getOwnUserPlaylists(loggedUser);}
+
+
+    public List<Playlist> getOwnUserPlaylists(User user) {
+        List<Playlist> playlistList = new ArrayList<>();
+        try {
+            playlistList = userDAO.getAllPlaylist(user);
+        } catch (ActionNotCompletedException e) {
+            e.printStackTrace();
+            return new ArrayList<Playlist>();
+        }
+        return playlistList;
+    }
+
+    public void setPlaylistName(Playlist playlist, String newName) {
+        try {
+            playlistDAO.updatePlaylistName(playlist, newName);
+        } catch (ActionNotCompletedException e) {
+            e.printStackTrace();
+        }
+    }
 }
