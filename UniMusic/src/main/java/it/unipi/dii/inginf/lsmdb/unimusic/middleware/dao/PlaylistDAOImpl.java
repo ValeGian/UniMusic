@@ -143,6 +143,26 @@ public class PlaylistDAOImpl implements PlaylistDAO{
         }
     }
 
+    public void updatePlaylistName(Playlist playlist, String newName) throws ActionNotCompletedException{
+        try {
+            updatePlaylistNameDocument(playlist, newName);
+            updatePlaylistNameNode(playlist, newName);
+            logger.info("Updated playlist name of " + playlist.getID() + " from " + playlist.getName() + " to " + newName);
+        } catch (MongoException mongoEx) {
+            logger.error(mongoEx.getMessage());
+            throw new ActionNotCompletedException(mongoEx);
+        } catch (Neo4jException neoEx) {
+            logger.error(neoEx.getMessage());
+            try {
+                updatePlaylistNameDocument(playlist, playlist.getName());
+                throw new ActionNotCompletedException(neoEx);
+            } catch (MongoException mongoEx) {
+                logger.error(mongoEx.getMessage());
+                throw new ActionNotCompletedException(mongoEx);
+            }
+        }
+    }
+
     @Override
     public void addSongToFavourite(User user, Song song) throws ActionNotCompletedException{
         addSong(getFavourite(user), song);
@@ -336,5 +356,29 @@ public class PlaylistDAOImpl implements PlaylistDAO{
         }
     }
 
+    private void updatePlaylistNameDocument(Playlist playlist, String newName) throws ActionNotCompletedException{
+        MongoCollection<Document> userCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
+
+        Bson find = eq("createdPlaylists.playlistId", playlist.getID());
+        Bson updateQuery = set ("createdPlaylists.$.name", newName);
+
+        try{
+            userCollection.updateOne(find, updateQuery);
+        } catch (MongoException mongoEx) {
+            logger.error(mongoEx.getMessage());
+            throw new ActionNotCompletedException(mongoEx);
+        }
+    }
+
+    private void updatePlaylistNameNode(Playlist playlist, String newName) throws ActionNotCompletedException{
+        try ( Session session = Neo4jDriver.getInstance().getDriver().session() )
+        {
+            session.writeTransaction((TransactionWork<Void>) tx -> {
+                tx.run( "MATCH (p:Playlist { playlistId: $playlistId }) SET p.name = $newName",
+                        parameters("playlistId", playlist.getID(), "newName", newName) );
+                return null;
+            });
+        }
+    }
 
 }
