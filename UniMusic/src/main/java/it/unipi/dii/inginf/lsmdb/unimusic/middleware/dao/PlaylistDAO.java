@@ -69,11 +69,11 @@ public interface PlaylistDAO {
 
 
     /** Update the name of a Playlist
-     * @param playlistId id of the playlist to rename
+     * @param playlist playlist to rename
      * @param newName new name of the playlist
      * @throws ActionNotCompletedException
      */
-    void updatePlaylistName(String playlistId, String newName) throws ActionNotCompletedException;
+    void updatePlaylistName(Playlist playlist, String newName) throws ActionNotCompletedException;
 
     /** Checks if the song is the favourite of the user
      * @param user
