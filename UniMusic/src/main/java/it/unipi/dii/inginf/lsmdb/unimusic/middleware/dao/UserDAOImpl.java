@@ -576,15 +576,15 @@ public class UserDAOImpl implements UserDAO{
             deleteUserDocument(user);
             deleteUserNode(user);
             logger.info("DELETED User " + user.getUsername());
-        } catch (MongoException mEx) {
+        } catch (MongoException | Neo4jException mEx) {
             logger.error(mEx.getMessage());
             throw new ActionNotCompletedException(mEx);
-        } catch (Neo4jException n4jEx) {
-            logger.error(n4jEx.getMessage());
-            throw new ActionNotCompletedException(n4jEx);
         }
     }
 
+    /**
+     * @return the number of users present in the application.
+     */
     @Override
     public int getTotalUsers() {
         try (Session session = Neo4jDriver.getInstance().getDriver().session())

@@ -20,7 +20,6 @@ import org.neo4j.driver.TransactionWork;
 
 import java.time.Year;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -28,17 +27,9 @@ import static com.mongodb.client.model.Aggregates.sample;
 import static org.neo4j.driver.Values.parameters;
 
 public class UserAndPlaylistPopulation {
-    private static MiddlewareConnector connector = MiddlewareConnector.getInstance();
+    private static final MiddlewareConnector connector = MiddlewareConnector.getInstance();
 
-    public static void main(String[] args) throws ActionNotCompletedException {
-        UserAndPlaylistPopulation instance = new UserAndPlaylistPopulation();
-
-        instance.populateWithUser(500);
-        instance.createRandomPlaylist(1000, 5, 20);
-        //instance.completelyRandomLikes(4000);
-        //instance.completelyRandomUserFollows(3000);
-        //instance.completelyRandomPlaylistFollow(2000);
-    }
+    public static void main(String[] args) { }
 
     private void populateWithUser(int howManyUsers){
         Random generator = new Random();
@@ -88,8 +79,7 @@ public class UserAndPlaylistPopulation {
 
         try (MongoCursor<Document> cursor = songsCollection.aggregate(Arrays.asList(sample)).iterator()) {
             if(cursor.hasNext()) {
-                Document result = cursor.next();
-                song = new Song(result.toJson());
+                song = new Song(cursor.next());
             }
         }catch (MongoException mongoEx) {
             System.out.println(mongoEx.getMessage());
@@ -139,7 +129,7 @@ public class UserAndPlaylistPopulation {
             Song song;
             do {
                 song = getRandomSong();
-            }while(song.getAlbum().getImage() == null);
+            }while(song.getAlbum().getImage() == null && song.getArtist().equals("Gucci Mane"));
 
             connector.addSong(playlist, song);
         }
@@ -170,8 +160,8 @@ public class UserAndPlaylistPopulation {
         }
     }
 
-    public Playlist getRandomPlaylist() throws ActionNotCompletedException {
-        Playlist playlist = null;
+    public Playlist getRandomPlaylist() {
+        Playlist playlist;
         try ( Session session = Neo4jDriver.getInstance().getDriver().session() )
         {
             playlist = session.readTransaction((TransactionWork<Playlist>) tx -> {
@@ -197,7 +187,7 @@ public class UserAndPlaylistPopulation {
         SongDAO songDAO = new SongDAOImpl();
         try (MongoCursor<Document> cursor = songCollection.find().iterator()) {
             while (cursor.hasNext()) {
-                Song mongoSong = new Song(cursor.next().toJson());
+                Song mongoSong = new Song(cursor.next());
                 try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
                     String query = "MATCH (s:Song) " +
                             "WHERE s.songId = $songId " +
@@ -217,7 +207,27 @@ public class UserAndPlaylistPopulation {
             }
         }
     }
+/*
+    private void resolveNode() throws ActionNotCompletedException {
+        try (Session session = Neo4jDriver.getInstance().getDriver().session()) {
+            Result result = session.run("MATCH (u:User) RETURN u.username AS username");
+            UserDAO userDAO = new UserDAOImpl();
+            while(result.hasNext()) {
+                System.out.println("O");
+                String username = result.next().get("username").asString();
+                User user = userDAO.getUserByUsername(username);
+                if (user == null) {
+                    user = new User(username);
+                    userDAO.deleteUserNode(user);
+                    System.out.println("cancellato");
+                }
+            }
+        }catch (Neo4jException neo4){
+            neo4.printStackTrace();
+        }
+    }
 
+ */
     private void resolvePlaylistInconsistencies() throws ActionNotCompletedException {
 
         MongoCollection<Document> songCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
@@ -245,7 +255,7 @@ public class UserAndPlaylistPopulation {
         }
     }
 
-    private void resolveUserInconsistencies() throws ActionNotCompletedException {
+    private void resolveUserInconsistencies() {
 
         MongoCollection<Document> songCollection = MongoDriver.getInstance().getCollection(Collections.USERS);
         UserDAO userDAO = new UserDAOImpl();
@@ -260,12 +270,8 @@ public class UserAndPlaylistPopulation {
 
                     if(!result.hasNext()){
                         System.out.println("Sure to delete id: " + mongoUser.getUsername());
-                        System.out.print("> ");
-                        String response = new Scanner(System.in).nextLine();
-                        if(response.equals("yes"))
-                            userDAO.deleteUserDocument(mongoUser);
-                        else
-                            System.out.println("Not deleted");
+                        userDAO.deleteUserDocument(mongoUser);
+                        System.out.println("deleted");
                     }
                 }
             }

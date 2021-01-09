@@ -193,4 +193,5 @@ public interface UserDAO {
     int getTotalUsers();
 
     void deleteUserDocument(User user) throws MongoException;
+
 }

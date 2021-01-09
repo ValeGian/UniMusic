@@ -1,17 +1,10 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.middleware.dao;
 
-import com.mongodb.client.MongoCollection;
-import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Song;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
-import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.Collections;
-import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection.MongoDriver;
-import javafx.util.Pair;
-import org.bson.Document;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 
 public class SongDAOImplTest {
 

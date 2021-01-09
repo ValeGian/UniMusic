@@ -8,6 +8,7 @@ import org.neo4j.driver.Record;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Song {
     private String ID;
@@ -43,42 +44,43 @@ public class Song {
 
     /**
      * Constructs a song given a json string.
-     * @param jsonSong
+     * @param songDocument
      */
-    public Song(String jsonSong){
+    public Song(Document songDocument){
 
-        JSONObject song = new JSONObject(jsonSong);
+        ID = songDocument.getString("_id");
+        title = songDocument.getString("title");
+        artist = songDocument.getString("artist");
+        rating = songDocument.getDouble("rating");
+        likeCount = songDocument.getInteger("likeCount");
 
-        ID = song.getString("_id");
-        title = song.getString("title");
-        artist = song.getString("artist");
-        rating = song.getDouble("rating");
-        likeCount = song.getInt("likeCount");
-
-        JSONArray media = song.getJSONArray("media");
-        youtubeMediaURL = media.getJSONObject(0).getString("url");
-        spotifyMediaURL = media.getJSONObject(1).getString("url");
-        geniusMediaURL = media.getJSONObject(2).getString("url");
+        List<Document> mediaDocument = (List<Document>) songDocument.get("media");
+        youtubeMediaURL = mediaDocument.get(0).getString("url");
+        spotifyMediaURL = mediaDocument.get(1).getString("url");
+        geniusMediaURL = mediaDocument.get(2).getString("url");
 
         Album songAlbum = new Album();
-
-        try {
-            songAlbum.setTitle(song.getJSONObject("album").getString("title"));
-            songAlbum.setImage(song.getJSONObject("album").getString("image"));
-
-            album = songAlbum;
-            featuredArtists = new ArrayList<>();
-            JSONArray jsonFeaturedArtists = song.getJSONArray("featuredArtists");
-            if (jsonFeaturedArtists.length() != 0) {
-                for (int i = 0; i < jsonFeaturedArtists.length(); i++)
-                    featuredArtists.add(jsonFeaturedArtists.getString(i));
-            }
-
-            releaseYear = song.getInt("releaseYear");
-            genre = song.getString("genre");
-        }catch (JSONException jex){
-            jex.printStackTrace();
+        Document albumDocument = (Document) songDocument.get("album");
+        if(albumDocument != null) {
+            songAlbum.setTitle(albumDocument.getString("title"));
+            songAlbum.setImage(albumDocument.getString("image"));
         }
+
+        album = songAlbum;
+        if(songDocument.get("featuredArtists") != null)
+            featuredArtists = (ArrayList<String>) songDocument.get("featuredArtists");
+        else
+            featuredArtists = new ArrayList<>();
+
+
+                try{
+                    songDocument.getInteger("releaseYear");
+                }catch (NullPointerException exception){
+                    exception.printStackTrace();
+                    releaseYear = -1;
+                }
+
+        genre = songDocument.getString("genre");
 
     }
 

@@ -159,12 +159,9 @@ public class PlaylistDAOImpl implements PlaylistDAO{
             deletePlaylistDocument(playlist);
             deletePlaylistNode(playlist);
             logger.info("Deleted playlist " + playlist.getID());
-        } catch (MongoException mongoEx) {
+        } catch (MongoException | Neo4jException mongoEx) {
             logger.error(mongoEx.getMessage());
             throw new ActionNotCompletedException(mongoEx);
-        } catch (Neo4jException neoEx) {
-            logger.error(neoEx.getMessage());
-            throw new ActionNotCompletedException(neoEx);
         }
     }
 
@@ -282,6 +279,9 @@ public class PlaylistDAOImpl implements PlaylistDAO{
         return firstList;
     }
 
+    /**
+     * @return the number of playlists present in the application.
+     */
     @Override
     public int getTotalPlaylists() {
         try (Session session = Neo4jDriver.getInstance().getDriver().session())

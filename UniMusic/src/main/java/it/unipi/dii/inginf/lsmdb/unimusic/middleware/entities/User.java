@@ -49,7 +49,7 @@ public class User {
         lastName = userDocument.get("lastName").toString();
         age = Integer.parseInt(userDocument.get("age").toString());
         privilegeLevel = PrivilegeLevel.getPrivilegeLevel(userDocument.getString("privilegeLevel"));
-        country = userDocument.get("country").toString();
+        //country = userDocument.get("country").toString();
     }
 
     public Document toBsonDocument() {

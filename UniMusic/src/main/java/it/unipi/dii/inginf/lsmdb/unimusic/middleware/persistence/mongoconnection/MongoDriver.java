@@ -10,7 +10,6 @@ public class MongoDriver {
 
     private final String connectionString = "mongodb://172.16.3.115:27020,172.16.3.114:27020,172.16.3.161:27020/"
             + "?w=1&readPreference=nearest";
-    //private final String connectionString = "mongodb://localhost:27017";
     private final String databaseName = "UniMusic";
 
     private MongoDriver() {

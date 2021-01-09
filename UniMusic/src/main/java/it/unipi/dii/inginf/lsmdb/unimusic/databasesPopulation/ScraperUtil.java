@@ -1,7 +1,6 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.databasesPopulation;
 
 import java.io.IOException;
-import java.util.Random;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,12 +12,12 @@ public class ScraperUtil {
         System.out.println(getGenre("https://genius.com/Aretha-franklin-respect-lyrics"));
     }
     public static String getGenre(String url){
-        Document doc = null;
+        Document doc;
         String genre = null;
         String base = "primary&quot;:true,&quot;url&quot;:&quot;https://genius.com/tags/";
         boolean endParsing = false;
         try {
-            doc = Jsoup.connect(url).userAgent("Mozilla/4.0").ignoreHttpErrors(true).followRedirects(true).timeout(100000).ignoreContentType(true).get();;
+            doc = Jsoup.connect(url).userAgent("Mozilla/4.0").ignoreHttpErrors(true).followRedirects(true).timeout(100000).ignoreContentType(true).get();
             String html = doc.html(); //gets all the html of the page
             //cut all the html before the genre
             int indexBase = html.indexOf(base);
@@ -48,8 +47,8 @@ public class ScraperUtil {
 
 
     public static double getPopularity(String url){
-        String tooltip = null;
-        Document doc = null;
+        String tooltip;
+        Document doc;
         double result = -1;
         try {
             doc = Jsoup.connect(url).get();
@@ -64,8 +63,8 @@ public class ScraperUtil {
             String newHtml = html.substring(startIndex);
 
             String jsonString = getCurlyBracketsContent(newHtml); //prendo la stringa json dell'oggetto sentimentBarRenderer
-            //System.out.println(jsonString);
-            JSONObject json = null;
+
+            JSONObject json;
             try {
                 json = new JSONObject(jsonString);
                 tooltip = json.getString("tooltip");

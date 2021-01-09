@@ -1,19 +1,15 @@
 package it.unipi.dii.inginf.lsmdb.unimusic.databasesPopulation;
 
-import com.mongodb.ConnectionString;
-import com.mongodb.client.*;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.dao.SongDAOImpl;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Album;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Song;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
-import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.json.*;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Class that takes care of performing all actions related to scraping.
@@ -22,38 +18,6 @@ import java.util.Random;
 public class MusicScraper {
 
     public static void main(String[] args) throws ActionNotCompletedException {
-
-        /*
-        MongoClient client = MongoClients.create(new ConnectionString("mongodb://localhost:27017"));
-        // connect with the database
-        MongoDatabase mongoDB = client.getDatabase("UniMusic");
-        MongoCollection songs = mongoDB.getCollection("songs");
-
-        int i = 0;
-        try (MongoCursor<Document> cursor = songs.find().iterator()){
-            while(cursor.hasNext()) {
-                String jsonSong = cursor.next().toJson();
-                Song song = new Song(jsonSong);
-                try {
-                    new SongDAOImpl().createSong(song);
-                }catch (ActionNotCompletedException ex){
-                    ex.printStackTrace();
-                    continue;
-                }catch(NullPointerException ex){
-                    System.out.println(jsonSong);
-                    break;
-                }
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-
-        }
-        DA FAR PARTIRE COSI COME E'*/
-
         populateWithSong(530001, 534000, "BQBAdzoql0K9SxXMvmATIaEPdXWmMLL4o35BgbSzs7AGlFJwSZ-nv1aYe4wSqtC-hbVgLwLWJPrJ_oEhMPnzxpaxPNe_NP-Z_48AVgkGle8eHbIYkcOMlJ79m6EZeEqJEOaPwAalCI4IsCkGsircI52TRol4VR6mpsRISWcMNA");
     }
 
@@ -141,7 +105,7 @@ public class MusicScraper {
             } catch (JSONException e) {
                 try {
                     songAlbum.setTitle(song.getJSONObject("album").getString("full_title"));
-                }catch(JSONException ex){}
+                }catch(JSONException ignored){}
             }
 
             System.out.format("Response:-\tAlbum: %s\tTitle: %s\tindex: %s\n\n", songAlbum.getImage(), songToInsert.getTitle(), i);
@@ -157,13 +121,13 @@ public class MusicScraper {
 
                     songToInsert.setFeaturedArtists(artists);
                 }
-            } catch (JSONException e) {
+            } catch (JSONException ignored) {
             }
 
             try{
                 int year = Integer.parseInt(song.getString("release_date").split("-")[0]);
                 songToInsert.setReleaseYear(year);
-            } catch (JSONException e) {
+            } catch (JSONException ignored) {
             }
 
             new SongDAOImpl().createSong(songToInsert);
@@ -174,15 +138,15 @@ public class MusicScraper {
 
 
     /**
-     * @param inputUrl
-     * @param bearer
+     * @param inputUrl url of the interested source.
+     * @param bearer authorization key.
      * @return The response from the given API, specified by inputUrl, using the bearer to authentication.
      */
     private static StringBuffer getResponse(String inputUrl, String bearer){
         StringBuffer response = new StringBuffer();
         try {
             URL url = new URL(inputUrl);
-            HttpURLConnection conn = null;
+            HttpURLConnection conn;
 
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestProperty("Authorization", "Bearer " + bearer);

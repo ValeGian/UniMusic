@@ -5,7 +5,7 @@ public enum Collections {
     SONGS("songs");
 
     private String collName;
-    private Collections(String collName) {
+    Collections(String collName) {
         this.collName = collName;
     }
 

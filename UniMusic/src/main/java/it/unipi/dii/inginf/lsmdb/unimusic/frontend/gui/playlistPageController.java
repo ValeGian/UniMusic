@@ -5,25 +5,22 @@ import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Playlist;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.Song;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.entities.User;
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.exception.ActionNotCompletedException;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Border;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 
 import java.io.IOException;
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -31,10 +28,11 @@ public class playlistPageController implements Initializable {
     private static Playlist playlistToDisplay;
     private static MiddlewareConnector connector = MiddlewareConnector.getInstance();
 
-    @FXML private Label titleText;
+    @FXML private TextField titleText;
     @FXML private Label authorText;
     @FXML private ImageView imagePlaylist;
     @FXML private ImageView binImage;
+    @FXML private ImageView modifyImage;
 
     @FXML private VBox songListBox;
 
@@ -51,6 +49,10 @@ public class playlistPageController implements Initializable {
         songListBox.setAlignment(Pos.CENTER); songListBox.setFillWidth(true);
         //if the author of the playlist is the logged user, it has the possibility to delete the playlist
         if (playlistToDisplay.getAuthor().equals(connector.getLoggedUser().getUsername()) && !playlistToDisplay.isFavourite()) {
+            modifyImage.setVisible(true);
+            modifyImage.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>()
+            {@Override public void handle(MouseEvent mouseEvent) { modifyPlaylistName();}});
+
             binImage.setVisible(true);
             binImage.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 
@@ -66,6 +68,19 @@ public class playlistPageController implements Initializable {
             });
         }
     }
+
+    private void modifyPlaylistName() {
+        if(modifyImage.getImage().getUrl().equals("file:src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/modify.png")) {
+            modifyImage.setImage(new Image("file:src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/confirm.png"));
+            titleText.setText("Insert the new Playlist name...");
+            titleText.setEditable(true);
+        }else{
+            modifyImage.setImage(new Image("file:src/main/resources/it/unipi/dii/inginf/lsmdb/unimusic/frontend/gui/img/modify.png"));
+            titleText.setEditable(false);
+            connector.setPlaylistName(playlistToDisplay, titleText.getText());
+        }
+    }
+
 
     public static void getPlaylistPage(Playlist playlist) throws IOException {
         try {

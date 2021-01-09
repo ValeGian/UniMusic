@@ -8,7 +8,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -17,11 +16,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 import java.awt.*;
@@ -122,7 +116,10 @@ public class songPageController implements Initializable {
         }
         artistText.setText(artists);
 
-        albumText.setText("Album: " + songToDisplay.getAlbum().getTitle());
+        if(songToDisplay.getAlbum().getTitle() != null)
+            albumText.setText("Album: " + songToDisplay.getAlbum().getTitle());
+        else
+            albumText.setText("Album title Unknown");
 
         String releasedYear = (songToDisplay.getReleaseYear() == 0)?"Release year unknown":("Released year: " + songToDisplay.getReleaseYear());
         releasedYearText.setText(releasedYear);
@@ -148,7 +145,7 @@ public class songPageController implements Initializable {
             @Override
             public void handle(ActionEvent actionEvent) { handlePlaylist(); }});
 
-        List<Playlist> allUserPlaylist = connector.getUserPlaylists();
+        List<Playlist> allUserPlaylist = connector.getOwnUserPlaylists();
 
         for(Playlist plToAdd: allUserPlaylist)
             playlistList.getItems().add(getPlaylistButton(plToAdd));
