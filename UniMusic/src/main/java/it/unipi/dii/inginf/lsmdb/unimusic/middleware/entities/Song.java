@@ -74,7 +74,7 @@ public class Song {
 
 
                 try{
-                    songDocument.getInteger("releaseYear");
+                    releaseYear = songDocument.getInteger("releaseYear");
                 }catch (NullPointerException exception){
                     exception.printStackTrace();
                     releaseYear = -1;

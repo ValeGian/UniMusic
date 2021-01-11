@@ -13,6 +13,7 @@ import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.mongoconnection
 import it.unipi.dii.inginf.lsmdb.unimusic.middleware.persistence.neo4jconnection.Neo4jDriver;
 import javafx.util.Pair;
 import org.apache.log4j.Logger;
+import org.bson.BsonType;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.neo4j.driver.Result;
@@ -37,10 +38,6 @@ import static org.neo4j.driver.Values.parameters;
 public class SongDAOImpl implements SongDAO{
     private static final Logger logger = UMLogger.getSongLogger();
 
-    public static void main(String[] args) throws ActionNotCompletedException {
-        SongDAOImpl s = new SongDAOImpl();
-        s.getSongsByPartialTitle("a");
-    }
 
     //-----------------------------------------------  CREATE  -----------------------------------------------
 
@@ -202,11 +199,11 @@ public class SongDAOImpl implements SongDAO{
 
         Document computeExpression = Document.parse("{$multiply: [{ $floor:{ $divide: [ \"$releaseYear\", 10 ] }}, 10]}");
 
-        Bson match = match(exists("releaseYear"));
+        Bson match = match(and(exists("releaseYear"), type("album.title", BsonType.STRING)));
         Bson project = project(fields(excludeId(), include("releaseYear"), include("album"), include("rating"), computed("decade", computeExpression)));
 
         Bson group = Document.parse("{$group: {_id: {title: \"$album.title\", url:\"$album.image\",  decade: \"$decade\"}, avgRating: {$avg: \"$rating\"}, numSong:{$sum:1}}}");
-        Bson match2 = match(gt("numSong", 5));
+        Bson match2 = match(gte("numSong", 5));
         Bson sortRate = sort(ascending("avgRating"));
 
         Bson group2 = Document.parse("{$group:{" +
