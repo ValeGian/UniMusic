@@ -1,2 +1,2 @@
 # LSMDB_UniMusic
-Project for the <i>'LARGE-SCALE AND MULTI-STRUCTURED DATABASES'</i> course
+Project for the <i>'Large-Scale and Multi-Structured Databases'</i> course
