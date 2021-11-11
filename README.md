@@ -1,5 +1,5 @@
 # LSMDB_UniMusic
-Project for the <i>'Large-Scale and Multi-Structured Databases'</i> course
+Project for the <i>'Large-Scale and Multi-Structured Databases'</i> course. Please, check the [Documentation](Documentation.pdf)
 
 <b>UniMusic</b> is an application whose main purpose is to provide a song search and management service; songs that can be found on the platform are associated with links to official sources on the Internet, where users can listen to them (for example, official YouTube / Spotify source).
 The application provides general information about each stored song (e.g. name, genre, artist) and offers users the ability to search and browse them, possibly applying specific
