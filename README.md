@@ -24,7 +24,6 @@ Neo4j database.
 <img src='imgs/architecture-diagram.png'>
 
 ## Dataset Organization and Database Population
-### Song information
 The application dataset is manly composed by songs’ information, that are the core of our application.
 Firstly, we have obtained almost all the information using services offered by [GENIUS](https://www.genius.com), that permits to scrape their content through HTTP-based API.
 It returns a raw json document for each song requested; we then filter all information needed, in particular also 2 URLs and a URI that are used to scrape remaining information:
