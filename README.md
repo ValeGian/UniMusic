@@ -21,4 +21,4 @@ The client side is divided into:
 Server composed of 3 virtual machines which hosts a MongoDB cluster and a single instance of the
 Neo4j database.
 
-Music application that uses a <i>MongoDB</i> and a <i>Neo4j</i> database
+[](imgs/univariate.png)
