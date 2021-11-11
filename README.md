@@ -26,7 +26,7 @@ Neo4j database.
 ## Dataset Organization and Database Population
 ### Song information
 The application dataset is manly composed by songs’ information, that are the core of our application.
-Firstly, we have obtained almost all the information using services offered by [GENIUS](https://www.genius.com), that permits to scrape their content through HTTP-based API (all steps can be found [here](https://www.docs.genius.com)).
+Firstly, we have obtained almost all the information using services offered by [GENIUS](https://www.genius.com), that permits to scrape their content through HTTP-based API.
 It returns a raw json document for each song requested; we then filter all information needed, in particular also 2 URLs and a URI that are used to scrape remaining information:
 - using the Genius URL to the specific song page, we scrape the attribute “genre” that is not provided through API.
 - using the Spotify URI, we have requested, through Spotify API, the song’s popularity.
