@@ -21,4 +21,4 @@ The client side is divided into:
 Server composed of 3 virtual machines which hosts a MongoDB cluster and a single instance of the
 Neo4j database.
 
-[](imgs/univariate.png)
+[](imgs/architecture-diagram.png)
