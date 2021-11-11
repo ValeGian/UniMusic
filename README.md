@@ -22,3 +22,17 @@ Server composed of 3 virtual machines which hosts a MongoDB cluster and a single
 Neo4j database.
 
 <img src='imgs/architecture-diagram.png'>
+
+## Dataset Organization and Database Population
+### Song information
+The application dataset is manly composed by songs’ information, that are the core of our application.
+Firstly, we have obtained almost all the information using services offered by [GENIUS](www.genius.com), that permits to scrape their content through HTTP-based API (all steps can be found [here](www.docs.genius.com)).
+It returns a raw json document for each song requested; we then filter all information needed, in particular also 2 URLs and a URI that are used to scrape remaining information:
+- using the Genius URL to the specific song page, we scrape the attribute “genre” that is not provided through API.
+- using the Spotify URI, we have requested, through Spotify API, the song’s popularity.
+- using the YouTube URL to the official video of the song we scrape the number of Like and Dislike.
+The last two information have been used to create our “popularity” attribute as an aggregation of Spotify popularity and YouTube Like/Dislike ratio using this formula:
+<i>0.7 * SpotifyPopularity + YouTubeRatio * 0.3.</i>
+
+Here we have a summary of how the two databases are populated:
+<img src='imgs/database-creation-workflow.png'>
